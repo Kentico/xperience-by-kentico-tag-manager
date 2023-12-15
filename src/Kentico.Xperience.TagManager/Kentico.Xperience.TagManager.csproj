@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-
+    <Product>Xperience by Kentico Tag Manager</Product>
+    <Title>$(Product)</Title>
+    <PackageId>Kentico.Xperience.TagManager</PackageId>
+    <Description>Enables marketers to author custom tags that can be embedded in a website channel. Example: GA4, cookie banners, custom CSS.</Description>
+    <RepositoryUrl>https://github.com/kentico/xperience-by-kentico-tag-manager</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
