@@ -15,7 +15,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
 
   "[markdown]": {
@@ -30,10 +30,10 @@
     "editor.defaultFormatter": "ms-dotnettools.csharp"
   },
 
-  "dotnet.defaultSolution": "Kentico.Xperience.RepoTemplate.sln",
+  "dotnet.defaultSolution": "Kentico.Xperience.TagManager.sln",
 
   "eslint.workingDirectories": [
-    "./src/Kentico.Xperience.RepoTemplate/Admin/Client"
+    "./src/Kentico.Xperience.TagManager/Admin/Client"
   ],
   "[aspnetcorerazor]": {
     "editor.defaultFormatter": "ms-dotnettools.csharp"

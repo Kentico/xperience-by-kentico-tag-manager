@@ -4,10 +4,10 @@
     {
       "type": "npm",
       "script": "install",
-      "path": "src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Client",
       "group": "clean",
       "problemMatcher": [],
-      "label": "npm: install - src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "label": "npm: install - src/Kentico.Xperience.TagManager/Admin/Client",
       "detail": "install dependencies from package"
     },
     {
@@ -24,7 +24,7 @@
       "problemMatcher": ["$msCompile"],
       "group": "none",
       "options": {
-        "cwd": "${workspaceFolder}/src/Kentico.Xperience.RepoTemplate/"
+        "cwd": "${workspaceFolder}/src/Kentico.Xperience.TagManager/"
       },
       "label": "dotnet: format"
     },
@@ -38,27 +38,27 @@
     {
       "type": "npm",
       "script": "build",
-      "path": "src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Client",
       "group": "build",
       "problemMatcher": [],
-      "label": "npm: build - src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "label": "npm: build - src/Kentico.Xperience.TagManager/Admin/Client",
       "detail": "webpack --mode=production"
     },
     {
       "type": "npm",
       "script": "build:dev",
-      "path": "src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Client",
       "group": "build",
       "problemMatcher": [],
-      "label": "npm: build:dev - src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "label": "npm: build:dev - src/Kentico.Xperience.TagManager/Admin/Client",
       "detail": "webpack --mode=development"
     },
     {
       "type": "npm",
       "script": "start",
-      "path": "src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Client",
       "problemMatcher": [],
-      "label": "npm: start - src/Kentico.Xperience.RepoTemplate/Admin/Client",
+      "label": "npm: start - src/Kentico.Xperience.TagManager/Admin/Client",
       "detail": "webpack serve --mode development"
     },
     {
@@ -69,7 +69,7 @@
         "watch",
         "run",
         "--project",
-        "${workspaceFolder}/src/Kentico.Xperience.RepoTemplate.Sample/DancingGoat.csproj"
+        "${workspaceFolder}/src/Kentico.Xperience.TagManager.Sample/DancingGoat.csproj"
       ],
       "options": {
         "env": {

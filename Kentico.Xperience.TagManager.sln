@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kentico.Xperience.TagManager", "src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj", "{52F11256-9F81-4FC1-A2EF-37B113A8F242}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A94EE676-9ABE-44EA-BF9E-22004E9D54C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CFBE190C-6BF0-4F9A-A01B-70CC9B3BED8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kentico.Xperience.TagManager.Tests", "tests\Kentico.Xperience.TagManager.Tests\Kentico.Xperience.TagManager.Tests.csproj", "{0251412E-CB7E-44D9-847E-7FD1D3780FDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{A639C482-C69C-49F8-ADA5-09D68AF6FEE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DancingGoat", "examples\DancingGoat\DancingGoat.csproj", "{D54B0FFF-6BB8-4EB1-8357-699AD761FAEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52F11256-9F81-4FC1-A2EF-37B113A8F242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52F11256-9F81-4FC1-A2EF-37B113A8F242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52F11256-9F81-4FC1-A2EF-37B113A8F242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52F11256-9F81-4FC1-A2EF-37B113A8F242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0251412E-CB7E-44D9-847E-7FD1D3780FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0251412E-CB7E-44D9-847E-7FD1D3780FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0251412E-CB7E-44D9-847E-7FD1D3780FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0251412E-CB7E-44D9-847E-7FD1D3780FDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D54B0FFF-6BB8-4EB1-8357-699AD761FAEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D54B0FFF-6BB8-4EB1-8357-699AD761FAEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D54B0FFF-6BB8-4EB1-8357-699AD761FAEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D54B0FFF-6BB8-4EB1-8357-699AD761FAEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52F11256-9F81-4FC1-A2EF-37B113A8F242} = {A94EE676-9ABE-44EA-BF9E-22004E9D54C9}
+		{0251412E-CB7E-44D9-847E-7FD1D3780FDD} = {CFBE190C-6BF0-4F9A-A01B-70CC9B3BED8A}
+		{D54B0FFF-6BB8-4EB1-8357-699AD761FAEF} = {A639C482-C69C-49F8-ADA5-09D68AF6FEE9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B2A20BC-F57B-4AAE-B1C2-E4DC52EFCAC5}
+	EndGlobalSection
+EndGlobal
