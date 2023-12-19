@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Kentico.Xperience.Admin" Version="28.1.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="CMS.AssemblyDiscoverableAttribute">
+		</AssemblyAttribute>
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="Kentico.Xperience.Admin.Base">
+	    <HintPath>..\DancingGoat\bin\Debug\net7.0\Kentico.Xperience.Admin.Base.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+</Project>

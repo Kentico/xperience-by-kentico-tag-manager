@@ -1,5 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
+  <PropertyGroup>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+	
   <PropertyGroup>
     <Product>Xperience by Kentico Tag Manager</Product>
     <Title>$(Product)</Title>
@@ -8,12 +14,20 @@
     <RepositoryUrl>https://github.com/kentico/xperience-by-kentico-tag-manager</RepositoryUrl>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Kentico.Xperience.Admin" />
+	</ItemGroup>
+	
   <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.WebApp"/>
+    <PackageReference Include="Kentico.Xperience.WebApp" />
     <PackageReference Include="Microsoft.SourceLink.GitHub">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+	<AssemblyAttribute Include="CMS.AssemblyDiscoverableAttribute"></AssemblyAttribute>
   </ItemGroup>
 
 </Project>
