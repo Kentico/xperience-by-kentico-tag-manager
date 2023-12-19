@@ -27,7 +27,6 @@ Tag Manager integration enabling marketers to author custom tags that can be emb
 
 ## Package Installation
 
----This details the steps required to add the library to a solution. This could include multiple packages (NuGet and/or npm)---
 > [!WARNING]  
 > Nuget package not published yet!
 
@@ -38,7 +37,8 @@ dotnet add package Kentico.Xperience.TagManager
 ```
 
 ## Quick Start
-
+1. Include `Kentico.Xperience.TagManager` project in the solution.
+1. Add to main project as project dependency.
 1. Add this library to the application services.
 
    ```csharp
@@ -50,6 +50,12 @@ dotnet add package Kentico.Xperience.TagManager
 
    builder.Services.AddCustomChannelSettingsModule();
    ```
+1. In the administration go to UI application 'Custom channel settings'.
+1. Create new record.
+1. Choose channel, snippet type, custom code snippet or GTM ID, and consent.
+1. During rendering the livesite page, the application automatically adds custom code snippets with accepted consents.
+1. To dynamically update the rendered code snippets, call javascript function `window.UpdateCodeSnippets()`.
+1. To assign permission to view and update code snippets of specific channel using 'Custom channel settings' UI application, go to RoleManagement -> choose a role -> Permissions -> Add to website channel UI application the permission `Channel settings`.  
 ## Full Instructions
 
 ---Add the full instructions, guidance, and tips to the Usage-Guide.md file---
