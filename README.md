@@ -4,7 +4,7 @@
 
 ## Description
 
----Please put here some general information about your Intergration / App / Solution.---
+Tag Manager integration enabling marketers to author custom tags that can be embedded in a website channel. Example: GA4, cookie banners, custom CSS.
 
 ## Screenshots
 
@@ -12,12 +12,9 @@
 ![Custom tags listing](/images/screenshots/listing.png "Custom tags listing")
 ![Create custom code snippet](/images/screenshots/create_snippet.png "Create custom code snippet")
 ![Create GTM tag snippet](/images/screenshots/create_gtmid.png "Create GTM tag snippet")
-![Consents](/images/screenshots/data_protection.png "Consents")
 ![Custom channel permission](/images/screenshots/custom_permission.png "Custom channel permission")
 
 ## Library Version Matrix
-
----This matrix explains which versions of the library are compatible with different versions of Xperience by Kentico---
 
 | Xperience Version | Library Version |
 | ----------------- | --------------- |
@@ -25,14 +22,14 @@
 
 ### Dependencies
 
----These are all the dependencies required to use (not build) the library---
-
 - [ASP.NET Core 8.0](https://dotnet.microsoft.com/en-us/download)
 - [Xperience by Kentico](https://docs.xperience.io/xp/changelog)
 
 ## Package Installation
 
 ---This details the steps required to add the library to a solution. This could include multiple packages (NuGet and/or npm)---
+> [!WARNING]  
+> Nuget package not published yet!
 
 Add the package to your application using the .NET CLI
 
@@ -42,9 +39,17 @@ dotnet add package Kentico.Xperience.TagManager
 
 ## Quick Start
 
----This section shows how to quickly get started with the library. The minimum number of steps (without all the details) should be listed
-to give a developer a general idea of what is involved---
+1. Add this library to the application services.
 
+   ```csharp
+   // Program.cs
+
+   var builder = WebApplication.CreateBuilder(args);
+
+   // ...
+
+   builder.Services.AddCustomChannelSettingsModule();
+   ```
 ## Full Instructions
 
 ---Add the full instructions, guidance, and tips to the Usage-Guide.md file---
