@@ -27,9 +27,6 @@ Tag Manager integration enabling marketers to author custom tags that can be emb
 
 ## Package Installation
 
-> [!WARNING]  
-> Nuget package not published yet!
-
 Add the package to your application using the .NET CLI
 
 ```powershell
