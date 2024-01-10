@@ -1,8 +1,12 @@
-﻿using Kentico.Xperience.TagManager.Modules;
+﻿using CMS.Localization;
+using Kentico.Xperience.TagManager.Modules;
+using Kentico.Xperience.TagManager.Resources;
 using Kentico.Xperience.TagManager.Services;
 using Kentico.Xperience.TagManager.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
+
+[assembly: RegisterLocalizationResource(typeof(Localization), "en-us")]
 
 namespace Kentico.Xperience.TagManager
 {
@@ -11,7 +15,7 @@ namespace Kentico.Xperience.TagManager
         public static IServiceCollection AddCustomChannelSettingsModule(this IServiceCollection services)
         {
             services.AddSingleton<ICustomChannelSettingsModuleInstaller, CustomChannelSettingsModuleInstaller>();
-            services.AddSingleton<IChannelCodeSnippetsContext, ChannelCodeSnippetsContext>();
+            services.AddSingleton<IChannelCodeSnippetsService, ChannelCodeSnippetsService>();
             services.AddScoped<IWebsiteChannelPermissionService, WebsiteChannelPermissionService>();
             services.AddTransient<ITagHelperComponent, CodeSnippetTagHelperComponent>();
             return services;

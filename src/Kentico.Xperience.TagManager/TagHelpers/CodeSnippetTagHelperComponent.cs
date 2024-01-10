@@ -1,85 +1,95 @@
 ﻿using Kentico.Xperience.TagManager.Enums;
-using Kentico.Xperience.TagManager.Helpers;
 using Kentico.Xperience.TagManager.Models;
 using Kentico.Xperience.TagManager.Services;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Kentico.Xperience.TagManager.TagHelpers
 {
     public class CodeSnippetTagHelperComponent : TagHelperComponent
     {
+        private const string HeadTag = "head";
+        private const string BodyTag = "body";
+
         public override int Order => 1;
 
-        private readonly IChannelCodeSnippetsContext codeSnippetsContext;
+        private readonly IChannelCodeSnippetsService codeSnippetsContext;
+        private readonly IUrlHelperFactory urlHelperFactory;
 
-        public CodeSnippetTagHelperComponent(IChannelCodeSnippetsContext codeSnippetsContext)
+        public CodeSnippetTagHelperComponent(IChannelCodeSnippetsService codeSnippetsContext,
+            IUrlHelperFactory urlHelperFactory)
         {
             this.codeSnippetsContext = codeSnippetsContext;
+            this.urlHelperFactory = urlHelperFactory;
         }
+
+        /// <summary>
+        /// The <see cref="ViewContext"/>.
+        /// </summary>
+        [HtmlAttributeNotBound]
+        [ViewContext]
+        public ViewContext ViewContext { get; set; } = default!;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var codeSnippets = await codeSnippetsContext.GetCodeSnippets();
-            if (string.Equals(context.TagName, "head",
-                       StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(context.TagName, HeadTag, StringComparison.OrdinalIgnoreCase))
             {
-                foreach (var codeSnippet in FilterCustomSnippetsByLocation(codeSnippets, CodeSnippetLocations.HeadTop))
-                {
-                    output.PreContent.AppendHtml(codeSnippet.Code);
-                }
-                foreach (var codeSnippet in FilterCustomSnippetsByLocation(codeSnippets, CodeSnippetLocations.HeadBottom))
-                {
-                    output.PostContent.AppendHtml(codeSnippet.Code);
-                }
-                foreach (var gtm in FilterGTMSnippets(codeSnippets))
-                {
-                    output.PostContent.AppendHtml(CodeSnippetHelper.GenerateGTMHeadScript(gtm.GTMId));
-                }
-            }
-            if (string.Equals(context.TagName, "body",
-                               StringComparison.OrdinalIgnoreCase))
-            {
-                foreach (var codeSnippet in FilterCustomSnippetsByLocation(codeSnippets, CodeSnippetLocations.BodyTop))
-                {
-                    output.PreContent.AppendHtml(CodeSnippetHelper.WrapCodeSnippet(codeSnippet.Code, codeSnippet.ID));
-                }
-                foreach (var codeSnippet in FilterCustomSnippetsByLocation(codeSnippets, CodeSnippetLocations.BodyBottom))
-                {
-                    output.PostContent.AppendHtml(CodeSnippetHelper.WrapCodeSnippet(codeSnippet.Code, codeSnippet.ID));
-                }
-                foreach (var gtm in FilterGTMSnippets(codeSnippets))
-                {
-                    output.PreContent.AppendHtml(CodeSnippetHelper.WrapCodeSnippet(CodeSnippetHelper.GenerateGTMBodyScript(gtm.GTMId), gtm.ID));
-                }
-
-                output.PostContent.AppendHtml(CreateIdsWrapper(codeSnippets.Select(c => c.ID).ToArray()));
-                output.PostContent.AppendHtml(GetScriptSrcTag());
+                ProcessHead(output, await codeSnippetsContext.GetCodeSnippets());
             }
 
+            if (string.Equals(context.TagName, BodyTag, StringComparison.OrdinalIgnoreCase))
+            {
+                ProcessBody(output, await codeSnippetsContext.GetCodeSnippets());
+            }
         }
 
-        private IEnumerable<ChannelCodeSnippetDto> FilterCustomSnippetsByLocation(IEnumerable<ChannelCodeSnippetDto> codeSnippets, CodeSnippetLocations location) => codeSnippets
-                .Where(x => x != null && x.Location == location);
-
-        private IEnumerable<ChannelCodeSnippetDto> FilterGTMSnippets(IEnumerable<ChannelCodeSnippetDto> codeSnippets) => codeSnippets
-                .Where(c => !string.IsNullOrEmpty(c.GTMId));
-
-        private IHtmlContent CreateIdsWrapper(int[] ids)
+        private static void ProcessHead(
+            TagHelperOutput output,
+            ILookup<CodeSnippetLocations, ChannelCodeSnippetDto> codeSnippets)
         {
-            var divTag = new TagBuilder("div");
-            divTag.Attributes.Add("id", "codeSnippets_initIds");
-            divTag.Attributes.Add("data-ids", JsonSerializer.Serialize(ids));
-            return divTag;
+            foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.HeadTop])
+            {
+                output.PreContent.AppendHtml(codeSnippet.Code);
+            }
+
+            foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.HeadBottom])
+            {
+                output.PostContent.AppendHtml(codeSnippet.Code);
+            }
+        }
+
+        private void ProcessBody(
+            TagHelperOutput output,
+            ILookup<CodeSnippetLocations, ChannelCodeSnippetDto> codeSnippets)
+        {
+            foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.BodyTop])
+            {
+                output.PreContent.AppendHtml(codeSnippet.Code);
+            }
+
+            foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.BodyBottom])
+            {
+                output.PostContent.AppendHtml(codeSnippet.Code);
+            }
+
+            output.PostContent.AppendHtml(GetScriptSrcTag());
         }
 
         private IHtmlContent GetScriptSrcTag()
         {
-            var scriptTag = new TagBuilder("script");
-            scriptTag.Attributes.Add("type", "text/javascript");
-            scriptTag.Attributes.Add("src", "~/_content/Kentico.Xperience.TagManager/Scripts/main.js");
+            var urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
+            var scriptTag = new TagBuilder("script")
+            {
+                Attributes =
+                {
+                    ["type"] = "text/javascript",
+                    ["src"] = urlHelper.Content("~/_content/Kentico.Xperience.TagManager/Scripts/main.js")
+                }
+            };
+
             return scriptTag;
         }
     }

@@ -5,10 +5,8 @@ namespace Kentico.Xperience.TagManager.Admin.UIFormComponents
 {
     public class CodeSnippetTypesDropdownOptionsProvider : IDropDownOptionsProvider
     {
-        public async Task<IEnumerable<DropDownOptionItem>> GetOptionItems()
-        {
-            return new DropDownOptionItem[]
-            {
+        public Task<IEnumerable<DropDownOptionItem>> GetOptionItems() => Task.FromResult<IEnumerable<DropDownOptionItem>>(
+            [
                 new DropDownOptionItem
                 {
                     Value = nameof(CodeSnippetTypes.CustomCode),
@@ -19,7 +17,6 @@ namespace Kentico.Xperience.TagManager.Admin.UIFormComponents
                     Value = nameof(CodeSnippetTypes.GTM),
                     Text = "Google Tag Manager"
                 }
-            };
-        }
+            ]);
     }
 }

@@ -1,25 +1,20 @@
 ﻿using CMS.Membership;
-using Kentico.Membership;
-using Kentico.Xperience.Admin.Base.Authentication;
 using CMS.Websites;
+using Kentico.Membership;
 
 namespace Kentico.Xperience.TagManager.Services
 {
     public class WebsiteChannelPermissionService : IWebsiteChannelPermissionService
     {
-        private readonly IAuthenticatedUserAccessor authenticatedUserAccessor;
         private readonly IUserRoleInfoProvider roleInfoProvider;
 
-        public WebsiteChannelPermissionService(IAuthenticatedUserAccessor authenticatedUserAccessor, IUserRoleInfoProvider roleInfoProvider)
+        public WebsiteChannelPermissionService(IUserRoleInfoProvider roleInfoProvider)
         {
-            this.authenticatedUserAccessor = authenticatedUserAccessor;
             this.roleInfoProvider = roleInfoProvider;
         }
 
-
-        public async Task<IEnumerable<int>> GetChannelIDsWithGrantedPermission(string permission)
+        public IEnumerable<int> GetChannelIDsWithGrantedPermission(AdminApplicationUser user, string permission)
         {
-            var user = await authenticatedUserAccessor.Get();
             if (user.IsAdministrator())
             {
                 return WebsiteChannelInfoProvider.ProviderObject.Get()
@@ -32,8 +27,9 @@ namespace Kentico.Xperience.TagManager.Services
                 .WhereEquals(nameof(ApplicationPermissionInfo.PermissionName), permission)
                 .Column(nameof(ApplicationPermissionInfo.ApplicationName))
                 .GetListResult<string>()
-                .Select(g => Guid.Parse(g.Substring(g.LastIndexOf("_"))))
+                .Select(g => Guid.Parse(g[g.LastIndexOf('_')..]))
                 .ToList();
+
             var websiteChannelIDs = WebsiteChannelInfoProvider.ProviderObject.Get()
                     .Columns(nameof(WebsiteChannelInfo.WebsiteChannelChannelID))
                     .WhereIn(nameof(WebsiteChannelInfo.WebsiteChannelGUID), websiteChannelGuids)

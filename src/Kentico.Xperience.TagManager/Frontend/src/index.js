@@ -7,97 +7,98 @@ const Locations = {
   BodyBottom: "BodyBottom",
 };
 
-window.UpdateCodeSnippets = async () => {
-  const initializedCodeSnippetsIds = JSON.parse(
-    document.getElementById(IDS_WRAPPER_ID).dataset.ids
+window.updateCodeSnippets = async function () {
+  const htmlSnippets = [...document.querySelectorAll("[data-snippet-id]")];
+
+  const initializedCodeSnippetsIds = new Set(
+    htmlSnippets.map((e) => parseInt(e.dataset.snippetId))
   );
 
-  var result = await fetch(UPDATE_CODE_SNIPPETS_URL, {
-    method: "post",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      ids: initializedCodeSnippetsIds,
-    }),
-  }).then((response) => response.json());
-  var newCodeSnippets = result.newCodeSnippets;
-  if (newCodeSnippets != undefined) {
-    for (var i = 0; i < newCodeSnippets.length; i++) {
-      var codeSnippet = newCodeSnippets[i];
-      switch (codeSnippet.location) {
-        case Locations.HeadTop:
-          PrependNodes(document.head, GetNodes(codeSnippet.code));
-          break;
-        case Locations.HeadBottom:
-          AppendNodes(document.head, GetNodes(codeSnippet.code));
-          break;
-        case Locations.BodyTop:
-          PrependNodes(document.body, GetNodes(codeSnippet.code));
-          break;
-        case Locations.BodyBottom:
-          AppendNodes(document.body, GetNodes(codeSnippet.code));
-          break;
-      }
+  const snippets = await getSnippets();
+
+  insertMissingSnippets();
+
+  removeNotValidSnippets();
+
+  function removeNotValidSnippets() {
+    for (let toRemove of htmlSnippets.filter(
+      (s) => !snippets.some((p) => p.id === parseInt(s.dataset.snippetId))
+    )) {
+      toRemove.remove();
     }
-    document.getElementById(IDS_WRAPPER_ID).dataset.ids = JSON.stringify(
-      result.codeSnippetsIDs
+  }
+
+  function insertMissingSnippets() {
+    const responseHtmlSnippets = document.createElement("template");
+    snippets.forEach((s) => responseHtmlSnippets.append(s.code));
+
+    var newCodeSnippets = snippets.filter(
+      (s) => !initializedCodeSnippetsIds.has(s.id)
     );
-  }
-  if (result.codeSnippetsToRemove != undefined) {
-    var codesToDeleteFromHead = [];
-    for (var i = 0; i < result.codeSnippetsToRemove.length; i++) {
-      var codeSnippetToRemove = result.codeSnippetsToRemove[i];
+    if (newCodeSnippets) {
+      for (let codeSnippet of newCodeSnippets) {
+        let insertFunc;
+        switch (codeSnippet.location) {
+          case Locations.HeadTop:
+            insertFunc = (e) => document.head.prepend(e);
+            break;
+          case Locations.HeadBottom:
+            insertFunc = (e) => document.head.append(e);
+            break;
+          case Locations.BodyTop:
+            insertFunc = (e) => document.body.prepend(e);
+            break;
+          case Locations.BodyBottom:
+            insertFunc = (e) => document.body.append(e);
+            break;
+        }
 
-      switch (codeSnippetToRemove.location) {
-        case Locations.HeadTop:
-        case Locations.HeadBottom:
-          codesToDeleteFromHead.push(codeSnippetToRemove.code);
-          break;
-        case Locations.BodyTop:
-        case Locations.BodyBottom:
-          document.getElementById(codeSnippetToRemove.wrapperID).remove();
-          break;
+        insertHtml(codeSnippet.code, (e) => insertFunc(e));
       }
     }
-    if (codesToDeleteFromHead.length > 0) {
-      RemoveCodesFromHead(codesToDeleteFromHead);
+  }
+
+  async function getSnippets() {
+    const response = await fetch(UPDATE_CODE_SNIPPETS_URL, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ids: [...initializedCodeSnippetsIds],
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const snippets = await response.json();
+    return snippets;
+  }
+
+  function insertHtml(html, destinationFunc) {
+    const template = document.createElement("template");
+    template.innerHTML = html;
+
+    for (let content of [...template.content.children]) {
+      if (content.nodeName === "SCRIPT") {
+        const clonedElement = cloneScriptElement(content);
+        destinationFunc(clonedElement);
+      } else {
+        destinationFunc(content);
+      }
     }
   }
-};
 
-RemoveCodesFromHead = (codes) => {
-  var newHead = document.head.innerHTML;
-  for (var i = 0; i < codes.length; i++) {
-    var nodes = GetNodes(codes[i]);
-    for (var j = 0; j < nodes.length; j++) {
-      newHead = newHead.replace(nodes[j].innerHTML, "");
+  function cloneScriptElement(content) {
+    const clonedElement = document.createElement("script");
+
+    for (let attribute of [...content.attributes]) {
+      clonedElement.setAttribute(attribute.name, attribute.value);
     }
-  }
-  document.head.innerHTML = newHead;
-};
 
-GetNodes = (htmlString) => {
-  var temp = document.createElement("div");
-  var nodes = [];
-  temp.innerHTML = htmlString;
-  while (temp.firstChild) {
-    nodes.push(temp.firstChild);
-    temp.removeChild(temp.firstChild);
-  }
-  return nodes;
-};
-
-AppendNodes = (parentNode, nodes) => AddNodes(parentNode, nodes, true);
-PrependNodes = (parentNode, nodes) => AddNodes(parentNode, nodes, false);
-AddNodes = (parentNode, nodes, append = false) => {
-  for (var i = 0; i < nodes.length; i++) {
-    var node = nodes[i];
-    if (append) {
-      parentNode.append(node);
-    } else {
-      parentNode.prepend(node);
-    }
+    clonedElement.text = content.text;
+    return clonedElement;
   }
 };

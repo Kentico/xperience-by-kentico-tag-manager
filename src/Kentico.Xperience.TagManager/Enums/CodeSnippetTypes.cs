@@ -1,6 +1,6 @@
 ﻿namespace Kentico.Xperience.TagManager.Enums
 {
-    enum CodeSnippetTypes
+    internal enum CodeSnippetTypes
     {
         CustomCode = 0,
         GTM = 1
