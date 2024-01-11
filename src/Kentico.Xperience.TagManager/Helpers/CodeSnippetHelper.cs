@@ -2,13 +2,10 @@
 
 namespace Kentico.Xperience.TagManager.Helpers
 {
-    public static partial class CodeSnippetHelper
+    public static class CodeSnippetHelper
     {
-        [GeneratedRegex("<([^\\/]*?)>")]
-        private static partial Regex AddConsentIdRegex();
-
         public static string AddSnippetIds(int codeSnippetId, int consentId, string codeSnippet) =>
-            AddConsentIdRegex().Replace(codeSnippet, $"""<$1 data-snippet-id="{codeSnippetId}" data-snippet-consent-id="{consentId}">""");
+            Regex.Replace(codeSnippet, "<([^\\/]*?)>", $"""<$1 data-snippet-id="{codeSnippetId}" data-snippet-consent-id="{consentId}">""");
 
         public static string GenerateGtmHeadScript(string gtmId) =>
             $$"""

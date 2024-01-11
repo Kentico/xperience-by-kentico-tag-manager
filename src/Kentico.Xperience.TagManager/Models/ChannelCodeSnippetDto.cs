@@ -4,9 +4,9 @@ namespace Kentico.Xperience.TagManager.Models
 {
     public class ChannelCodeSnippetDto
     {
-        public required int ID { get; init; }
-        public required string Code { get; init; }
-        public required CodeSnippetLocations Location { get; init; }
-        public required int Consent { get; init; }
+        public int ID { get; init; }
+        public string? Code { get; init; }
+        public CodeSnippetLocations Location { get; init; }
+        public int Consent { get; init; }
     }
 }

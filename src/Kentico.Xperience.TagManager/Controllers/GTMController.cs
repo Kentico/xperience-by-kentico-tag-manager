@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Kentico.Xperience.TagManager.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Kentico.Xperience.TagManager.Services;
 
@@ -14,7 +13,7 @@ namespace Kentico.Xperience.TagManager.Controllers
         private static readonly JsonSerializerOptions jsonSerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            Converters = { new JsonStringEnumConverter<CodeSnippetLocations>() }
+            Converters = { new JsonStringEnumConverter() }
         };
 
         public GTMController(
