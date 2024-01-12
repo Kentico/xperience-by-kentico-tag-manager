@@ -14,7 +14,7 @@ internal class CodeSnippetEditModel
     [DropDownComponent(Label = "Code snippet type", Order = 2, DataProviderType = typeof(CodeSnippetTypesDropdownOptionsProvider))]
     public string? SnippetType { get; set; }
 
-    [TextAreaComponent(Label = "Code", Order = 3, MinRowsNumber = 3)]
+    [CodeEditorComponent(Label = "Code", Order = 3)]
     [VisibleIfEqualTo(nameof(SnippetType), nameof(CodeSnippetTypes.CustomCode))]
     public string? Code { get; set; }
 
