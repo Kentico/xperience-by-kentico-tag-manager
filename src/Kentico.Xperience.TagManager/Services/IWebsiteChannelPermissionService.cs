@@ -1,9 +1,10 @@
 ﻿using Kentico.Membership;
 
-namespace Kentico.Xperience.TagManager.Services
+namespace Kentico.Xperience.TagManager.Services;
+
+internal interface IWebsiteChannelPermissionService
 {
-    public interface IWebsiteChannelPermissionService
-    {
-        IEnumerable<int> GetChannelIDsWithGrantedPermission(AdminApplicationUser user, string permission);
-    }
+    IEnumerable<int> GetChannelIDsWithGrantedPermission(AdminApplicationUser user, string permission);
+
+    Task<bool> IsAllowed(int channelId, string permissionName);
 }

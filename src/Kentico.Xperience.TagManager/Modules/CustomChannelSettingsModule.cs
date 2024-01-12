@@ -4,23 +4,17 @@ using CMS.DataEngine;
 using Kentico.Xperience.TagManager.Modules;
 
 [assembly: RegisterModule(typeof(CustomChannelSettingsModule))]
-namespace Kentico.Xperience.TagManager.Modules
+namespace Kentico.Xperience.TagManager.Modules;
+
+internal class CustomChannelSettingsModule : Module
 {
-    /// <summary>
-    /// Module with bizformitem event handlers for SalesForce Sales integration
-    /// </summary>
-    internal class CustomChannelSettingsModule : Module
+    public CustomChannelSettingsModule() : base(nameof(CustomChannelSettingsModule))
     {
-        public CustomChannelSettingsModule() : base(nameof(CustomChannelSettingsModule))
-        {
-        }
+    }
 
-        protected override void OnInit()
-        {
-            base.OnInit();
-            Service.Resolve<ICustomChannelSettingsModuleInstaller>().Install();
-        }
-
-
+    protected override void OnInit()
+    {
+        base.OnInit();
+        Service.Resolve<ICustomChannelSettingsModuleInstaller>().Install();
     }
 }

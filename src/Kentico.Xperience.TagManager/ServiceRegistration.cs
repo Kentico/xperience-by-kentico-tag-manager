@@ -8,17 +8,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 [assembly: RegisterLocalizationResource(typeof(Localization), "en-us")]
 
-namespace Kentico.Xperience.TagManager
+namespace Kentico.Xperience.TagManager;
+
+public static class ServiceRegistration
 {
-    public static class ServiceRegistration
+    public static IServiceCollection AddCustomChannelSettingsModule(this IServiceCollection services)
     {
-        public static IServiceCollection AddCustomChannelSettingsModule(this IServiceCollection services)
-        {
-            services.AddSingleton<ICustomChannelSettingsModuleInstaller, CustomChannelSettingsModuleInstaller>();
-            services.AddSingleton<IChannelCodeSnippetsService, ChannelCodeSnippetsService>();
-            services.AddScoped<IWebsiteChannelPermissionService, WebsiteChannelPermissionService>();
-            services.AddTransient<ITagHelperComponent, CodeSnippetTagHelperComponent>();
-            return services;
-        }
+        services.AddSingleton<ICustomChannelSettingsModuleInstaller, CustomChannelSettingsModuleInstaller>();
+        services.AddSingleton<IChannelCodeSnippetsService, ChannelCodeSnippetsService>();
+        services.AddScoped<IWebsiteChannelPermissionService, WebsiteChannelPermissionService>();
+        services.AddTransient<ITagHelperComponent, CodeSnippetTagHelperComponent>();
+        return services;
     }
 }

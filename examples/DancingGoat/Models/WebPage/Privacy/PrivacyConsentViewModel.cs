@@ -9,5 +9,7 @@
 
 
         public string Text { get; set; }
+
+        public bool Agreed { get; set; }
     }
 }

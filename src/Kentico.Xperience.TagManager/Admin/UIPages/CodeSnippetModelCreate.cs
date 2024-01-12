@@ -4,6 +4,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
 using Kentico.Xperience.TagManager.Admin.UIPages;
 using Kentico.Xperience.TagManager.Models;
+using Kentico.Xperience.TagManager.Services;
 
 [assembly: UIPage(
     parentType: typeof(CodeSnippetListing),
@@ -13,64 +14,91 @@ using Kentico.Xperience.TagManager.Models;
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 
-namespace Kentico.Xperience.TagManager.Admin.UIPages
+namespace Kentico.Xperience.TagManager.Admin.UIPages;
+
+[UIPermission(SystemPermissions.CREATE)]
+internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
 {
-    [UIPermission(SystemPermissions.CREATE)]
-    public class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
+    private CodeSnippetEditModel? model;
+    protected override CodeSnippetEditModel Model => model ??= new CodeSnippetEditModel();
+    private readonly IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider;
+    private readonly IPageUrlGenerator pageUrlGenerator;
+    private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
+
+    public CodeSnippetModelCreate(
+        Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider formItemCollectionProvider,
+        IFormDataBinder formDataBinder,
+        IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider,
+        IPageUrlGenerator pageUrlGenerator,
+        IWebsiteChannelPermissionService websiteChannelPermissionService)
+        : base(formItemCollectionProvider, formDataBinder)
     {
-        private CodeSnippetEditModel? model;
-        protected override CodeSnippetEditModel Model => model ??= new CodeSnippetEditModel();
-        private readonly IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider;
-        private readonly IPageUrlGenerator pageUrlGenerator;
+        this.channelCodeSnippetInfoProvider = channelCodeSnippetInfoProvider;
+        this.pageUrlGenerator = pageUrlGenerator;
+        this.websiteChannelPermissionService = websiteChannelPermissionService;
+    }
 
-        public CodeSnippetModelCreate(
-            Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider formItemCollectionProvider,
-            IFormDataBinder formDataBinder, IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider,
-            IPageUrlGenerator pageUrlGenerator)
-            : base(formItemCollectionProvider, formDataBinder)
+    protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetEditModel model,
+        ICollection<IFormItem> formItems)
+    {
+        CreateCodeSnippetInfo(model);
+
+        var navigateResponse = await NavigateToEditPage(model, formItems);
+
+        return navigateResponse;
+    }
+
+    private async Task<INavigateResponse> NavigateToEditPage(CodeSnippetEditModel model,
+        ICollection<IFormItem> formItems)
+    {
+        var baseResult = await base.ProcessFormData(model, formItems);
+
+        var navigateResponse = NavigateTo(
+            pageUrlGenerator.GenerateUrl<CodeSnippetListing>());
+
+        foreach (var message in baseResult.Messages)
         {
-            this.channelCodeSnippetInfoProvider = channelCodeSnippetInfoProvider;
-            this.pageUrlGenerator = pageUrlGenerator;
+            navigateResponse.Messages.Add(message);
         }
 
-        protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetEditModel model,
-            ICollection<IFormItem> formItems)
+        return navigateResponse;
+    }
+
+    protected override async Task<ICommandResponse> SubmitInternal(
+        FormSubmissionCommandArguments args,
+        ICollection<IFormItem> items,
+        IFormFieldValueProvider formFieldValueProvider)
+    {
+        //Validates Create permission for selected channel.
+
+        var channelId = Model.ChannelID.FirstOrDefault();
+        if (channelId == 0)
         {
-            CreateCodeSnippetInfo(model);
-
-            var navigateResponse = await NavigateToEditPage(model, formItems);
-
-            return navigateResponse;
+            return await base.SubmitInternal(args, items, formFieldValueProvider);
         }
 
-        private async Task<INavigateResponse> NavigateToEditPage(CodeSnippetEditModel model, ICollection<IFormItem> formItems)
+        var isAllowed = await websiteChannelPermissionService.IsAllowed(channelId, SystemPermissions.CREATE);
+
+        return isAllowed
+            ? await base.SubmitInternal(args, items, formFieldValueProvider)
+            : ResponseFrom(new FormSubmissionResult(FormSubmissionStatus.ValidationFailure))
+                .AddErrorMessage(
+                    LocalizationService.GetString("customchannelsettings.codesnippets.permissionerror"));
+
+    }
+
+    private ChannelCodeSnippetInfo CreateCodeSnippetInfo(CodeSnippetEditModel model)
+    {
+        var infoObject = new ChannelCodeSnippetInfo
         {
-            var baseResult = await base.ProcessFormData(model, formItems);
-
-            var navigateResponse = NavigateTo(
-                pageUrlGenerator.GenerateUrl<CodeSnippetListing>());
-
-            foreach (var message in baseResult.Messages)
-            {
-                navigateResponse.Messages.Add(message);
-            }
-
-            return navigateResponse;
-        }
-
-        private ChannelCodeSnippetInfo CreateCodeSnippetInfo(CodeSnippetEditModel model)
-        {
-            var infoObject = new ChannelCodeSnippetInfo
-            {
-                ChannelCodeSnippetChannelID = model.ChannelID.FirstOrDefault(),
-                ChannelCodeSnippetConsentID = model.ConsentID.FirstOrDefault(),
-                ChannelCodeSnippetCode = model.Code,
-                ChannelCodeSnippetGTMID = model.GTMID,
-                ChannelCodeSnippetLocation = model.Location,
-                ChannelCodeSnippetType = model.SnippetType
-            };
-            channelCodeSnippetInfoProvider.Set(infoObject);
-            return infoObject;
-        }
+            ChannelCodeSnippetChannelID = model.ChannelID.FirstOrDefault(),
+            ChannelCodeSnippetConsentID = model.ConsentID.FirstOrDefault(),
+            ChannelCodeSnippetCode = model.Code,
+            ChannelCodeSnippetGTMID = model.GTMID,
+            ChannelCodeSnippetLocation = model.Location,
+            ChannelCodeSnippetType = model.SnippetType
+        };
+        channelCodeSnippetInfoProvider.Set(infoObject);
+        return infoObject;
     }
 }

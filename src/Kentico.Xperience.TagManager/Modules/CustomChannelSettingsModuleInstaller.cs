@@ -3,16 +3,16 @@ using CMS.DataEngine;
 using CMS.FormEngine;
 using CMS.Modules;
 using GTM;
-using static Kentico.Xperience.TagManager.Constants.GTMConstants;
+using static Kentico.Xperience.TagManager.Constants.GtmConstants;
 
 namespace Kentico.Xperience.TagManager.Modules;
 
-public interface ICustomChannelSettingsModuleInstaller
+internal interface ICustomChannelSettingsModuleInstaller
 {
     void Install();
 }
 
-public class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModuleInstaller
+internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModuleInstaller
 {
     private readonly IResourceInfoProvider resourceInfoProvider;
 
@@ -44,9 +44,9 @@ public class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModule
         return resourceInfo;
     }
 
-    private void InstallModuleClasses(ResourceInfo resourceInfo) => InstallChannelCodeSnippetClass(resourceInfo);
+    private static void InstallModuleClasses(ResourceInfo resourceInfo) => InstallChannelCodeSnippetClass(resourceInfo);
 
-    private void InstallChannelCodeSnippetClass(ResourceInfo resourceInfo)
+    private static void InstallChannelCodeSnippetClass(ResourceInfo resourceInfo)
     {
         var channelCodeSnippetClass = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetInfo.OBJECT_TYPE);
         if (channelCodeSnippetClass is null)

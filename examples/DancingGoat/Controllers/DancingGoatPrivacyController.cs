@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using CMS.ContactManagement;
 using CMS.DataProtection;
-
 using DancingGoat;
 using DancingGoat.Controllers;
 using DancingGoat.Helpers.Generator;
 using DancingGoat.Models;
-
 using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
-
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: RegisterWebPageRoute(PrivacyPage.CONTENT_TYPE_NAME, typeof(DancingGoatPrivacyController), WebsiteChannelNames = new[] { DancingGoatConstants.WEBSITE_CHANNEL_NAME })]
@@ -43,7 +39,8 @@ namespace DancingGoat.Controllers
         }
 
 
-        public DancingGoatPrivacyController(IConsentAgreementService consentAgreementService, IConsentInfoProvider consentInfoProvider, IPreferredLanguageRetriever currentLanguageRetriever)
+        public DancingGoatPrivacyController(IConsentAgreementService consentAgreementService,
+            IConsentInfoProvider consentInfoProvider, IPreferredLanguageRetriever currentLanguageRetriever)
         {
             this.consentAgreementService = consentAgreementService;
             this.consentInfoProvider = consentInfoProvider;
@@ -59,11 +56,8 @@ namespace DancingGoat.Controllers
             {
                 model.DemoDisabled = true;
             }
-            else if (CurrentContact != null)
-            {
-                model.Consents = GetAgreedConsentsForCurrentContact();
-            }
 
+            model.Consents = GetAgreedConsentsForCurrentContact();
             model.ShowSavedMessage = TempData[SUCCESS_RESULT] != null;
             model.ShowErrorMessage = TempData[ERROR_RESULT] != null;
             model.PrivacyPageUrl = HttpContext.Request.Path;
@@ -71,6 +65,26 @@ namespace DancingGoat.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("/Agree")]
+        public ActionResult Agree(string returnUrl, string consentName)
+        {
+            var consentToAgree = consentInfoProvider.Get(consentName);
+
+            if (consentToAgree != null && CurrentContact != null)
+            {
+                consentAgreementService.Agree(CurrentContact, consentToAgree);
+
+                TempData[SUCCESS_RESULT] = true;
+            }
+            else
+            {
+                TempData[ERROR_RESULT] = true;
+            }
+
+            return Redirect(returnUrl);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -96,12 +110,14 @@ namespace DancingGoat.Controllers
 
         private IEnumerable<PrivacyConsentViewModel> GetAgreedConsentsForCurrentContact()
         {
-            return consentAgreementService.GetAgreedConsents(CurrentContact)
+            return consentInfoProvider.Get()
+                .AsEnumerable()
                 .Select(consent => new PrivacyConsentViewModel
                 {
-                    Name = consent.Name,
-                    Title = consent.DisplayName,
-                    Text = consent.GetConsentText(currentLanguageRetriever.Get()).ShortText
+                    Name = consent.ConsentName,
+                    Title = consent.ConsentDisplayName,
+                    Text = consent.GetConsentText(currentLanguageRetriever.Get()).ShortText,
+                    Agreed = CurrentContact is not null && consentAgreementService.IsAgreed(CurrentContact, consent)
                 });
         }
 
