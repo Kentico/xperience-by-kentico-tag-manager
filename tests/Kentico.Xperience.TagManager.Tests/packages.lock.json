@@ -941,8 +941,7 @@
         "type": "Project",
         "dependencies": {
           "Kentico.Xperience.Admin": "[28.1.0, )",
-          "Kentico.Xperience.WebApp": "[28.1.0, )",
-          "System.Linq.Async": "(, )"
+          "Kentico.Xperience.WebApp": "[28.1.0, )"
         }
       },
       "Kentico.Xperience.Admin": {
