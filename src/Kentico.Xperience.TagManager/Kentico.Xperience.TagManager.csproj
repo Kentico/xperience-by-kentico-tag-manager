@@ -13,10 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.Admin" />
-  </ItemGroup>
-
-  <ItemGroup>
+	<PackageReference Include="Kentico.Xperience.Admin" />
     <PackageReference Include="Kentico.Xperience.WebApp" />
     <PackageReference Include="Microsoft.SourceLink.GitHub">
       <PrivateAssets>all</PrivateAssets>

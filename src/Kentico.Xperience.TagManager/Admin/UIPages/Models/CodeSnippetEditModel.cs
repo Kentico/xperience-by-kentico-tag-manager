@@ -2,7 +2,7 @@
 using Kentico.Xperience.TagManager.Admin.UIFormComponents;
 using Kentico.Xperience.TagManager.Enums;
 
-namespace Kentico.Xperience.TagManager.Models;
+namespace Kentico.Xperience.TagManager.Admin.UIPages.Models;
 
 internal class CodeSnippetEditModel
 {

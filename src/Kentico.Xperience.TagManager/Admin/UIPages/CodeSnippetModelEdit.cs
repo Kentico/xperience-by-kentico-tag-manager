@@ -3,7 +3,7 @@ using GTM;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
 using Kentico.Xperience.TagManager.Admin.UIPages;
-using Kentico.Xperience.TagManager.Models;
+using Kentico.Xperience.TagManager.Admin.UIPages.Models;
 using Kentico.Xperience.TagManager.Services;
 using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider;
 
