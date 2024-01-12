@@ -65,9 +65,6 @@ window.updateCodeSnippets = async function () {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ids: [...initializedCodeSnippetsIds],
-      }),
     });
     if (!response.ok) {
       throw new Error(response.statusText);

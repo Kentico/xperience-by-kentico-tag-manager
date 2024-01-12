@@ -2,6 +2,7 @@
 using System.Linq;
 using CMS.ContactManagement;
 using CMS.DataProtection;
+using CMS.Helpers;
 using DancingGoat;
 using DancingGoat.Controllers;
 using DancingGoat.Helpers.Generator;
@@ -19,6 +20,7 @@ namespace DancingGoat.Controllers
         private const string SUCCESS_RESULT = "success";
         private const string ERROR_RESULT = "error";
 
+        private readonly ICurrentCookieLevelProvider cookieLevelProvider;
         private readonly IConsentAgreementService consentAgreementService;
         private readonly IConsentInfoProvider consentInfoProvider;
         private readonly IPreferredLanguageRetriever currentLanguageRetriever;
@@ -39,9 +41,13 @@ namespace DancingGoat.Controllers
         }
 
 
-        public DancingGoatPrivacyController(IConsentAgreementService consentAgreementService,
-            IConsentInfoProvider consentInfoProvider, IPreferredLanguageRetriever currentLanguageRetriever)
+        public DancingGoatPrivacyController(
+            ICurrentCookieLevelProvider cookieLevelProvider,
+            IConsentAgreementService consentAgreementService,
+            IConsentInfoProvider consentInfoProvider, 
+            IPreferredLanguageRetriever currentLanguageRetriever)
         {
+            this.cookieLevelProvider = cookieLevelProvider;
             this.consentAgreementService = consentAgreementService;
             this.consentInfoProvider = consentInfoProvider;
             this.currentLanguageRetriever = currentLanguageRetriever;
@@ -71,6 +77,8 @@ namespace DancingGoat.Controllers
         public ActionResult Agree(string returnUrl, string consentName)
         {
             var consentToAgree = consentInfoProvider.Get(consentName);
+
+            cookieLevelProvider.SetCurrentCookieLevel(Kentico.Web.Mvc.CookieLevel.All.Level);
 
             if (consentToAgree != null && CurrentContact != null)
             {
