@@ -1,12 +1,12 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
 using Kentico.Xperience.TagManager.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Kentico.Xperience.TagManager.Controllers;
 
 [Route("/gtm/[action]")]
-public sealed class GTMController : Controller
+public sealed class GtmController : Controller
 {
     private readonly IChannelCodeSnippetsService channelCodeSnippetsContext;
 
@@ -16,10 +16,7 @@ public sealed class GTMController : Controller
         Converters = { new JsonStringEnumConverter() }
     };
 
-    public GTMController(IChannelCodeSnippetsService channelCodeSnippetsContext)
-    {
-        this.channelCodeSnippetsContext = channelCodeSnippetsContext;
-    }
+    public GtmController(IChannelCodeSnippetsService channelCodeSnippetsContext) => this.channelCodeSnippetsContext = channelCodeSnippetsContext;
 
 
     [HttpPost]

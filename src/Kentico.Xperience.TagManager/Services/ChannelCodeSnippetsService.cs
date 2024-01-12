@@ -1,14 +1,14 @@
 ﻿using CMS.Base;
+using CMS.ContactManagement;
 using CMS.ContentEngine;
+using CMS.DataProtection;
+using CMS.Helpers;
 using CMS.Websites;
 using CMS.Websites.Routing;
-using CMS.DataProtection;
-using CMS.ContactManagement;
-using CMS.Helpers;
-using Kentico.Xperience.TagManager.Enums;
 using GTM;
-using Kentico.Xperience.TagManager.Models;
+using Kentico.Xperience.TagManager.Enums;
 using Kentico.Xperience.TagManager.Helpers;
+using Kentico.Xperience.TagManager.Models;
 
 namespace Kentico.Xperience.TagManager.Services;
 

@@ -71,13 +71,13 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
     {
         //Validates Create permission for selected channel.
 
-        var channelId = Model.ChannelID.FirstOrDefault();
+        int channelId = Model.ChannelID.FirstOrDefault();
         if (channelId == 0)
         {
             return await base.SubmitInternal(args, items, formFieldValueProvider);
         }
 
-        var isAllowed = await websiteChannelPermissionService.IsAllowed(channelId, SystemPermissions.CREATE);
+        bool isAllowed = await websiteChannelPermissionService.IsAllowed(channelId, SystemPermissions.CREATE);
 
         return isAllowed
             ? await base.SubmitInternal(args, items, formFieldValueProvider)

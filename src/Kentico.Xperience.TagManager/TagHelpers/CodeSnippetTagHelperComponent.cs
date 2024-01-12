@@ -3,9 +3,9 @@ using Kentico.Xperience.TagManager.Models;
 using Kentico.Xperience.TagManager.Services;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Kentico.Xperience.TagManager.TagHelpers;
 

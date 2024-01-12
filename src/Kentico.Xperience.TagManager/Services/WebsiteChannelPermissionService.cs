@@ -50,7 +50,7 @@ internal class WebsiteChannelPermissionService : IWebsiteChannelPermissionServic
             return true;
         }
 
-        var channelsIDs = GetChannelIDsWithGrantedPermission(
+        int[] channelsIDs = GetChannelIDsWithGrantedPermission(
                 await authenticatedUserAccessor.Get(),
                 SystemPermissions.VIEW)
             .ToArray();

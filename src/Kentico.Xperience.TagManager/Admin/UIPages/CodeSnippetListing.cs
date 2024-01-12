@@ -67,7 +67,7 @@ internal class CodeSnippetListing : ListingPage
         PageConfiguration.AddEditRowAction<CodeSnippetModelEdit>();
 
 
-        var channelsIDs = websiteChannelPermissionService.GetChannelIDsWithGrantedPermission(
+        int[] channelsIDs = websiteChannelPermissionService.GetChannelIDsWithGrantedPermission(
                 await authenticatedUserAccessor.Get(),
                 SystemPermissions.VIEW)
             .ToArray();
