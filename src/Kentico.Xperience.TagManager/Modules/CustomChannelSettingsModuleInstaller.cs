@@ -1,4 +1,5 @@
 ﻿using CMS.DataEngine;
+using CMS.DataProtection;
 using CMS.FormEngine;
 using CMS.Modules;
 using GTM;
@@ -73,7 +74,9 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
             Visible = false,
             DataType = FieldDataType.Integer,
             Enabled = true,
-            AllowEmpty = true
+            AllowEmpty = true,
+            ReferenceToObjectType = ConsentInfo.OBJECT_TYPE,
+            ReferenceType = ObjectDependencyEnum.Required
         };
         formInfo.AddFormItem(formItem);
         formItem = new FormFieldInfo
