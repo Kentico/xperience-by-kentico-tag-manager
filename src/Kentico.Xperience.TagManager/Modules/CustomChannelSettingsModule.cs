@@ -2,6 +2,7 @@
 using CMS.Core;
 using CMS.DataEngine;
 using Kentico.Xperience.TagManager.Modules;
+using Microsoft.Extensions.DependencyInjection;
 
 [assembly: RegisterModule(type: typeof(CustomChannelSettingsModule))]
 
@@ -13,9 +14,12 @@ internal class CustomChannelSettingsModule : Module
     {
     }
 
-    protected override void OnInit()
+    protected override void OnInit(ModuleInitParameters parameters)
     {
         base.OnInit();
-        Service.Resolve<ICustomChannelSettingsModuleInstaller>().Install();
+
+        var services = parameters.Services;
+
+        services.GetRequiredService<ICustomChannelSettingsModuleInstaller>().Install();
     }
 }
