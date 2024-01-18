@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using CMS.ContactManagement;
+﻿using CMS.ContactManagement;
 using CMS.DataProtection;
 using CMS.Helpers;
 using DancingGoat;
 using DancingGoat.Controllers;
 using DancingGoat.Helpers.Generator;
 using DancingGoat.Models;
-using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +41,7 @@ namespace DancingGoat.Controllers
         public DancingGoatPrivacyController(
             ICurrentCookieLevelProvider cookieLevelProvider,
             IConsentAgreementService consentAgreementService,
-            IConsentInfoProvider consentInfoProvider, 
+            IConsentInfoProvider consentInfoProvider,
             IPreferredLanguageRetriever currentLanguageRetriever)
         {
             this.cookieLevelProvider = cookieLevelProvider;
@@ -54,7 +51,7 @@ namespace DancingGoat.Controllers
         }
 
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var model = new PrivacyViewModel();
 
@@ -63,7 +60,7 @@ namespace DancingGoat.Controllers
                 model.DemoDisabled = true;
             }
 
-            model.Consents = GetAgreedConsentsForCurrentContact();
+            model.Consents = await GetAgreedConsentsForCurrentContact();
             model.ShowSavedMessage = TempData[SUCCESS_RESULT] != null;
             model.ShowErrorMessage = TempData[ERROR_RESULT] != null;
             model.PrivacyPageUrl = HttpContext.Request.Path;
@@ -116,17 +113,17 @@ namespace DancingGoat.Controllers
         }
 
 
-        private IEnumerable<PrivacyConsentViewModel> GetAgreedConsentsForCurrentContact()
+        private async Task<IEnumerable<PrivacyConsentViewModel>> GetAgreedConsentsForCurrentContact()
         {
-            return consentInfoProvider.Get()
-                .AsEnumerable()
-                .Select(consent => new PrivacyConsentViewModel
+            return await consentInfoProvider.Get()
+                .ToAsyncEnumerable()
+                .SelectAwait(async consent => new PrivacyConsentViewModel
                 {
                     Name = consent.ConsentName,
                     Title = consent.ConsentDisplayName,
-                    Text = consent.GetConsentText(currentLanguageRetriever.Get()).ShortText,
+                    Text = (await consent.GetConsentTextAsync(currentLanguageRetriever.Get())).ShortText,
                     Agreed = CurrentContact is not null && consentAgreementService.IsAgreed(CurrentContact, consent)
-                });
+                }).ToListAsync();
         }
 
 

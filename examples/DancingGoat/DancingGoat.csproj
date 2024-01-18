@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <RootNamespace>DancingGoat</RootNamespace>
     <UserSecretsId>4bb57401-f6b2-4cf0-b115-a805042eeb98</UserSecretsId>
@@ -28,5 +28,6 @@
     <PackageReference Include="kentico.xperience.azurestorage" />
     <PackageReference Include="kentico.xperience.imageprocessing" />
     <PackageReference Include="kentico.xperience.webapp" />
+    <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
 </Project>
