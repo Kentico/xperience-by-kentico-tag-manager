@@ -87,7 +87,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
 
     }
 
-    private ChannelCodeSnippetInfo CreateCodeSnippetInfo(CodeSnippetEditModel model)
+    private void CreateCodeSnippetInfo(CodeSnippetEditModel model)
     {
         var infoObject = new ChannelCodeSnippetInfo
         {

@@ -35,7 +35,7 @@ dotnet add package Kentico.Xperience.TagManager
 
 ## Quick Start
 1. Include `Kentico.Xperience.TagManager` project in the solution.
-1. Add to live site project as project dependency.
+1. Add to Xperience by Kentico application as project dependency.
 1. Register required services into DI container.
 
    ```csharp

@@ -8,7 +8,7 @@ internal class CodeSnippetEditModel
 {
     [RequiredValidationRule]
     [ObjectIdSelectorComponent(objectType: "cms.channel", Label = "Channel", Order = 1, WhereConditionProviderType = typeof(ChannelSelectorWhereConditionProvider))]
-    public IEnumerable<int> ChannelID { get; set; } = [];
+    public IEnumerable<int> ChannelIDs { get; set; } = [];
 
     [RequiredValidationRule]
     [DropDownComponent(Label = "Code snippet type", Order = 2, DataProviderType = typeof(CodeSnippetTypesDropdownOptionsProvider))]
@@ -27,5 +27,5 @@ internal class CodeSnippetEditModel
     public string? GTMID { get; set; }
 
     [ObjectIdSelectorComponent(objectType: "cms.consent", Label = "Consent", Order = 5, Placeholder = "{$customchannelsettings.codesnippets.noconsentneeded$}")]
-    public IEnumerable<int> ConsentID { get; set; } = [];
+    public IEnumerable<int> ConsentIDs { get; set; } = [];
 }

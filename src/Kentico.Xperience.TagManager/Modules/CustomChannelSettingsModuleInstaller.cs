@@ -55,7 +55,7 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
 
             channelCodeSnippetClass.ClassName = ChannelCodeSnippetInfo.OBJECT_TYPE;
             channelCodeSnippetClass.ClassTableName = ChannelCodeSnippetInfo.OBJECT_TYPE.Replace(".", "_");
-            channelCodeSnippetClass.ClassDisplayName = "ChannelCodeSnippet";
+            channelCodeSnippetClass.ClassDisplayName = "Channel Code Snippet";
             channelCodeSnippetClass.ClassResourceID = resourceInfo.ResourceID;
             channelCodeSnippetClass.ClassType = ClassType.OTHER;
             var formInfo = FormHelper.GetBasicFormDefinition(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID));
