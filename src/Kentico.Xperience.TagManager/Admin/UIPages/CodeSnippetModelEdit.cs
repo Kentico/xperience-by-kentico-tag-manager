@@ -9,7 +9,7 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
 
 [assembly: UIPage(
     parentType: typeof(CodeSnippetListing),
-    PageParameterConstants.PARAMETERIZED_SLUG,
+    slug: PageParameterConstants.PARAMETERIZED_SLUG,
     uiPageType: typeof(CodeSnippetModelEdit),
     name: "Edit a code snippet",
     templateName: TemplateNames.EDIT,

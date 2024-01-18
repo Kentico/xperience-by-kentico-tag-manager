@@ -6,7 +6,7 @@ using Kentico.Xperience.TagManager.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 
-[assembly: RegisterLocalizationResource(typeof(Localization), "en-us")]
+[assembly: RegisterLocalizationResource(markedType: typeof(Localization), cultureCodes: "en-us")]
 
 namespace Kentico.Xperience.TagManager;
 

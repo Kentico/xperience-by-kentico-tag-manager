@@ -3,7 +3,15 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.UIPages;
 using Kentico.Xperience.TagManager.Admin;
 
-[assembly: UIApplication(CustomChannelSettings.IDENTIFIER, typeof(CustomChannelSettings), "custom-channel-settings", "Custom channel settings", BaseApplicationCategories.CONFIGURATION, Icons.DialogWindowCogwheel, TemplateNames.SECTION_LAYOUT)]
+[assembly: UIApplication(
+    identifier: CustomChannelSettings.IDENTIFIER,
+    type: typeof(CustomChannelSettings),
+    slug: "custom-channel-settings",
+    name: "Custom channel settings",
+    category: BaseApplicationCategories.CONFIGURATION,
+    icon: Icons.DialogWindowCogwheel,
+    templateName: TemplateNames.SECTION_LAYOUT)]
+
 namespace Kentico.Xperience.TagManager.Admin;
 
 [UIPermission(SystemPermissions.VIEW)]

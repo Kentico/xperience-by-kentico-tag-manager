@@ -3,7 +3,8 @@ using CMS.Core;
 using CMS.DataEngine;
 using Kentico.Xperience.TagManager.Modules;
 
-[assembly: RegisterModule(typeof(CustomChannelSettingsModule))]
+[assembly: RegisterModule(type: typeof(CustomChannelSettingsModule))]
+
 namespace Kentico.Xperience.TagManager.Modules;
 
 internal class CustomChannelSettingsModule : Module

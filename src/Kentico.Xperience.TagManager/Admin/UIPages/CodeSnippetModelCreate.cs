@@ -8,7 +8,7 @@ using Kentico.Xperience.TagManager.Services;
 
 [assembly: UIPage(
     parentType: typeof(CodeSnippetListing),
-    "add",
+    slug: "add",
     uiPageType: typeof(CodeSnippetModelCreate),
     name: "Create a code snippet",
     templateName: TemplateNames.EDIT,
