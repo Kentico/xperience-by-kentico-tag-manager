@@ -38,10 +38,10 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
 
             model = new CodeSnippetEditModel()
             {
-                ChannelID = [info.ChannelCodeSnippetChannelID],
+                ChannelIDs = [info.ChannelCodeSnippetChannelID],
                 Code = info.ChannelCodeSnippetCode,
                 SnippetType = info.ChannelCodeSnippetType,
-                ConsentID = info.ChannelCodeSnippetConsentID == 0 ? [] : [info.ChannelCodeSnippetConsentID],
+                ConsentIDs = info.ChannelCodeSnippetConsentID == 0 ? [] : [info.ChannelCodeSnippetConsentID],
                 GTMID = info.ChannelCodeSnippetGTMID,
                 Location = info.ChannelCodeSnippetLocation,
             };
@@ -74,7 +74,7 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
     {
         //Validates Update permission for selected channel.
 
-        int channelId = Model.ChannelID.FirstOrDefault();
+        int channelId = Model.ChannelIDs.FirstOrDefault();
         if (channelId == 0)
         {
             return await base.SubmitInternal(args, items, formFieldValueProvider);
@@ -95,8 +95,8 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
         ICollection<IFormItem> formItems)
     {
         var info = channelCodeSnippetInfoProvider.Get(ObjectID);
-        info.ChannelCodeSnippetChannelID = model.ChannelID.FirstOrDefault();
-        info.ChannelCodeSnippetConsentID = model.ConsentID.FirstOrDefault();
+        info.ChannelCodeSnippetChannelID = model.ChannelIDs.FirstOrDefault();
+        info.ChannelCodeSnippetConsentID = model.ConsentIDs.FirstOrDefault();
         info.ChannelCodeSnippetCode = model.Code;
         info.ChannelCodeSnippetGTMID = model.GTMID;
         info.ChannelCodeSnippetLocation = model.Location;

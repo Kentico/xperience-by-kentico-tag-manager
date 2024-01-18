@@ -71,7 +71,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
     {
         //Validates Create permission for selected channel.
 
-        int channelId = Model.ChannelID.FirstOrDefault();
+        int channelId = Model.ChannelIDs.FirstOrDefault();
         if (channelId == 0)
         {
             return await base.SubmitInternal(args, items, formFieldValueProvider);
@@ -91,14 +91,13 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
     {
         var infoObject = new ChannelCodeSnippetInfo
         {
-            ChannelCodeSnippetChannelID = model.ChannelID.FirstOrDefault(),
-            ChannelCodeSnippetConsentID = model.ConsentID.FirstOrDefault(),
+            ChannelCodeSnippetChannelID = model.ChannelIDs.FirstOrDefault(),
+            ChannelCodeSnippetConsentID = model.ConsentIDs.FirstOrDefault(),
             ChannelCodeSnippetCode = model.Code,
             ChannelCodeSnippetGTMID = model.GTMID,
             ChannelCodeSnippetLocation = model.Location,
             ChannelCodeSnippetType = model.SnippetType
         };
         channelCodeSnippetInfoProvider.Set(infoObject);
-        return infoObject;
     }
 }
