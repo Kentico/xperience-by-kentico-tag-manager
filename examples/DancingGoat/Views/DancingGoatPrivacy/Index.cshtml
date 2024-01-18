@@ -94,7 +94,7 @@
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {
-                window.updateCodeSnippets()
+                window.xperience.tagManager.updateCodeSnippets()
 
                 btn.innerText = btn.innerText === "AGREE ASYNC" ? "REVOKE ASYNC" : "AGREE ASYNC";
             }
