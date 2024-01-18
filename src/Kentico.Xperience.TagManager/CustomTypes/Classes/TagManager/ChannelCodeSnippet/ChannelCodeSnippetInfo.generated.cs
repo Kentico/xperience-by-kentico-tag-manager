@@ -20,7 +20,7 @@ namespace GTM
         /// <summary>
         /// Object type.
         /// </summary>
-        public const string OBJECT_TYPE = "cms.channelcodesnippet";
+        public const string OBJECT_TYPE = "kenticotagmanager.channelcodesnippet";
 
 
         /// <summary>
@@ -30,6 +30,10 @@ namespace GTM
         public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "CMS.ChannelCodeSnippet", "ChannelCodeSnippetID", null, null, null, null, null, null, null)
         {
             TouchCacheDependencies = true,
+            ContinuousIntegrationSettings =
+            {
+                Enabled = true
+            },
             DependsOn = new List<ObjectDependency>()
             {
                 new ObjectDependency("ChannelCodeSnippetChannelID", "cms.channel", ObjectDependencyEnum.Required),
