@@ -12,7 +12,6 @@ Tag Manager integration enabling marketers to author custom tags that can be emb
 ![Custom tags listing](/images/screenshots/listing.png "Custom tags listing")
 ![Create custom code snippet](/images/screenshots/create_snippet.png "Create custom code snippet")
 ![Create GTM tag snippet](/images/screenshots/create_gtmid.png "Create GTM tag snippet")
-![Custom channel permission](/images/screenshots/custom_permission.png "Custom channel permission")
 
 ## Library Version Matrix
 
