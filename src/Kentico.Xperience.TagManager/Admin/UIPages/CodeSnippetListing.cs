@@ -37,7 +37,7 @@ internal class CodeSnippetListing : ListingPage
     protected override string ObjectType => ChannelCodeSnippetInfo.OBJECT_TYPE;
 
     /// <inheritdoc />
-    [PageCommand(Permission = "Delete")]
+    [PageCommand(Permission = SystemPermissions.DELETE)]
     public override Task<ICommandResponse<RowActionResult>> Delete(int id) => base.Delete(id);
 
     public override async Task ConfigurePage()

@@ -25,7 +25,7 @@ internal class ChannelSelectorWhereConditionProvider : IObjectSelectorWhereCondi
         var currentUser = authenticatedUserAccessor.Get().GetAwaiter().GetResult();
 
         int[] channelIDs = websiteChannelPermissionService
-            .GetChannelIDsWithGrantedPermission(currentUser, SystemPermissions.CREATE)
+            .GetChannelIDsWithGrantedPermission(currentUser, SystemPermissions.VIEW)
             .ToArray();
 
         return new WhereCondition()

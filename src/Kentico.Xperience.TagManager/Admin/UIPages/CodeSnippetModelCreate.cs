@@ -17,6 +17,7 @@ using Kentico.Xperience.TagManager.Services;
 namespace Kentico.Xperience.TagManager.Admin.UIPages;
 
 [UIPermission(SystemPermissions.CREATE)]
+[UIEvaluatePermission(SystemPermissions.CREATE)]
 internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
 {
     private CodeSnippetEditModel? model;
@@ -37,6 +38,9 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
         this.pageUrlGenerator = pageUrlGenerator;
         this.websiteChannelPermissionService = websiteChannelPermissionService;
     }
+
+    [PageCommand(Permission = SystemPermissions.CREATE)]
+    public override Task<ICommandResponse<FormChangeResult>> Change(FormChangeCommandArguments args) => base.Change(args);
 
     protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetEditModel model,
         ICollection<IFormItem> formItems)
@@ -77,7 +81,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
             return await base.SubmitInternal(args, items, formFieldValueProvider);
         }
 
-        bool isAllowed = await websiteChannelPermissionService.IsAllowed(channelId, SystemPermissions.CREATE);
+        bool isAllowed = await websiteChannelPermissionService.IsAllowed(channelId, SystemPermissions.VIEW);
 
         return isAllowed
             ? await base.SubmitInternal(args, items, formFieldValueProvider)
