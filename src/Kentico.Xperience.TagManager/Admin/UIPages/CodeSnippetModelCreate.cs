@@ -84,20 +84,14 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
             : ResponseFrom(new FormSubmissionResult(FormSubmissionStatus.ValidationFailure))
                 .AddErrorMessage(
                     LocalizationService.GetString("customchannelsettings.codesnippets.permissionerror"));
-
     }
 
     private void CreateCodeSnippetInfo(CodeSnippetEditModel model)
     {
-        var infoObject = new ChannelCodeSnippetInfo
-        {
-            ChannelCodeSnippetChannelID = model.ChannelIDs.FirstOrDefault(),
-            ChannelCodeSnippetConsentID = model.ConsentIDs.FirstOrDefault(),
-            ChannelCodeSnippetCode = model.Code,
-            ChannelCodeSnippetGTMID = model.GTMID,
-            ChannelCodeSnippetLocation = model.Location,
-            ChannelCodeSnippetType = model.SnippetType
-        };
+        var infoObject = new ChannelCodeSnippetInfo();
+
+        ChannelCodeSnippetHelper.SetChannelCodeSnippetInfo(model, infoObject);
+
         channelCodeSnippetInfoProvider.Set(infoObject);
     }
 }

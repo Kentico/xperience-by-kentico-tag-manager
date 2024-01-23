@@ -95,12 +95,9 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
         ICollection<IFormItem> formItems)
     {
         var info = channelCodeSnippetInfoProvider.Get(ObjectID);
-        info.ChannelCodeSnippetChannelID = model.ChannelIDs.FirstOrDefault();
-        info.ChannelCodeSnippetConsentID = model.ConsentIDs.FirstOrDefault();
-        info.ChannelCodeSnippetCode = model.Code;
-        info.ChannelCodeSnippetGTMID = model.GTMID;
-        info.ChannelCodeSnippetLocation = model.Location;
-        info.ChannelCodeSnippetType = model.SnippetType;
+
+        ChannelCodeSnippetHelper.SetChannelCodeSnippetInfo(model, info);
+
         channelCodeSnippetInfoProvider.Set(info);
 
         return await base.ProcessFormData(model, formItems);

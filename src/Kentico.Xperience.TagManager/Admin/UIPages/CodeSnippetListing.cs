@@ -1,4 +1,5 @@
-﻿using CMS.ContentEngine;
+﻿using CMS.Base;
+using CMS.ContentEngine;
 using CMS.DataProtection;
 using CMS.Membership;
 using GTM;
@@ -6,6 +7,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.TagManager.Admin;
 using Kentico.Xperience.TagManager.Admin.UIPages;
+using Kentico.Xperience.TagManager.Enums;
 using Kentico.Xperience.TagManager.Services;
 
 [assembly: UIPage(
@@ -45,19 +47,20 @@ internal class CodeSnippetListing : ListingPage
         PageConfiguration.ColumnConfigurations.AddColumn(
             nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
             "Channel",
+            sortable: false,
             formatter: (value, _) => ChannelInfoProvider.ProviderObject.Get((int)value).ChannelDisplayName
         );
 
         PageConfiguration.QueryModifiers.AddModifier(q =>
-            q.AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID)));
+            q.AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
         PageConfiguration.ColumnConfigurations.AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
             "Code Snippet",
-            formatter: (_, container) =>
-                container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ??
-                $"Google Tag Manager ID: {container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID)]}");
+            sortable: false,
+            formatter: (_, container) => FormatCodeSnippet(container));
         PageConfiguration.ColumnConfigurations.AddColumn(
             nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
             "Consent",
+            sortable: false,
             formatter: (value, _) =>
                 value is null or 0
                     ? LocalizationService.GetString("customchannelsettings.codesnippets.noconsentneeded")
@@ -75,5 +78,21 @@ internal class CodeSnippetListing : ListingPage
         PageConfiguration.QueryModifiers
             .AddModifier((query, _) =>
                 query.WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs));
+    }
+
+    private static string FormatCodeSnippet(IDataContainer container)
+    {
+        object? codeSnippetType = container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+        return codeSnippetType switch
+        {
+            nameof(CodeSnippetTypes.GTM) =>
+                $"Google Tag Manager ID: {container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID)]}",
+            nameof(CodeSnippetTypes.CustomCode) => container[
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ?? string.Empty,
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(codeSnippetType),
+                codeSnippetType,
+                "Invalid ChannelCodeSnippetType!")
+        };
     }
 }

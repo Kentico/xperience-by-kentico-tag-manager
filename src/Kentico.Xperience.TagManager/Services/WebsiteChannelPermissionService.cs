@@ -46,13 +46,6 @@ internal class WebsiteChannelPermissionService : IWebsiteChannelPermissionServic
 
     public async Task<bool> IsAllowed(int channelId, string permissionName)
     {
-        var currentUser = await authenticatedUserAccessor.Get();
-
-        if (currentUser.IsAdministrator())
-        {
-            return true;
-        }
-
         int[] channelsIDs = GetChannelIDsWithGrantedPermission(
                 await authenticatedUserAccessor.Get(),
                 SystemPermissions.VIEW)
