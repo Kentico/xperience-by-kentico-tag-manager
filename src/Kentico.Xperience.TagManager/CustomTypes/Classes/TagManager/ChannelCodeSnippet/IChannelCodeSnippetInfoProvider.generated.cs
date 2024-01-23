@@ -1,6 +1,6 @@
 using CMS.DataEngine;
 
-namespace GTM
+namespace Kentico.Xperience.TagManager
 {
     /// <summary>
     /// Declares members for <see cref="ChannelCodeSnippetInfo"/> management.

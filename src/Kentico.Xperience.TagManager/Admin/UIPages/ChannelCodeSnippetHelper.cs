@@ -1,5 +1,4 @@
-﻿using GTM;
-using Kentico.Xperience.TagManager.Admin.UIPages.Models;
+﻿using Kentico.Xperience.TagManager.Admin.UIPages.Models;
 using Kentico.Xperience.TagManager.Enums;
 
 namespace Kentico.Xperience.TagManager.Admin.UIPages;

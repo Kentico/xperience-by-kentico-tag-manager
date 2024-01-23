@@ -5,7 +5,6 @@ using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.Websites;
 using CMS.Websites.Routing;
-using GTM;
 using Kentico.Xperience.TagManager.Enums;
 using Kentico.Xperience.TagManager.Helpers;
 using Kentico.Xperience.TagManager.Models;

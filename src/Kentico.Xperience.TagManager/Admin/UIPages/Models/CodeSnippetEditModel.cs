@@ -1,4 +1,6 @@
-﻿using Kentico.Xperience.Admin.Base.FormAnnotations;
+﻿using CMS.ContentEngine;
+using CMS.DataProtection;
+using Kentico.Xperience.Admin.Base.FormAnnotations;
 using Kentico.Xperience.TagManager.Admin.UIFormComponents;
 using Kentico.Xperience.TagManager.Enums;
 
@@ -7,7 +9,7 @@ namespace Kentico.Xperience.TagManager.Admin.UIPages.Models;
 internal class CodeSnippetEditModel
 {
     [RequiredValidationRule]
-    [ObjectIdSelectorComponent(objectType: "cms.channel", Label = "Channel", Order = 1, WhereConditionProviderType = typeof(ChannelSelectorWhereConditionProvider))]
+    [ObjectIdSelectorComponent(objectType: ChannelInfo.OBJECT_TYPE, Label = "Channel", Order = 1, WhereConditionProviderType = typeof(ChannelSelectorWhereConditionProvider))]
     public IEnumerable<int> ChannelIDs { get; set; } = [];
 
     [RequiredValidationRule]
@@ -26,6 +28,6 @@ internal class CodeSnippetEditModel
     [VisibleIfEqualTo(nameof(SnippetType), nameof(CodeSnippetTypes.GTM))]
     public string? GTMID { get; set; }
 
-    [ObjectIdSelectorComponent(objectType: "cms.consent", Label = "Consent", Order = 5, Placeholder = "{$customchannelsettings.codesnippets.noconsentneeded$}")]
+    [ObjectIdSelectorComponent(objectType: ConsentInfo.OBJECT_TYPE, Label = "Consent", Order = 5, Placeholder = "{$customchannelsettings.codesnippets.noconsentneeded$}")]
     public IEnumerable<int> ConsentIDs { get; set; } = [];
 }

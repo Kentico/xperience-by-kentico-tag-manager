@@ -1,5 +1,4 @@
 ﻿using CMS.Membership;
-using GTM;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
 using Kentico.Xperience.TagManager.Admin.UIPages;

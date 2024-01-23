@@ -2,7 +2,6 @@
 using CMS.DataProtection;
 using CMS.FormEngine;
 using CMS.Modules;
-using GTM;
 using static Kentico.Xperience.TagManager.Constants.GtmConstants;
 
 namespace Kentico.Xperience.TagManager.Modules;
@@ -74,6 +73,27 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
             ReferenceType = ObjectDependencyEnum.Required
         };
         formInfo.AddFormItem(formItem);
+
+        formItem = new FormFieldInfo
+        {
+            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetName),
+            Visible = true,
+            DataType = FieldDataType.Text,
+            Enabled = true,
+            AllowEmpty = false,
+        };
+        formInfo.AddFormItem(formItem);
+
+        formItem = new FormFieldInfo
+        {
+            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLastModified),
+            Visible = false,
+            DataType = FieldDataType.DateTime,
+            Enabled = true,
+            AllowEmpty = false,
+        };
+        formInfo.AddFormItem(formItem);
+
         formItem = new FormFieldInfo
         {
             Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),

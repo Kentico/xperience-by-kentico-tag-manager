@@ -2,7 +2,6 @@
 using CMS.ContentEngine;
 using CMS.DataProtection;
 using CMS.Membership;
-using GTM;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.TagManager.Admin;
@@ -80,6 +79,12 @@ internal class CodeSnippetListing : ListingPage
                 query.WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="container"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     private static string FormatCodeSnippet(IDataContainer container)
     {
         object? codeSnippetType = container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
@@ -90,7 +95,7 @@ internal class CodeSnippetListing : ListingPage
             nameof(CodeSnippetTypes.CustomCode) => container[
                 nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ?? string.Empty,
             _ => throw new ArgumentOutOfRangeException(
-                nameof(codeSnippetType),
+                nameof(container),
                 codeSnippetType,
                 "Invalid ChannelCodeSnippetType!")
         };

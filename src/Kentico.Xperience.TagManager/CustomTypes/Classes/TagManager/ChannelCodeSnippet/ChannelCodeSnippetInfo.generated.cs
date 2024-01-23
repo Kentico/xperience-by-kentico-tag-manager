@@ -1,15 +1,16 @@
-using System;
 using System.Data;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 using CMS;
 using CMS.DataEngine;
 using CMS.Helpers;
-using GTM;
+using CMS.ContentEngine;
+using CMS.DataProtection;
+using Kentico.Xperience.TagManager;
 
 [assembly: RegisterObjectType(typeof(ChannelCodeSnippetInfo), ChannelCodeSnippetInfo.OBJECT_TYPE)]
-namespace GTM
+
+namespace Kentico.Xperience.TagManager
 {
     /// <summary>
     /// Data container class for <see cref="ChannelCodeSnippetInfo"/>.
@@ -26,8 +27,7 @@ namespace GTM
         /// <summary>
         /// Type information.
         /// </summary>
-#warning "You will need to configure the type info."
-        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippet", "ChannelCodeSnippetID", null, null, null, null, null, null, null)
+        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippet", nameof(ChannelCodeSnippetID), nameof(ChannelCodeSnippetLastModified), null, nameof(ChannelCodeSnippetName), null, null, null, null)
         {
             TouchCacheDependencies = true,
             ContinuousIntegrationSettings =
@@ -36,8 +36,8 @@ namespace GTM
             },
             DependsOn = new List<ObjectDependency>()
             {
-                new ObjectDependency("ChannelCodeSnippetChannelID", "cms.channel", ObjectDependencyEnum.Required),
-                new ObjectDependency("ChannelCodeSnippetConsentID", "cms.consent", ObjectDependencyEnum.Required),
+                new ObjectDependency(nameof(ChannelCodeSnippetChannelID), ChannelInfo.OBJECT_TYPE, ObjectDependencyEnum.Required),
+                new ObjectDependency(nameof(ChannelCodeSnippetConsentID), ConsentInfo.OBJECT_TYPE, ObjectDependencyEnum.Required),
             },
         };
 
@@ -50,6 +50,28 @@ namespace GTM
         {
             get => ValidationHelper.GetInteger(GetValue(nameof(ChannelCodeSnippetID)), 0);
             set => SetValue(nameof(ChannelCodeSnippetID), value);
+        }
+
+
+        /// <summary>
+        /// Channel code snippet name.
+        /// </summary>
+        [DatabaseField]
+        public virtual string ChannelCodeSnippetName
+        {
+            get => ValidationHelper.GetString(GetValue(nameof(ChannelCodeSnippetName)), "");
+            set => SetValue(nameof(ChannelCodeSnippetName), value);
+        }
+
+
+        /// <summary>
+        /// Channel code snippet date modified.
+        /// </summary>
+        [DatabaseField]
+        public virtual DateTime ChannelCodeSnippetLastModified
+        {
+            get => ValidationHelper.GetDateTime(GetValue(nameof(ChannelCodeSnippetLastModified)), DateTime.MinValue);
+            set => SetValue(nameof(ChannelCodeSnippetLastModified), value);
         }
 
 

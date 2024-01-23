@@ -1,6 +1,6 @@
 using CMS.DataEngine;
 
-namespace GTM
+namespace Kentico.Xperience.TagManager
 {
     /// <summary>
     /// Class providing <see cref="ChannelCodeSnippetInfo"/> management.
