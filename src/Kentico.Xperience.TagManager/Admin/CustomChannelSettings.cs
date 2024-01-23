@@ -6,10 +6,10 @@ using Kentico.Xperience.TagManager.Admin;
 [assembly: UIApplication(
     identifier: CustomChannelSettings.IDENTIFIER,
     type: typeof(CustomChannelSettings),
-    slug: "custom-channel-settings",
-    name: "Custom channel settings",
+    slug: "tag-management",
+    name: "Tag Management",
     category: BaseApplicationCategories.CONFIGURATION,
-    icon: Icons.DialogWindowCogwheel,
+    icon: Icons.BracesOctothorpe,
     templateName: TemplateNames.SECTION_LAYOUT)]
 
 namespace Kentico.Xperience.TagManager.Admin;
@@ -20,5 +20,5 @@ namespace Kentico.Xperience.TagManager.Admin;
 [UIPermission(SystemPermissions.DELETE)]
 internal class CustomChannelSettings : ApplicationPage
 {
-    public const string IDENTIFIER = "custom-channel-settings";
+    public const string IDENTIFIER = "tag-management";
 }
