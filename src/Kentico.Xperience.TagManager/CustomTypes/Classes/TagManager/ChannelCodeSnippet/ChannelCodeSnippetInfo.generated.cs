@@ -27,7 +27,7 @@ namespace GTM
         /// Type information.
         /// </summary>
 #warning "You will need to configure the type info."
-        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "CMS.ChannelCodeSnippet", "ChannelCodeSnippetID", null, null, null, null, null, null, null)
+        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippet", "ChannelCodeSnippetID", null, null, null, null, null, null, null)
         {
             TouchCacheDependencies = true,
             ContinuousIntegrationSettings =
