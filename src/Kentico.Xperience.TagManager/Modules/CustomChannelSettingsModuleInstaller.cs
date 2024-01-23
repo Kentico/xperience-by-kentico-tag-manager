@@ -45,7 +45,7 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
 
     private static void InstallChannelCodeSnippetClass(ResourceInfo resourceInfo)
     {
-        var channelCodeSnippetClass = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetInfo.OBJECT_TYPE) ??
+        var channelCodeSnippetClass = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName) ??
                                       DataClassInfo.New(ChannelCodeSnippetInfo.OBJECT_TYPE);
 
         channelCodeSnippetClass.ClassName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName;
