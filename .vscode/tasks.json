@@ -2,29 +2,59 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "dotnet",
-      "task": "build",
-      "problemMatcher": ["$msCompile"],
-      "group": "build",
-      "label": "dotnet: build (Solution)"
-    },
-    {
-      "type": "shell",
+      "label": ".NET: build (Solution)",
       "command": "dotnet",
-      "args": ["format"],
-      "problemMatcher": ["$msCompile"],
-      "group": "none",
-      "options": {
-        "cwd": "${workspaceFolder}/src/Kentico.Xperience.TagManager/"
-      },
-      "label": "dotnet: format (TagManager)"
+      "type": "process",
+      "args": [
+        "build",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
     },
     {
-      "type": "dotnet",
-      "task": "clean",
-      "problemMatcher": ["$msCompile"],
-      "group": "build",
-      "label": "dotnet: clean (Solution)"
+      "label": ".NET: rebuild (Solution)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "--no-incremental",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": ".NET: clean (Solution)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "clean",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": ".NET: test (Solution)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "test",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": ".NET: format (TagManager)",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["format", "Kentico.Xperience.TagManager.csproj"],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/src/Kentico.Xperience.TagManager"
+      }
     },
     {
       "type": "npm",
