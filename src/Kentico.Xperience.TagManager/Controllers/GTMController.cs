@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Kentico.Xperience.TagManager.Controllers;
 
-[Route("/gtm/[action]")]
+[Route("/kentico.tagmanager/gtm/[action]")]
 public sealed class GtmController : Controller
 {
     private readonly IChannelCodeSnippetsService channelCodeSnippetsContext;

@@ -89,7 +89,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
         {
             Attributes =
             {
-                ["type"] = "text/javascript",
+                ["type"] = "module",
                 ["src"] = fileVersionProvider.AddFileVersionToPath(
                     ViewContext.HttpContext.Request.PathBase,
                     urlHelper.Content("~/_content/Kentico.Xperience.TagManager/Scripts/ktc-tagmanager.js"))
