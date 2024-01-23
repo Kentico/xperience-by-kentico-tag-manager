@@ -2,6 +2,7 @@
 using CMS.Websites;
 using Kentico.Membership;
 using Kentico.Xperience.Admin.Base.Authentication;
+using Kentico.Xperience.TagManager.Constants;
 
 namespace Kentico.Xperience.TagManager.Services;
 
@@ -28,9 +29,11 @@ internal class WebsiteChannelPermissionService : IWebsiteChannelPermissionServic
             .Source(s => s.InnerJoin<ApplicationPermissionInfo>(nameof(UserRoleInfo.RoleID), nameof(ApplicationPermissionInfo.RoleID)))
             .WhereEquals(nameof(UserInfo.UserID), user.UserID)
             .WhereEquals(nameof(ApplicationPermissionInfo.PermissionName), permission)
+            .WhereStartsWith(nameof(ApplicationPermissionInfo.ApplicationName), GtmConstants.Permissions.WebsiteChannelPermissionName)
             .Column(nameof(ApplicationPermissionInfo.ApplicationName))
             .GetListResult<string>()
-            .Select(g => Guid.Parse(g[g.LastIndexOf('_')..]))
+            .Select(g => g.Split('_') is [_, var guid] ? Guid.Parse(guid) : Guid.Empty)
+            .Where(g => g != Guid.Empty)
             .ToList();
 
         var websiteChannelIDs = WebsiteChannelInfoProvider.ProviderObject.Get()
