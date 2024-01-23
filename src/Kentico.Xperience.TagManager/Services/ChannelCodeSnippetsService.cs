@@ -63,7 +63,7 @@ internal class ChannelCodeSnippetsService : IChannelCodeSnippetsService
                             nameof(WebsiteChannelInfo.WebsiteChannelChannelID));
 
                         x.LeftJoin<ConsentInfo>(
-                            $"cms_channelcodesnippet.{nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID)}",
+                            $"kenticotagmanager_channelcodesnippet.{nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID)}",
                             nameof(ConsentInfo.ConsentID));
                     })
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), channelContext.WebsiteChannelID)
