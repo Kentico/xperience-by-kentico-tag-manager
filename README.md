@@ -33,10 +33,13 @@ dotnet add package Kentico.Xperience.TagManager
 ```
 
 ## Quick Start
+
 1. Include `Kentico.Xperience.TagManager` project in the solution.
-	```powershell
-	dotnet add package Kentico.Xperience.TagManager
-	```
+
+   ```powershell
+   dotnet add package Kentico.Xperience.TagManager
+   ```
+
 2. Register required services into DI container.
 
    ```csharp
@@ -46,13 +49,14 @@ dotnet add package Kentico.Xperience.TagManager
 
    // ...
 
-   builder.Services.AddCustomChannelSettingsModule();
+   builder.Services.AddTagManager();
    ```
-1. In the administration go to UI application 'Custom channel settings'.
-1. Create new record.
-1. Choose channel, snippet type, custom code snippet or GTM ID, and consent.
-1. During rendering the livesite page, the application automatically adds custom code snippets with accepted consents.
-1. To dynamically update the rendered code snippets, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
+
+3. In the administration go to UI application 'Custom channel settings'.
+4. Create new record.
+5. Choose channel, snippet type, custom code snippet or GTM ID, and consent.
+6. During rendering the livesite page, the application automatically adds custom code snippets with accepted consents.
+7. To dynamically update the rendered code snippets, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
 
 ## Contributing
 

@@ -58,7 +58,7 @@ builder.Services.AddLocalization()
     });
 
 builder.Services.AddDancingGoatServices();
-builder.Services.AddCustomChannelSettingsModule();
+builder.Services.AddTagManager();
 
 ConfigureMembershipServices(builder.Services);
 

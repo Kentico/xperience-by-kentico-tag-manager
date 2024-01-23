@@ -4,15 +4,14 @@ using Kentico.Xperience.TagManager.Resources;
 using Kentico.Xperience.TagManager.Services;
 using Kentico.Xperience.TagManager.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.DependencyInjection;
 
 [assembly: RegisterLocalizationResource(markedType: typeof(Localization), cultureCodes: "en-us")]
 
-namespace Kentico.Xperience.TagManager;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceRegistration
 {
-    public static IServiceCollection AddCustomChannelSettingsModule(this IServiceCollection services)
+    public static IServiceCollection AddTagManager(this IServiceCollection services)
     {
         services.AddSingleton<ICustomChannelSettingsModuleInstaller, CustomChannelSettingsModuleInstaller>();
         services.AddSingleton<IChannelCodeSnippetsService, ChannelCodeSnippetsService>();
