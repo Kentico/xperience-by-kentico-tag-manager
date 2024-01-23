@@ -15,10 +15,6 @@
 	<ItemGroup>
 		<PackageReference Include="Kentico.Xperience.Admin" />
 		<PackageReference Include="Kentico.Xperience.WebApp" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,13 +36,11 @@
 		</Compile>
 	</ItemGroup>
 
-	<Target Name="NpmInstall" BeforeTargets="NpmBuildClient"
-	        Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
+	<Target Name="NpmInstall" BeforeTargets="NpmBuildClient" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
 		<Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)\Frontend" />
 	</Target>
 
-	<Target Name="NpmBuildClient" BeforeTargets="BeforeBuild"
-	        Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
+	<Target Name="NpmBuildClient" BeforeTargets="BeforeBuild" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
 		<Exec Command="npm run build:prod" WorkingDirectory="$(MSBuildProjectDirectory)\Frontend" />
 	</Target>
 
