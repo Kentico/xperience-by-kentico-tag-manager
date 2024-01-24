@@ -37,7 +37,7 @@ stages:
             value: Release
 
           - name: ProjectPath
-            value: src/PROJECT_NAME/PROJECT_NAME.csproj
+            value: src/Kentico.Xperience.TagManager/Kentico.Xperience.TagManager.csproj
 
         steps:
           - task: UseDotNet@2
