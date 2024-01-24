@@ -1,19 +1,47 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <Product>Xperience by Kentico Tag Manager</Product>
-    <Title>$(Product)</Title>
-    <PackageId>Kentico.Xperience.TagManager</PackageId>
-    <Description>Enables marketers to author custom tags that can be embedded in a website channel. Example: GA4, cookie banners, custom CSS.</Description>
-    <RepositoryUrl>https://github.com/kentico/xperience-by-kentico-tag-manager</RepositoryUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Kentico.Xperience.WebApp"/>
-    <PackageReference Include="Microsoft.SourceLink.GitHub">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<PropertyGroup>
+		<Product>Xperience by Kentico Tag Manager</Product>
+		<Title>$(Product)</Title>
+		<PackageId>Kentico.Xperience.TagManager</PackageId>
+		<Description>Enables marketers to author custom tags that can be embedded in a website channel. Example: GA4, cookie banners, custom CSS.</Description>
+		<RepositoryUrl>https://github.com/kentico/xperience-by-kentico-tag-manager</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Kentico.Xperience.Admin" />
+		<PackageReference Include="Kentico.Xperience.WebApp" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="CMS.AssemblyDiscoverableAttribute"></AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Localization.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Localization.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Resources\Localization.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Localization.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<Target Name="NpmInstall" BeforeTargets="NpmBuildClient" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
+		<Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)\Frontend" />
+	</Target>
+
+	<Target Name="NpmBuildClient" BeforeTargets="BeforeBuild" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
+		<Exec Command="npm run build:prod" WorkingDirectory="$(MSBuildProjectDirectory)\Frontend" />
+	</Target>
 
 </Project>

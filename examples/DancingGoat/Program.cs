@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Kentico.Xperience.TagManager;
 
 
 
@@ -57,6 +58,7 @@ builder.Services.AddLocalization()
     });
 
 builder.Services.AddDancingGoatServices();
+builder.Services.AddKenticoTagManager();
 
 ConfigureMembershipServices(builder.Services);
 

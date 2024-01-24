@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using CMS.ContactManagement;
+﻿using CMS.ContactManagement;
 using CMS.DataProtection;
-
+using CMS.Helpers;
 using DancingGoat;
 using DancingGoat.Controllers;
 using DancingGoat.Helpers.Generator;
 using DancingGoat.Models;
-
-using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
-
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: RegisterWebPageRoute(PrivacyPage.CONTENT_TYPE_NAME, typeof(DancingGoatPrivacyController), WebsiteChannelNames = new[] { DancingGoatConstants.WEBSITE_CHANNEL_NAME })]
@@ -23,6 +17,7 @@ namespace DancingGoat.Controllers
         private const string SUCCESS_RESULT = "success";
         private const string ERROR_RESULT = "error";
 
+        private readonly ICurrentCookieLevelProvider cookieLevelProvider;
         private readonly IConsentAgreementService consentAgreementService;
         private readonly IConsentInfoProvider consentInfoProvider;
         private readonly IPreferredLanguageRetriever currentLanguageRetriever;
@@ -43,15 +38,20 @@ namespace DancingGoat.Controllers
         }
 
 
-        public DancingGoatPrivacyController(IConsentAgreementService consentAgreementService, IConsentInfoProvider consentInfoProvider, IPreferredLanguageRetriever currentLanguageRetriever)
+        public DancingGoatPrivacyController(
+            ICurrentCookieLevelProvider cookieLevelProvider,
+            IConsentAgreementService consentAgreementService,
+            IConsentInfoProvider consentInfoProvider,
+            IPreferredLanguageRetriever currentLanguageRetriever)
         {
+            this.cookieLevelProvider = cookieLevelProvider;
             this.consentAgreementService = consentAgreementService;
             this.consentInfoProvider = consentInfoProvider;
             this.currentLanguageRetriever = currentLanguageRetriever;
         }
 
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var model = new PrivacyViewModel();
 
@@ -59,11 +59,8 @@ namespace DancingGoat.Controllers
             {
                 model.DemoDisabled = true;
             }
-            else if (CurrentContact != null)
-            {
-                model.Consents = GetAgreedConsentsForCurrentContact();
-            }
 
+            model.Consents = await GetAgreedConsentsForCurrentContact();
             model.ShowSavedMessage = TempData[SUCCESS_RESULT] != null;
             model.ShowErrorMessage = TempData[ERROR_RESULT] != null;
             model.PrivacyPageUrl = HttpContext.Request.Path;
@@ -71,6 +68,28 @@ namespace DancingGoat.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("/Agree")]
+        public ActionResult Agree(string returnUrl, string consentName)
+        {
+            var consentToAgree = consentInfoProvider.Get(consentName);
+
+            cookieLevelProvider.SetCurrentCookieLevel(Kentico.Web.Mvc.CookieLevel.All.Level);
+
+            if (consentToAgree != null && CurrentContact != null)
+            {
+                consentAgreementService.Agree(CurrentContact, consentToAgree);
+
+                TempData[SUCCESS_RESULT] = true;
+            }
+            else
+            {
+                TempData[ERROR_RESULT] = true;
+            }
+
+            return Redirect(returnUrl);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -94,15 +113,17 @@ namespace DancingGoat.Controllers
         }
 
 
-        private IEnumerable<PrivacyConsentViewModel> GetAgreedConsentsForCurrentContact()
+        private async Task<IEnumerable<PrivacyConsentViewModel>> GetAgreedConsentsForCurrentContact()
         {
-            return consentAgreementService.GetAgreedConsents(CurrentContact)
-                .Select(consent => new PrivacyConsentViewModel
+            return await consentInfoProvider.Get()
+                .ToAsyncEnumerable()
+                .SelectAwait(async consent => new PrivacyConsentViewModel
                 {
-                    Name = consent.Name,
-                    Title = consent.DisplayName,
-                    Text = consent.GetConsentText(currentLanguageRetriever.Get()).ShortText
-                });
+                    Name = consent.ConsentName,
+                    Title = consent.ConsentDisplayName,
+                    Text = (await consent.GetConsentTextAsync(currentLanguageRetriever.Get())).ShortText,
+                    Agreed = CurrentContact is not null && consentAgreementService.IsAgreed(CurrentContact, consent)
+                }).ToListAsync();
         }
 
 
