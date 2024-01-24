@@ -58,7 +58,7 @@ builder.Services.AddLocalization()
     });
 
 builder.Services.AddDancingGoatServices();
-builder.Services.AddTagManager();
+builder.Services.AddKenticoTagManager();
 
 ConfigureMembershipServices(builder.Services);
 

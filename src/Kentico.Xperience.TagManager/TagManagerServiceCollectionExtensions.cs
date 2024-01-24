@@ -10,7 +10,12 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class TagManagerServiceCollectionExtensions
 {
-    public static IServiceCollection AddTagManager(this IServiceCollection services)
+    /// <summary>
+    /// Adds all required services for Tag Manager functionality
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddKenticoTagManager(this IServiceCollection services)
     {
         services.AddSingleton<ITagManagerModuleInstaller, TagManagerModuleInstaller>();
         services.AddSingleton<IChannelCodeSnippetsService, ChannelCodeSnippetsService>();
