@@ -1,6 +1,4 @@
-﻿using Kentico.Xperience.TagManager.Enums;
-
-namespace Kentico.Xperience.TagManager.Models;
+﻿namespace Kentico.Xperience.TagManager.Rendering;
 
 public class ChannelCodeSnippetDto
 {

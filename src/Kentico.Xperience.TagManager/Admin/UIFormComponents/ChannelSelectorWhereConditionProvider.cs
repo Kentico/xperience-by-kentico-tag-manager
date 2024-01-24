@@ -3,9 +3,8 @@ using CMS.DataEngine;
 using CMS.Membership;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
-using Kentico.Xperience.TagManager.Services;
 
-namespace Kentico.Xperience.TagManager.Admin.UIFormComponents;
+namespace Kentico.Xperience.TagManager.Admin;
 
 internal class ChannelSelectorWhereConditionProvider : IObjectSelectorWhereConditionProvider
 {

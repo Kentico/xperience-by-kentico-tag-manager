@@ -4,8 +4,8 @@ using Kentico.Xperience.Admin.Base.UIPages;
 using Kentico.Xperience.TagManager.Admin;
 
 [assembly: UIApplication(
-    identifier: CustomChannelSettings.IDENTIFIER,
-    type: typeof(CustomChannelSettings),
+    identifier: TagManagerApplicationPage.IDENTIFIER,
+    type: typeof(TagManagerApplicationPage),
     slug: "tag-management",
     name: "Tag Management",
     category: BaseApplicationCategories.CONFIGURATION,
@@ -18,7 +18,7 @@ namespace Kentico.Xperience.TagManager.Admin;
 [UIPermission(SystemPermissions.CREATE)]
 [UIPermission(SystemPermissions.UPDATE)]
 [UIPermission(SystemPermissions.DELETE)]
-internal class CustomChannelSettings : ApplicationPage
+internal class TagManagerApplicationPage : ApplicationPage
 {
     public const string IDENTIFIER = "tag-management";
 }

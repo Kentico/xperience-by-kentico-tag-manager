@@ -1,20 +1,18 @@
 ﻿using CMS.Membership;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
-using Kentico.Xperience.TagManager.Admin.UIPages;
-using Kentico.Xperience.TagManager.Admin.UIPages.Models;
-using Kentico.Xperience.TagManager.Services;
+using Kentico.Xperience.TagManager.Admin;
 using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider;
 
 [assembly: UIPage(
-    parentType: typeof(CodeSnippetListing),
-    slug: PageParameterConstants.PARAMETERIZED_SLUG,
+    parentType: typeof(ChannelCodeSnippetSectionPage),
+    slug: "edit",
     uiPageType: typeof(CodeSnippetModelEdit),
-    name: "Edit a code snippet",
+    name: "Edit code snippet",
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 
-namespace Kentico.Xperience.TagManager.Admin.UIPages;
+namespace Kentico.Xperience.TagManager.Admin;
 
 internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
 {
@@ -38,6 +36,7 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
             model = new CodeSnippetEditModel()
             {
                 ChannelIDs = [info.ChannelCodeSnippetChannelID],
+                CodeName = info.ChannelCodeSnippetName,
                 Code = info.ChannelCodeSnippetCode,
                 SnippetType = info.ChannelCodeSnippetType,
                 ConsentIDs = info.ChannelCodeSnippetConsentID == 0 ? [] : [info.ChannelCodeSnippetConsentID],
@@ -95,7 +94,7 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
     {
         var info = channelCodeSnippetInfoProvider.Get(ObjectID);
 
-        ChannelCodeSnippetHelper.SetChannelCodeSnippetInfo(model, info);
+        model.MapToChannelCodeSnippetInfo(info);
 
         channelCodeSnippetInfoProvider.Set(info);
 

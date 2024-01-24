@@ -1,4 +1,4 @@
-﻿namespace Kentico.Xperience.TagManager.Enums;
+﻿namespace Kentico.Xperience.TagManager.Admin;
 
 internal enum CodeSnippetTypes
 {

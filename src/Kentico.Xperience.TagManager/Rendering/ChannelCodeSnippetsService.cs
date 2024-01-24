@@ -1,15 +1,13 @@
-﻿using CMS.Base;
+﻿using System.Text.RegularExpressions;
+using CMS.Base;
 using CMS.ContactManagement;
 using CMS.ContentEngine;
 using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.Websites;
 using CMS.Websites.Routing;
-using Kentico.Xperience.TagManager.Enums;
-using Kentico.Xperience.TagManager.Helpers;
-using Kentico.Xperience.TagManager.Models;
 
-namespace Kentico.Xperience.TagManager.Services;
+namespace Kentico.Xperience.TagManager.Rendering;
 
 internal class ChannelCodeSnippetsService : IChannelCodeSnippetsService
 {
@@ -30,23 +28,22 @@ internal class ChannelCodeSnippetsService : IChannelCodeSnippetsService
         this.cache = cache;
     }
 
-    public Task<ILookup<CodeSnippetLocations, ChannelCodeSnippetDto>> GetCodeSnippets()
+    public Task<ILookup<CodeSnippetLocations, ChannelCodeSnippetDto>> GetConsentedCodeSnippets(ContactInfo? contact)
     {
-        var currentContact = ContactManagementContext.CurrentContact;
         return cache.LoadAsync(s =>
         {
-            s.CacheDependency =
+            s.GetCacheDependency = () =>
                 CacheHelper.GetCacheDependency(
                     [
                         $"{ChannelCodeSnippetInfo.OBJECT_TYPE}|all",
                         $"{ChannelInfo.OBJECT_TYPE}|all",
                         $"{WebsiteChannelInfo.OBJECT_TYPE}|all",
 
-                        $"{ContactInfo.OBJECT_TYPE}|byid|{currentContact?.ContactID}|children|cms.consentagreement",
+                        $"{ContactInfo.OBJECT_TYPE}|byid|{contact?.ContactID}|children|{ConsentAgreementInfo.OBJECT_TYPE}",
                     ]);
 
             return GetCodeSnippetsInternal();
-        }, new CacheSettings(CacheHelper.CacheMinutes(), $"codesnippetsservice.getcodesnippets.{currentContact?.ContactID}"));
+        }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(ChannelCodeSnippetsService)}.{nameof(GetConsentedCodeSnippets)}|{contact?.ContactID}"));
 
         async Task<ILookup<CodeSnippetLocations, ChannelCodeSnippetDto>> GetCodeSnippetsInternal()
         {
@@ -80,7 +77,7 @@ internal class ChannelCodeSnippetsService : IChannelCodeSnippetsService
 
                         return (snippet, consent);
                     }))
-                .Where(r => r.consent is null || (currentContact is not null && consentAgreementService.IsAgreed(currentContact, r.consent)))
+                .Where(r => r.consent is null || (contact is not null && consentAgreementService.IsAgreed(contact, r.consent)))
                 .SelectMany(r => CreateCodeSnipped(r.snippet))
                 .ToLookup(r => r.Location);
 
@@ -95,7 +92,7 @@ internal class ChannelCodeSnippetsService : IChannelCodeSnippetsService
             yield return new ChannelCodeSnippetDto
             {
                 ID = c.ChannelCodeSnippetID,
-                Code = CodeSnippetHelper.AddSnippetIds(
+                Code = AddSnippetIds(
                     c.ChannelCodeSnippetID,
                     c.ChannelCodeSnippetCode),
                 Location = Enum.TryParse(c.ChannelCodeSnippetLocation, out CodeSnippetLocations location)
@@ -109,19 +106,57 @@ internal class ChannelCodeSnippetsService : IChannelCodeSnippetsService
         yield return new ChannelCodeSnippetDto
         {
             ID = c.ChannelCodeSnippetID,
-            Code = CodeSnippetHelper.AddSnippetIds(
+            Code = AddSnippetIds(
                 c.ChannelCodeSnippetID,
-                CodeSnippetHelper.GenerateGtmHeadScript(c.ChannelCodeSnippetGTMID)),
+                GenerateGtmHeadScript(c.ChannelCodeSnippetGTMID)),
             Location = CodeSnippetLocations.HeadBottom,
         };
 
         yield return new ChannelCodeSnippetDto
         {
             ID = c.ChannelCodeSnippetID,
-            Code = CodeSnippetHelper.AddSnippetIds(
+            Code = AddSnippetIds(
                 c.ChannelCodeSnippetID,
-                CodeSnippetHelper.GenerateGtmBodyScript(c.ChannelCodeSnippetGTMID)),
+                GenerateGtmBodyScript(c.ChannelCodeSnippetGTMID)),
             Location = CodeSnippetLocations.BodyTop,
         };
     }
+
+    public static string AddSnippetIds(int codeSnippetId, string codeSnippet) =>
+        Regex.Replace(codeSnippet, "<([^\\/]*?)>", $"""<$1 data-snippet-id="{codeSnippetId}">""");
+
+    public static string GenerateGtmHeadScript(string gtmId) =>
+        $$"""
+          <script>
+              (function (w, d, s, l, i) {
+                  w[l] = w[l] || [];
+                  w[l].push({
+                      'gtm.start':
+                          new Date().getTime(),
+                      event: 'gtm.js'
+                  });
+                  var f = d.getElementsByTagName(s)[0],
+                      j = d.createElement(s),
+                      dl = l != 'dataLayer' ? '&l=' + l : '';
+                  j.async = true;
+                  j.src =
+                      'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                  var n = d.querySelector('[nonce]');
+                  n && j.setAttribute('nonce', n.nonce || n.getAttribute('nonce'));
+                  f.parentNode.insertBefore(j, f);
+              })(window, document, 'script', 'dataLayer','{{gtmId}}');
+          </script>
+          """;
+
+    public static string GenerateGtmBodyScript(string gtmId) =>
+        $"""
+         <noscript>
+             <iframe src="https://www.googletagmanager.com/ns.html?id={gtmId}"
+                     height="0"
+                     width="0"
+                     style="display:none;visibility:hidden"
+                     title="GTMNoScript">
+             </iframe>
+         </noscript>
+         """;
 }

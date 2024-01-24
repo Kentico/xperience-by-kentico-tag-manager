@@ -1,6 +1,6 @@
 ﻿using Kentico.Membership;
 
-namespace Kentico.Xperience.TagManager.Services;
+namespace Kentico.Xperience.TagManager.Admin;
 
 internal interface IWebsiteChannelPermissionService
 {

@@ -1,5 +1,4 @@
-const CODE_SNIPPETS_MANAGEMENT_PATH =
-  "/kentico.tagmanager/gtm/UpdateCodeSnippets";
+const CODE_SNIPPETS_MANAGEMENT_PATH = "/kentico.tagmanager";
 const Locations = {
   HeadTop: "HeadTop",
   HeadBottom: "HeadBottom",
@@ -17,7 +16,7 @@ window.xperience.tagManager = {
       htmlSnippets.map((e) => parseInt(e.dataset.snippetId))
     );
 
-    const snippets = await getSnippets();
+    const snippets = await getTags();
 
     insertMissingSnippets();
 
@@ -61,14 +60,17 @@ window.xperience.tagManager = {
       }
     }
 
-    async function getSnippets() {
-      const response = await fetch(CODE_SNIPPETS_MANAGEMENT_PATH, {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+    async function getTags() {
+      const response = await fetch(
+        `${CODE_SNIPPETS_MANAGEMENT_PATH}/GetConsentedTags`,
+        {
+          method: "post",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(response.statusText);
       }

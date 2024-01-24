@@ -1,7 +1,6 @@
 ﻿using Kentico.Xperience.Admin.Base.FormAnnotations;
-using Kentico.Xperience.TagManager.Enums;
 
-namespace Kentico.Xperience.TagManager.Admin.UIFormComponents;
+namespace Kentico.Xperience.TagManager.Admin;
 
 internal class CodeSnippetTypesDropdownOptionsProvider : IDropDownOptionsProvider
 {

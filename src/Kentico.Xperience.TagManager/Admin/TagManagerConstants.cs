@@ -1,6 +1,6 @@
 ﻿namespace Kentico.Xperience.TagManager.Constants;
 
-internal static class GtmConstants
+internal static class TagManagerConstants
 {
     internal static class Permissions
     {
@@ -10,9 +10,9 @@ internal static class GtmConstants
     internal static class ResourceConstants
     {
         private const string ResourceNamePrefix = "Kentico.Xperience.TagManager";
-        public const string ResourceDisplayName = "Custom channel settings";
-        public const string ResourceName = $"{ResourceNamePrefix}.CustomChannelSettings";
-        public const string ResourceDescription = "";
-        public const bool ResourceIsInDevelopment = true;
+        public const string ResourceDisplayName = "Kentico Tag Manager";
+        public const string ResourceName = ResourceNamePrefix;
+        public const string ResourceDescription = "Kentico Tag Manager custom data";
+        public const bool ResourceIsInDevelopment = false;
     }
 }

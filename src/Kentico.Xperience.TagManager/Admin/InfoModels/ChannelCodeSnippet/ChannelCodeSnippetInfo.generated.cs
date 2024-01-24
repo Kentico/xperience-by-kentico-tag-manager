@@ -27,7 +27,7 @@ namespace Kentico.Xperience.TagManager
         /// <summary>
         /// Type information.
         /// </summary>
-        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippet", nameof(ChannelCodeSnippetID), nameof(ChannelCodeSnippetLastModified), null, nameof(ChannelCodeSnippetName), null, null, null, null)
+        public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippet", nameof(ChannelCodeSnippetID), nameof(ChannelCodeSnippetLastModified), nameof(ChannelCodeSnippetGuid), nameof(ChannelCodeSnippetName), null, null, null, null)
         {
             TouchCacheDependencies = true,
             ContinuousIntegrationSettings =
@@ -51,6 +51,18 @@ namespace Kentico.Xperience.TagManager
             get => ValidationHelper.GetInteger(GetValue(nameof(ChannelCodeSnippetID)), 0);
             set => SetValue(nameof(ChannelCodeSnippetID), value);
         }
+
+
+        /// <summary>
+        /// Channel code snippet guid.
+        /// </summary>
+        [DatabaseField]
+        public virtual Guid ChannelCodeSnippetGuid
+        {
+            get => ValidationHelper.GetGuid(GetValue(nameof(ChannelCodeSnippetGuid)), default);
+            set => SetValue(nameof(ChannelCodeSnippetGuid), value);
+        }
+
 
 
         /// <summary>

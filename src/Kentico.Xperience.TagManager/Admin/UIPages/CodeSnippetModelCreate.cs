@@ -1,9 +1,8 @@
 ﻿using CMS.Membership;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
-using Kentico.Xperience.TagManager.Admin.UIPages;
-using Kentico.Xperience.TagManager.Admin.UIPages.Models;
-using Kentico.Xperience.TagManager.Services;
+using Kentico.Xperience.TagManager.Admin;
+using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider;
 
 [assembly: UIPage(
     parentType: typeof(CodeSnippetListing),
@@ -13,9 +12,8 @@ using Kentico.Xperience.TagManager.Services;
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 
-namespace Kentico.Xperience.TagManager.Admin.UIPages;
+namespace Kentico.Xperience.TagManager.Admin;
 
-[UIPermission(SystemPermissions.CREATE)]
 [UIEvaluatePermission(SystemPermissions.CREATE)]
 internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
 {
@@ -26,7 +24,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
     public CodeSnippetModelCreate(
-        Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider formItemCollectionProvider,
+        IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
         IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider,
         IPageUrlGenerator pageUrlGenerator,
@@ -93,7 +91,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
     {
         var infoObject = new ChannelCodeSnippetInfo();
 
-        ChannelCodeSnippetHelper.SetChannelCodeSnippetInfo(model, infoObject);
+        model.MapToChannelCodeSnippetInfo(infoObject);
 
         channelCodeSnippetInfoProvider.Set(infoObject);
     }

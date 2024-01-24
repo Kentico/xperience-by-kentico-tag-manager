@@ -1,22 +1,23 @@
-﻿using CMS.DataEngine;
+﻿using CMS.ContentEngine;
+using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.FormEngine;
 using CMS.Modules;
-using static Kentico.Xperience.TagManager.Constants.GtmConstants;
+using Kentico.Xperience.Admin.Base.Forms;
+using static Kentico.Xperience.TagManager.Constants.TagManagerConstants;
 
-namespace Kentico.Xperience.TagManager.Modules;
+namespace Kentico.Xperience.TagManager.Admin;
 
-internal interface ICustomChannelSettingsModuleInstaller
+internal interface ITagManagerModuleInstaller
 {
     void Install();
 }
 
-internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModuleInstaller
+internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 {
     private readonly IResourceInfoProvider resourceInfoProvider;
 
-    public CustomChannelSettingsModuleInstaller(IResourceInfoProvider resourceInfoProvider) =>
-        this.resourceInfoProvider = resourceInfoProvider;
+    public TagManagerModuleInstaller(IResourceInfoProvider resourceInfoProvider) => this.resourceInfoProvider = resourceInfoProvider;
 
     public void Install()
     {
@@ -58,7 +59,9 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
             Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
             Visible = false,
             DataType = FieldDataType.Integer,
-            Enabled = true
+            Enabled = true,
+            ReferenceToObjectType = ChannelInfo.OBJECT_TYPE,
+            ReferenceType = ObjectDependencyEnum.Required
         };
         formInfo.AddFormItem(formItem);
 
@@ -70,7 +73,18 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
             Enabled = true,
             AllowEmpty = true,
             ReferenceToObjectType = ConsentInfo.OBJECT_TYPE,
-            ReferenceType = ObjectDependencyEnum.Required
+            ReferenceType = ObjectDependencyEnum.Required,
+        };
+        formItem.SetComponentName(ObjectIdSelectorComponent.IDENTIFIER);
+        formInfo.AddFormItem(formItem);
+
+        formItem = new FormFieldInfo
+        {
+            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGuid),
+            Visible = false,
+            DataType = FieldDataType.Guid,
+            Enabled = true,
+            AllowEmpty = false,
         };
         formInfo.AddFormItem(formItem);
 
@@ -81,7 +95,12 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
             DataType = FieldDataType.Text,
             Enabled = true,
             AllowEmpty = false,
+            Settings = new()
+            {
+                { nameof(TextInputProperties.Label), "Code name" },
+            }
         };
+        formItem.SetComponentName(TextInputComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
         formItem = new FormFieldInfo
@@ -104,6 +123,7 @@ internal class CustomChannelSettingsModuleInstaller : ICustomChannelSettingsModu
             Enabled = true,
             AllowEmpty = true
         };
+        formItem.SetComponentName(CodeEditorComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
         formItem = new FormFieldInfo

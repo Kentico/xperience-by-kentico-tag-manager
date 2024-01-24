@@ -1,13 +1,11 @@
-﻿using Kentico.Xperience.TagManager.Enums;
-using Kentico.Xperience.TagManager.Models;
-using Kentico.Xperience.TagManager.Services;
+﻿using CMS.ContactManagement;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Kentico.Xperience.TagManager.TagHelpers;
+namespace Kentico.Xperience.TagManager.Rendering;
 
 internal class CodeSnippetTagHelperComponent : TagHelperComponent
 {
@@ -39,14 +37,16 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
+        var contact = ContactManagementContext.CurrentContact;
+
         if (string.Equals(context.TagName, HeadTag, StringComparison.OrdinalIgnoreCase))
         {
-            ProcessHead(output, await codeSnippetsContext.GetCodeSnippets());
+            ProcessHead(output, await codeSnippetsContext.GetConsentedCodeSnippets(contact));
         }
 
         if (string.Equals(context.TagName, BodyTag, StringComparison.OrdinalIgnoreCase))
         {
-            ProcessBody(output, await codeSnippetsContext.GetCodeSnippets());
+            ProcessBody(output, await codeSnippetsContext.GetConsentedCodeSnippets(contact));
         }
     }
 

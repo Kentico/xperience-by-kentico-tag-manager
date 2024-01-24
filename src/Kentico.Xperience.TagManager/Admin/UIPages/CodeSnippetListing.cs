@@ -1,36 +1,39 @@
 ﻿using CMS.Base;
 using CMS.ContentEngine;
+using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.Membership;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.TagManager.Admin;
-using Kentico.Xperience.TagManager.Admin.UIPages;
-using Kentico.Xperience.TagManager.Enums;
-using Kentico.Xperience.TagManager.Services;
 
 [assembly: UIPage(
-    parentType: typeof(CustomChannelSettings),
+    parentType: typeof(TagManagerApplicationPage),
     slug: "snippets",
     uiPageType: typeof(CodeSnippetListing),
     name: "Code snippets",
     templateName: TemplateNames.LISTING,
     order: UIPageOrder.First)]
 
-namespace Kentico.Xperience.TagManager.Admin.UIPages;
+namespace Kentico.Xperience.TagManager.Admin;
 
 internal class CodeSnippetListing : ListingPage
 {
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
     private readonly IConsentInfoProvider consentInfoProvider;
     private readonly IAuthenticatedUserAccessor authenticatedUserAccessor;
+    private readonly IInfoProvider<ChannelInfo> channelProvider;
 
-    public CodeSnippetListing(IWebsiteChannelPermissionService websiteChannelPermissionService,
-        IConsentInfoProvider consentInfoProvider, IAuthenticatedUserAccessor authenticatedUserAccessor)
+    public CodeSnippetListing(
+        IWebsiteChannelPermissionService websiteChannelPermissionService,
+        IConsentInfoProvider consentInfoProvider,
+        IAuthenticatedUserAccessor authenticatedUserAccessor,
+        IInfoProvider<ChannelInfo> channelProvider)
     {
         this.websiteChannelPermissionService = websiteChannelPermissionService;
         this.consentInfoProvider = consentInfoProvider;
         this.authenticatedUserAccessor = authenticatedUserAccessor;
+        this.channelProvider = channelProvider;
     }
 
     protected override string ObjectType => ChannelCodeSnippetInfo.OBJECT_TYPE;
@@ -41,33 +44,55 @@ internal class CodeSnippetListing : ListingPage
 
     public override async Task ConfigurePage()
     {
+        var allConsents = await consentInfoProvider.Get().GetEnumerableTypedResultAsync();
+        var allChannels = await channelProvider.Get().GetEnumerableTypedResultAsync();
+
         PageConfiguration.HeaderActions.AddLink<CodeSnippetModelCreate>("Add new");
-        PageConfiguration.TableActions.AddDeleteAction("Delete");
-        PageConfiguration.ColumnConfigurations.AddColumn(
-            nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
-            "Channel",
-            sortable: false,
-            formatter: (value, _) => ChannelInfoProvider.ProviderObject.Get((int)value).ChannelDisplayName
-        );
-
-        PageConfiguration.QueryModifiers.AddModifier(q =>
-            q.AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
-        PageConfiguration.ColumnConfigurations.AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
-            "Code Snippet",
-            sortable: false,
-            formatter: (_, container) => FormatCodeSnippet(container));
-        PageConfiguration.ColumnConfigurations.AddColumn(
-            nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
-            "Consent",
-            sortable: false,
-            formatter: (value, _) =>
-                value is null or 0
-                    ? LocalizationService.GetString("customchannelsettings.codesnippets.noconsentneeded")
-                    : consentInfoProvider.Get((int)value).ConsentDisplayName
-        );
-
+        PageConfiguration.TableActions.AddDeleteAction(nameof(Delete));
         PageConfiguration.AddEditRowAction<CodeSnippetModelEdit>();
 
+        PageConfiguration.ColumnConfigurations
+            .AddColumn(
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID),
+                "ID",
+                maxWidth: 10)
+            .AddColumn(
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetName),
+                "Code Name",
+                searchable: true)
+            .AddColumn(
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
+                "Channel",
+                sortable: false,
+                formatter: (value, _) => allChannels.FirstOrDefault(c => c.ChannelID == (int)value)?.ChannelDisplayName ?? ""
+            )
+            .AddColumn(
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
+                "Type",
+                formatter: (value, _) => value switch
+                {
+                    nameof(CodeSnippetTypes.GTM) => "Google Tag Manager",
+                    nameof(CodeSnippetTypes.CustomCode) => "Custom",
+                    _ => "Unknown"
+
+                })
+            .AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
+                "Code Snippet",
+                sortable: false,
+                formatter: (_, container) => FormatCodeSnippet(container))
+            .AddColumn(
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
+                "Consent",
+                sortable: false,
+                formatter: (value, _) =>
+                    value is null or 0
+                        ? LocalizationService.GetString("customchannelsettings.codesnippets.noconsentneeded")
+                        : allConsents.FirstOrDefault(c => c.ConsentID == (int)value)?.ConsentDisplayName ?? "")
+            .AddColumn(
+                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLastModified),
+                "Last Modified",
+                defaultSortDirection: SortTypeEnum.Desc,
+                sortable: true);
 
         int[] channelsIDs = websiteChannelPermissionService.GetChannelIDsWithGrantedPermission(
                 await authenticatedUserAccessor.Get(),
@@ -76,7 +101,9 @@ internal class CodeSnippetListing : ListingPage
 
         PageConfiguration.QueryModifiers
             .AddModifier((query, _) =>
-                query.WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs));
+                query
+                    .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs)
+                    .AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
     }
 
     /// <summary>
@@ -100,4 +127,12 @@ internal class CodeSnippetListing : ListingPage
                 "Invalid ChannelCodeSnippetType!")
         };
     }
+}
+
+internal record struct UIPermissions
+{
+    public bool View { get; set; }
+    public bool Update { get; set; }
+    public bool Delete { get; set; }
+    public bool Create { get; set; }
 }
