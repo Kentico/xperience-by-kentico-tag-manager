@@ -49,7 +49,7 @@ dotnet add package Kentico.Xperience.TagManager
 
    // ...
 
-   builder.Services.AddTagManager();
+   builder.Services.AddKenticoTagManager();
    ```
 
 3. In the administration go to UI application 'Custom channel settings'.
