@@ -10,7 +10,7 @@
     <PackageVersion Include="Kentico.Xperience.WebApp" Version="28.1.0" />
     <PackageVersion Include="kentico.xperience.azurestorage" Version="28.1.0" />
     <PackageVersion Include="kentico.xperience.imageprocessing" Version="28.1.0" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.6.0.74858" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.17.0.82934" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="NUnit" Version="4.0.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
