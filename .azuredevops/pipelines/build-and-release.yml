@@ -75,6 +75,17 @@ stages:
               feedsToUse: select
               restoreArguments: --locked-mode
 
+          - task: Npm@1
+            inputs:
+              command: "ci"
+              workingDir: ${{ variables.ProjectFolder }}/Frontend
+
+          - task: Npm@1
+            inputs:
+              command: "custom"
+              customCommand: run build:prod
+              workingDir: ${{ variables.ProjectFolder }}/Frontend
+
           - task: DotNetCoreCLI@2
             displayName: Build
             inputs:

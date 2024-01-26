@@ -34,12 +34,4 @@
 		</Compile>
 	</ItemGroup>
 
-	<Target Name="NpmInstall" BeforeTargets="NpmBuildClient" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
-		<Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)\Frontend" />
-	</Target>
-
-	<Target Name="NpmBuildClient" BeforeTargets="BeforeBuild" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
-		<Exec Command="npm run build:prod" WorkingDirectory="$(MSBuildProjectDirectory)\Frontend" />
-	</Target>
-
 </Project>
