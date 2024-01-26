@@ -81,7 +81,7 @@ stages:
               command: build
               projects: ${{ variables.ProjectPath }}
               configuration: ${{ variables.Configuration }}
-              arguments: --no-restore
+              arguments: --no-restore --verbosity Detailed
 
           - task: DotNetCoreCLI@2
             displayName: Create NuGet package
@@ -93,6 +93,13 @@ stages:
               includesymbols: true
               nobuild: true
               versioningScheme: off
+
+          - task: PowerShell@2
+            displayName: Debug - add nuspec to artifacts
+            inputs:
+              targetType: inline
+              script: |
+                Get-ChildItem -Recurse -Filter *.nuspec | Copy-Item -Destination "$(System.DefaultWorkingDirectory)/packages" -Force
 
           - publish: $(System.DefaultWorkingDirectory)/packages
             displayName: Publish NuGet package as artifact

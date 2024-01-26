@@ -11,4 +11,11 @@
 
         <SignFile CertificateThumbprint="$(AuthenticodeCertificateThumbprint)" TimestampUrl="http://time.certum.pl" SigningTarget="%(AssemblyToSign.Identity)" />
     </Target>
+
+    <ItemGroup>
+        <Content Remove="*lock.json" />
+        <Content Remove="package.json" />
+        <None Remove="package.json" />
+        <None Remove="*lock.json" />
+    </ItemGroup>
 </Project>
