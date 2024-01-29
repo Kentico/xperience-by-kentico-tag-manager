@@ -62,6 +62,8 @@ To run the Sample app Admin customization in development mode, add the following
 
 ## Development Workflow
 
+### Prepare your Git branch and commits
+
 1. Create a new branch with one of the following prefixes
 
    - `feat/` - for new functionality
@@ -74,8 +76,33 @@ To run the Sample app Admin customization in development mode, add the following
 
 1. Commit changes, with a commit message preferably following the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) convention.
 
-1. Once ready, create a PR on GitHub. The PR will need to have all comments resolved and all tests passing before it will be merged.
+### Test the package locally using the following commands
 
-   - The PR should have a helpful description of the scope of changes being contributed.
-   - Include screenshots or video to reflect UX or UI updates
-   - Indicate if new settings need to be applied when the changes are merged - locally or in other environments
+1. Create a local packages folder
+
+   `mkdir ./test-packages`
+
+1. Add a local NuGet package config
+
+   `dotnet nuget add source ./test-packages`
+
+1. Generate a local package
+
+   `dotnet pack .\src\Kentico.Xperience.TagManager\ -c Release -o .\test-packages\ -p:SIGN_FILE=false`
+
+1. Use the NuGet package in the DancingGoat project instead of the project reference
+
+   1. Modify `examples\DancingGoat.csproj` replacing the `<ProjectReference Include="..\..\src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj" />` with `<PackageReference Include="Kentico.Xperience.TagManager" />`
+   1. Update the `Directory.Packages.props` with a reference to the `Kentico.Xperience.TagManager` package `<PackageVersion Include="Kentico.Xperience.TagManager" Verison="" />` with a version matching the value in the project's `Directory.Build.props`
+
+1. Run the `DancingGoat` application and ensure all functionality is correct.
+
+1. Ensure these changes are not committed to the repository
+
+### Create a PR
+
+Once ready, create a PR on GitHub. The PR will need to have all comments resolved and all tests passing before it will be merged.
+
+- The PR should have a helpful description of the scope of changes being contributed.
+- Include screenshots or video to reflect UX or UI updates
+- Indicate if new settings need to be applied when the changes are merged - locally or in other environments
