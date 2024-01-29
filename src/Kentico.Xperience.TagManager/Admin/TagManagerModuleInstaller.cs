@@ -27,7 +27,10 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
     private ResourceInfo InstallModule()
     {
-        var resourceInfo = resourceInfoProvider.Get(ResourceConstants.ResourceName) ?? new ResourceInfo();
+        var resourceInfo = resourceInfoProvider.Get(ResourceConstants.ResourceName)
+            // Handle v1.0.0 resource name
+            ?? resourceInfoProvider.Get("Kentico.Xperience.TagManager")
+            ?? new ResourceInfo();
 
         resourceInfo.ResourceDisplayName = ResourceConstants.ResourceDisplayName;
         resourceInfo.ResourceName = ResourceConstants.ResourceName;
