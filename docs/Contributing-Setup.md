@@ -78,26 +78,33 @@ To run the Sample app Admin customization in development mode, add the following
 
 ### Test the package locally using the following commands
 
-1. Create a local packages folder
-
-   `mkdir ./test-packages`
-
-1. Add a local NuGet package config
-
-   `dotnet nuget add source ./test-packages`
-
-1. Generate a local package
-
-   `dotnet pack .\src\Kentico.Xperience.TagManager\ -c Release -o .\test-packages\ -p:SIGN_FILE=false`
+1. Generate a local package using the VS Code `.NET: pack (TagManager)` task or execute its command and arguments at the command line
+   This will generate a new `Kentico.Xperience.TagManager` package in the `nuget-local` folder with a version matching the version in your `Directory.Build.props`
 
 1. Use the NuGet package in the DancingGoat project instead of the project reference
 
-   1. Modify `examples\DancingGoat.csproj` replacing the `<ProjectReference Include="..\..\src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj" />` with `<PackageReference Include="Kentico.Xperience.TagManager" />`
-   1. Update the `Directory.Packages.props` with a reference to the `Kentico.Xperience.TagManager` package `<PackageVersion Include="Kentico.Xperience.TagManager" Verison="" />` with a version matching the value in the project's `Directory.Build.props`
+   1. Modify `examples\DancingGoat\DancingGoat.csproj` replacing the project reference with a package reference
 
-1. Run the `DancingGoat` application and ensure all functionality is correct.
+      ```xml
+      -<ProjectReference Include="..\..\src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj" />
+      +<PackageReference Include="Kentico.Xperience.TagManager" />
+      ```
 
-1. Ensure these changes are not committed to the repository
+   1. Update the `Directory.Packages.props` with a reference to the `Kentico.Xperience.TagManager` package
+
+      ```xml
+      +<PackageVersion Include="Kentico.Xperience.TagManager" Verison="" />
+      ```
+
+      Populate `Version=""` with the matching the value in the project's `Directory.Build.props`
+
+1. Rebuild the solution using the VS Code `.NET: rebuild (Solution)` task or run `dotnet build --no-incremental` at the command line
+
+1. Make sure the `Kentico.Xperience.TagManager.dll` version in the `examples\DancingGoat\bin\Debug\net6.0\` folder is the right version
+
+1. Run the `DancingGoat` application and ensure all functionality is correct
+
+1. Undo these changes to ensure they are not committed to the repository
 
 ### Create a PR
 

@@ -57,6 +57,24 @@
       }
     },
     {
+      "label": ".NET: pack (TagManager)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "pack",
+        "./src/Kentico.Xperience.TagManager",
+        "-c",
+        "Release",
+        "-o",
+        "nuget-local",
+        "-p:SIGN_FILE=false"
+      ],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
       "type": "npm",
       "script": "install",
       "path": "src/Kentico.Xperience.TagManager/Frontend",
