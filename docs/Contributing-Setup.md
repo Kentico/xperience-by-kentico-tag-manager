@@ -81,30 +81,23 @@ To run the Sample app Admin customization in development mode, add the following
 1. Generate a local package using the VS Code `.NET: pack (TagManager)` task or execute its command and arguments at the command line
    This will generate a new `Kentico.Xperience.TagManager` package in the `nuget-local` folder with a version matching the version in your `Directory.Build.props`
 
-1. Use the NuGet package in the DancingGoat project instead of the project reference
+1. Update the `Directory.Packages.props` to populate the `Kentico.Xperience.TagManager` package `Version=""` with the matching the value from the project's `Directory.Build.props`
 
-   1. Modify `examples\DancingGoat\DancingGoat.csproj` replacing the project reference with a package reference
+   > In the future, we will be able to use floating versions to automatically select the highest (local) package version
 
-      ```xml
-      -<ProjectReference Include="..\..\src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj" />
-      +<PackageReference Include="Kentico.Xperience.TagManager" />
-      ```
+1. Build the solution with the `LOCAL_NUGET=true` property
 
-   1. Update the `Directory.Packages.props` with a reference to the `Kentico.Xperience.TagManager` package
-
-      ```xml
-      +<PackageVersion Include="Kentico.Xperience.TagManager" Verison="" />
-      ```
-
-      Populate `Version=""` with the matching the value in the project's `Directory.Build.props`
-
-1. Rebuild the solution using the VS Code `.NET: rebuild (Solution)` task or run `dotnet build --no-incremental` at the command line
+   > You can use the VS Code `.NET: build (Solution) - LOCAL_NUGET` task
 
 1. Make sure the `Kentico.Xperience.TagManager.dll` version in the `examples\DancingGoat\bin\Debug\net6.0\` folder is the right version
 
 1. Run the `DancingGoat` application and ensure all functionality is correct
 
-1. Undo these changes to ensure they are not committed to the repository
+   > You can use the `.NET Launch (DancingGoat) - LOCAL_NUGET` lauch setting in VS Code
+
+1. Undo the `Directory.Packages.props` version number change to ensure it is not committed to the repository
+
+1. Perform a normal build to reset any modified `packages.lock.json` files
 
 ### Create a PR
 

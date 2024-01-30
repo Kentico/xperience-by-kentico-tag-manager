@@ -22,13 +22,14 @@
     <DefineConstants>$(DefineConstants);SEPARATED_ADMIN</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj" />
+    <ProjectReference Include="..\..\src\Kentico.Xperience.TagManager\Kentico.Xperience.TagManager.csproj" Condition="'$(LOCAL_NUGET)' != 'true'" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="kentico.xperience.admin" Condition="'$(SeparatedAdmin)' == 'false'" />
     <PackageReference Include="kentico.xperience.azurestorage" />
     <PackageReference Include="kentico.xperience.imageprocessing" />
     <PackageReference Include="kentico.xperience.webapp" />
+    <PackageReference Include="Kentico.Xperience.TagManager" Condition="'$(LOCAL_NUGET)' == 'true'" />
     <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
 </Project>
