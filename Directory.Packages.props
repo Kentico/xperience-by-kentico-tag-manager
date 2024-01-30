@@ -4,12 +4,15 @@
     <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <!-- When NuGet supports this property, we can specify a * as the Kentico.Xperience.TagManager package version for local testing -->
+    <CentralPackageFloatingVersionsEnabled Condition="'$(LOCAL_NUGET)' == 'true'">true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Kentico.Xperience.Admin" Version="28.1.0" />
     <PackageVersion Include="Kentico.Xperience.WebApp" Version="28.1.0" />
     <PackageVersion Include="kentico.xperience.azurestorage" Version="28.1.0" />
     <PackageVersion Include="kentico.xperience.imageprocessing" Version="28.1.0" />
+    <PackageVersion Include="Kentico.Xperience.TagManager" Version="" Condition="'$(LOCAL_NUGET)' == 'true'" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.17.0.82934" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="NUnit" Version="4.0.1" />
