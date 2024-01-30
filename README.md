@@ -8,17 +8,13 @@ Tag Manager integration enabling marketers to author custom tags that can be emb
 
 ## Screenshots
 
-<a href="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/ui_application.png"> <img src="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/ui_application.png" alt="UI Application" width="800">
-</a>
+![UI Application](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/ui_application.png)
 
-<a href="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/listing.png"> <img src="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/listing.png" alt="Custom tags listing" width="800">
-</a>
+![Custom tags listing](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/listing.png)
 
-<a href="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_snippet.png"> <img src="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_snippet.png" alt="Create custom code snippet" width="800">
-</a>
+![Create custom code snippet](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_snippet.png)
 
-<a href="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_gtmid.png"> <img src="https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_gtmid.png" alt="Create GTM tag snippet" width="800">
-</a>
+![Create GTM tag snippet](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_gtmid.png)
 
 ## Library Version Matrix
 
