@@ -48,14 +48,14 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
     private static void InstallChannelCodeSnippetClass(ResourceInfo resourceInfo)
     {
-        var channelCodeSnippetClass = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName) ??
+        var info = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName) ??
                                       DataClassInfo.New(ChannelCodeSnippetInfo.OBJECT_TYPE);
 
-        channelCodeSnippetClass.ClassName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName;
-        channelCodeSnippetClass.ClassTableName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
-        channelCodeSnippetClass.ClassDisplayName = "Channel Code Snippet";
-        channelCodeSnippetClass.ClassResourceID = resourceInfo.ResourceID;
-        channelCodeSnippetClass.ClassType = ClassType.OTHER;
+        info.ClassName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName;
+        info.ClassTableName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
+        info.ClassDisplayName = "Channel Code Snippet";
+        info.ClassResourceID = resourceInfo.ResourceID;
+        info.ClassType = ClassType.OTHER;
         var formInfo = FormHelper.GetBasicFormDefinition(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID));
         var formItem = new FormFieldInfo
         {
@@ -165,8 +165,30 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
         };
         formInfo.AddFormItem(formItem);
 
-        channelCodeSnippetClass.ClassFormDefinition = formInfo.GetXmlDefinition();
+        SetFormDefinition(info, formInfo);
 
-        DataClassInfoProvider.SetDataClassInfo(channelCodeSnippetClass);
+        if (info.HasChanged)
+        {
+            DataClassInfoProvider.SetDataClassInfo(info);
+        }
+    }
+
+    /// <summary>
+    /// Ensure that the form is not upserted with any existing form
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="form"></param>
+    private static void SetFormDefinition(DataClassInfo info, FormInfo form)
+    {
+        if (info.ClassID > 0)
+        {
+            var existingForm = new FormInfo(info.ClassFormDefinition);
+            existingForm.CombineWithForm(form, new());
+            info.ClassFormDefinition = existingForm.GetXmlDefinition();
+        }
+        else
+        {
+            info.ClassFormDefinition = form.GetXmlDefinition();
+        }
     }
 }
