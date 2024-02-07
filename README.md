@@ -56,10 +56,14 @@ dotnet add package Kentico.Xperience.TagManager
    ```
 
 3. In the administration go to UI application 'Tag Management'.
-4. Create new record.
-5. Choose channel, snippet type, custom code snippet or GTM ID, and consent.
-6. During rendering the livesite page, the application automatically adds custom code snippets with accepted consents.
-7. To dynamically update the rendered code snippets, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
+4. Create a new record:
+    * Select one of the channels. 
+    * Select code snippet type - either 'Google Tag Manager' or 'Custom code snippet'
+        * For 'Google Tag Manager' just fill in GTM ID.
+        * For 'Custom code snippet' fill in entire code you want to render.
+    * Fill in a consent if required. 
+5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
+6. To dynamically update the rendered code snippets, for example if a consent is accepted, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
 
 ## Contributing
 
