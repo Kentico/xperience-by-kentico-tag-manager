@@ -55,7 +55,7 @@ dotnet add package Kentico.Xperience.TagManager
    builder.Services.AddKenticoTagManager();
    ```
 
-3. In the administration go to UI application 'Custom channel settings'.
+3. In the administration go to UI application 'Tag Management'.
 4. Create new record.
 5. Choose channel, snippet type, custom code snippet or GTM ID, and consent.
 6. During rendering the livesite page, the application automatically adds custom code snippets with accepted consents.
