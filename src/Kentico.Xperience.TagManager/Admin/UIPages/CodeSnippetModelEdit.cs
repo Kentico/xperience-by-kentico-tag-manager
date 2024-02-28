@@ -40,7 +40,7 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
                 Code = info.ChannelCodeSnippetCode,
                 SnippetType = info.ChannelCodeSnippetType,
                 ConsentIDs = info.ChannelCodeSnippetConsentID == 0 ? [] : [info.ChannelCodeSnippetConsentID],
-                GTMID = info.ChannelCodeSnippetGTMID,
+                TagIdentifier = info.ChannelCodeSnippetIdentifier,
                 Location = info.ChannelCodeSnippetLocation,
             };
 

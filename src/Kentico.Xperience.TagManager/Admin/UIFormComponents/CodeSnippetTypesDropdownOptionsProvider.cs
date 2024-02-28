@@ -1,20 +1,26 @@
 ﻿using Kentico.Xperience.Admin.Base.FormAnnotations;
+using Kentico.Xperience.TagManager.Snippets;
 
 namespace Kentico.Xperience.TagManager.Admin;
 
 internal class CodeSnippetTypesDropdownOptionsProvider : IDropDownOptionsProvider
 {
-    public Task<IEnumerable<DropDownOptionItem>> GetOptionItems() => Task.FromResult<IEnumerable<DropDownOptionItem>>(
-    [
-        new DropDownOptionItem
+    public Task<IEnumerable<DropDownOptionItem>> GetOptionItems()
+    {
+        var factories = SnippetFactoryStore.GetSnippetFactories();
+        var options = new List<DropDownOptionItem>();
+
+        foreach (var factory in factories)
         {
-            Value = nameof(CodeSnippetTypes.CustomCode),
-            Text = "Custom code snippet"
-        },
-        new DropDownOptionItem
-        {
-            Value = nameof(CodeSnippetTypes.GTM),
-            Text = "Google Tag Manager"
+            var settings = factory.CreateCodeSnippetSettings();
+
+            options.Add(new DropDownOptionItem
+            {
+                Value = settings.TagTypeName,
+                Text = settings.TagDisplayName
+            });
         }
-    ]);
+
+        return Task.FromResult<IEnumerable<DropDownOptionItem>>(options);
+    }
 }

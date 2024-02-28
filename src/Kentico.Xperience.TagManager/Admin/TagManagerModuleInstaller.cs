@@ -131,7 +131,7 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID),
+            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier),
             Visible = false,
             Precision = 0,
             Size = 25,

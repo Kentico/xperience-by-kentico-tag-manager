@@ -18,7 +18,7 @@ public static class TagManagerServiceCollectionExtensions
     public static IServiceCollection AddKenticoTagManager(this IServiceCollection services)
     {
         services.AddSingleton<ITagManagerModuleInstaller, TagManagerModuleInstaller>();
-        services.AddSingleton<IChannelCodeSnippetsService, ChannelCodeSnippetsService>();
+        services.AddSingleton<IChannelCodeSnippetsService, DefaultChannelCodeSnippetsService>();
         services.AddScoped<IWebsiteChannelPermissionService, WebsiteChannelPermissionService>();
         services.AddTransient<ITagHelperComponent, CodeSnippetTagHelperComponent>();
         return services;

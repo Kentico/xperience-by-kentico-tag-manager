@@ -123,10 +123,10 @@ namespace Kentico.Xperience.TagManager
         /// Channel code snippet GTMID.
         /// </summary>
         [DatabaseField]
-        public virtual string ChannelCodeSnippetGTMID
+        public virtual string ChannelCodeSnippetIdentifier
         {
-            get => ValidationHelper.GetString(GetValue(nameof(ChannelCodeSnippetGTMID)), String.Empty);
-            set => SetValue(nameof(ChannelCodeSnippetGTMID), value, String.Empty);
+            get => ValidationHelper.GetString(GetValue(nameof(ChannelCodeSnippetIdentifier)), String.Empty);
+            set => SetValue(nameof(ChannelCodeSnippetIdentifier), value, String.Empty);
         }
 
 

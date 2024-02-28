@@ -1,4 +1,6 @@
-﻿using CMS.Base;
+﻿using System.ComponentModel;
+using AngleSharp.Dom.Events;
+using CMS.Base;
 using CMS.ContentEngine;
 using CMS.DataEngine;
 using CMS.DataProtection;
@@ -6,6 +8,8 @@ using CMS.Membership;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.TagManager.Admin;
+using Kentico.Xperience.TagManager.Snippets;
+using Microsoft.IdentityModel.Tokens;
 
 [assembly: UIPage(
     parentType: typeof(TagManagerApplicationPage),
@@ -69,17 +73,15 @@ internal class CodeSnippetListing : ListingPage
             .AddColumn(
                 nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
                 "Type",
-                formatter: (value, _) => value switch
-                {
-                    nameof(CodeSnippetTypes.GTM) => "Google Tag Manager",
-                    nameof(CodeSnippetTypes.CustomCode) => "Custom",
-                    _ => "Unknown"
-
-                })
+                formatter: (_, container) => FormatSnippetType(container),
+                sortable: true)
             .AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
                 "Code Snippet",
                 sortable: false,
                 formatter: (_, container) => FormatCodeSnippet(container))
+            .AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier),
+                "Identifier",
+                formatter: (_, container) => FormatIdentifier(container))
             .AddColumn(
                 nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
                 "Consent",
@@ -103,7 +105,7 @@ internal class CodeSnippetListing : ListingPage
             .AddModifier((query, _) =>
                 query
                     .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs)
-                    .AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
+                    .AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
     }
 
     /// <summary>
@@ -114,18 +116,58 @@ internal class CodeSnippetListing : ListingPage
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     private static string FormatCodeSnippet(IDataContainer container)
     {
-        object? codeSnippetType = container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
-        return codeSnippetType switch
+        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+
+        if (string.IsNullOrEmpty(codeSnippetType))
         {
-            nameof(CodeSnippetTypes.GTM) =>
-                $"Google Tag Manager ID: {container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID)]}",
-            nameof(CodeSnippetTypes.CustomCode) => container[
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ?? string.Empty,
-            _ => throw new ArgumentOutOfRangeException(
+            throw new ArgumentNullException(
                 nameof(container),
-                codeSnippetType,
-                "Invalid ChannelCodeSnippetType!")
-        };
+                "Invalid ChannelCodeSnippetType!");
+        }
+
+        bool hasCode = SnippetFactoryStore.GetSnippetFactory(codeSnippetType).CreateCodeSnippetSettings().HasCustomCode;
+
+        if (hasCode)
+        {
+            return container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ?? string.Empty;
+        }
+
+        return string.Empty;
+    }
+
+    private static string FormatIdentifier(IDataContainer container)
+    {
+        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+
+        if (string.IsNullOrEmpty(codeSnippetType))
+        {
+            throw new ArgumentNullException(
+                nameof(container),
+                "Invalid ChannelCodeSnippetType!");
+        }
+
+        bool hasIdentifier = SnippetFactoryStore.GetSnippetFactory(codeSnippetType).CreateCodeSnippetSettings().HasIdentifier;
+
+        if (hasIdentifier)
+        {
+            return (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier)];
+        }
+
+        return string.Empty;
+    }
+
+    private static string FormatSnippetType(IDataContainer container)
+    {
+        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+
+        if (string.IsNullOrEmpty(codeSnippetType))
+        {
+            throw new ArgumentNullException(
+                nameof(container),
+                "Invalid ChannelCodeSnippetType!");
+        }
+
+        return SnippetFactoryStore.GetSnippetFactory(codeSnippetType).CreateCodeSnippetSettings().TagDisplayName;
     }
 }
 

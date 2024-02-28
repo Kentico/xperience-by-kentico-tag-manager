@@ -52,7 +52,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
 
     private static void ProcessHead(
         TagHelperOutput output,
-        ILookup<CodeSnippetLocations, ChannelCodeSnippetDto> codeSnippets)
+        ILookup<CodeSnippetLocations, CodeSnippetDto> codeSnippets)
     {
         foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.HeadTop])
         {
@@ -67,7 +67,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
 
     private void ProcessBody(
         TagHelperOutput output,
-        ILookup<CodeSnippetLocations, ChannelCodeSnippetDto> codeSnippets)
+        ILookup<CodeSnippetLocations, CodeSnippetDto> codeSnippets)
     {
         foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.BodyTop])
         {
