@@ -14,11 +14,11 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
 
 namespace Kentico.Xperience.TagManager.Admin;
 
-internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
+internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetConfigurationModel>
 {
-    private CodeSnippetEditModel? model;
+    private CodeSnippetConfigurationModel? model;
 
-    protected override CodeSnippetEditModel Model
+    protected override CodeSnippetConfigurationModel Model
     {
         get
         {
@@ -30,10 +30,10 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
             var info = channelCodeSnippetInfoProvider.Get(ObjectID);
             if (info == null)
             {
-                return new CodeSnippetEditModel();
+                return new CodeSnippetConfigurationModel();
             }
 
-            model = new CodeSnippetEditModel()
+            model = new CodeSnippetConfigurationModel()
             {
                 ChannelIDs = [info.ChannelCodeSnippetChannelID],
                 CodeName = info.ChannelCodeSnippetName,
@@ -41,7 +41,7 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
                 SnippetType = info.ChannelCodeSnippetType,
                 ConsentIDs = info.ChannelCodeSnippetConsentID == 0 ? [] : [info.ChannelCodeSnippetConsentID],
                 TagIdentifier = info.ChannelCodeSnippetIdentifier,
-                Location = info.ChannelCodeSnippetLocation,
+                Location = info.ChannelCodeSnippetLocation
             };
 
             return model;
@@ -89,7 +89,7 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetEditModel>
     }
 
     protected override async Task<ICommandResponse> ProcessFormData(
-        CodeSnippetEditModel model,
+        CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
         var info = channelCodeSnippetInfoProvider.Get(ObjectID);

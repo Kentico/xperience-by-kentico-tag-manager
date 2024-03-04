@@ -1,16 +1,46 @@
-﻿namespace Kentico.Xperience.TagManager.Snippets;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace Kentico.Xperience.TagManager.Snippets;
 
 internal static class SnippetFactoryStore
 {
-    private static readonly Dictionary<string, ISnippetFactory> snippetFactories;
-    static SnippetFactoryStore() => snippetFactories = [];
-    public static void AddSnippetFactory<TSnippetFactory>() where TSnippetFactory : ISnippetFactory, new()
+    private static readonly Dictionary<string, ISnippetFactory> snippetFactories = [];
+    public static void AddSnippetFactory<TSnippetFactory>(IConfiguration configuration) where TSnippetFactory : ISnippetFactory, new()
     {
+        const string section = "xbyk.tagmanager.modules";
+        const string snippetTypePrefix = "Kentico";
+
+        var usedTagModuleSection = configuration.GetSection(section).GetChildren();
         var snippetFactory = new TSnippetFactory();
-        string tagTypeName = snippetFactory.CreateCodeSnippetSettings().TagTypeName;
-        snippetFactories.Add(tagTypeName, snippetFactory);
+        var settings = snippetFactory.CreateCodeSnippetSettings();
+        string configurationString = $"{snippetTypePrefix}.{settings.TagTypeName}";
+        string tagType = settings.TagTypeName;
+
+        if (usedTagModuleSection.Any() && !usedTagModuleSection.Any(x => x.Value == configurationString))
+        {
+            return;
+        }
+
+        if (!snippetFactories.TryAdd(tagType, snippetFactory))
+        {
+            throw new InvalidOperationException($"Snippet Factory with name {tagType} is already registered.");
+        }
     }
 
-    public static ISnippetFactory GetSnippetFactory(string channelCodeSnippetType) => snippetFactories[channelCodeSnippetType];
-    public static IEnumerable<ISnippetFactory> GetSnippetFactories() => snippetFactories.Values;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="channelCodeSnippetType"></param>
+    /// <returns>true if the store contains the specified snippet factory; otherwise, false.</returns>
+    public static ISnippetFactory? TryGetSnippetFactory(string channelCodeSnippetType)
+    {
+        if (snippetFactories.TryGetValue(channelCodeSnippetType, out var factory))
+        {
+            return factory;
+        }
+
+        return null;
+    }
+    public static IEnumerable<ISnippetFactory> GetRegisteredSnippetFactories() => snippetFactories.Values;
+    public static IEnumerable<string> GetRegisteredSnippetFactoryTypes() => snippetFactories.Keys;
 }

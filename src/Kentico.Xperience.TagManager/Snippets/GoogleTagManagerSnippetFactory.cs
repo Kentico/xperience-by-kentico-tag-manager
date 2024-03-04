@@ -1,8 +1,8 @@
 ﻿namespace Kentico.Xperience.TagManager.Snippets;
 
-public class GoogleTagManagerSnippetFactory : AbstractSnippetFactory
+internal class GoogleTagManagerSnippetFactory : AbstractSnippetFactory
 {
-    private const string TAG_TYPE_NAME = "GTM";
+    private const string TAG_TYPE_NAME = "GoogleTagManager";
     private const string TAG_DISPLAY_NAME = "Google Tag Manager";
 
     public override CodeSnippetSettings CreateCodeSnippetSettings() =>

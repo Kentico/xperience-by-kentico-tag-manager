@@ -7,7 +7,7 @@ internal class CodeSnippetTypesDropdownOptionsProvider : IDropDownOptionsProvide
 {
     public Task<IEnumerable<DropDownOptionItem>> GetOptionItems()
     {
-        var factories = SnippetFactoryStore.GetSnippetFactories();
+        var factories = SnippetFactoryStore.GetRegisteredSnippetFactories();
         var options = new List<DropDownOptionItem>();
 
         foreach (var factory in factories)

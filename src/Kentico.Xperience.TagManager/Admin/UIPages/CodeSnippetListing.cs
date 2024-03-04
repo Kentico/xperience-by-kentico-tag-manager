@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using AngleSharp.Dom.Events;
-using CMS.Base;
+﻿using CMS.Base;
 using CMS.ContentEngine;
 using CMS.DataEngine;
 using CMS.DataProtection;
@@ -9,7 +7,6 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.TagManager.Admin;
 using Kentico.Xperience.TagManager.Snippets;
-using Microsoft.IdentityModel.Tokens;
 
 [assembly: UIPage(
     parentType: typeof(TagManagerApplicationPage),
@@ -105,6 +102,7 @@ internal class CodeSnippetListing : ListingPage
             .AddModifier((query, _) =>
                 query
                     .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs)
+                    .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
                     .AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
     }
 
@@ -125,9 +123,7 @@ internal class CodeSnippetListing : ListingPage
                 "Invalid ChannelCodeSnippetType!");
         }
 
-        bool hasCode = SnippetFactoryStore.GetSnippetFactory(codeSnippetType).CreateCodeSnippetSettings().HasCustomCode;
-
-        if (hasCode)
+        if (codeSnippetType == CustomSnippetFactory.TAG_TYPE_NAME)
         {
             return container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ?? string.Empty;
         }
@@ -146,9 +142,7 @@ internal class CodeSnippetListing : ListingPage
                 "Invalid ChannelCodeSnippetType!");
         }
 
-        bool hasIdentifier = SnippetFactoryStore.GetSnippetFactory(codeSnippetType).CreateCodeSnippetSettings().HasIdentifier;
-
-        if (hasIdentifier)
+        if (codeSnippetType != CustomSnippetFactory.TAG_TYPE_NAME)
         {
             return (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier)];
         }
@@ -167,7 +161,8 @@ internal class CodeSnippetListing : ListingPage
                 "Invalid ChannelCodeSnippetType!");
         }
 
-        return SnippetFactoryStore.GetSnippetFactory(codeSnippetType).CreateCodeSnippetSettings().TagDisplayName;
+        return SnippetFactoryStore.TryGetSnippetFactory(codeSnippetType)?.CreateCodeSnippetSettings().TagDisplayName ??
+            throw new InvalidOperationException("Specified snippet is not registered.");
     }
 }
 

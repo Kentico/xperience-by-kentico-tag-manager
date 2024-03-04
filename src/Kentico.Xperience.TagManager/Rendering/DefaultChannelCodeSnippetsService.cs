@@ -1,4 +1,5 @@
-﻿using CMS.Base;
+﻿using System.Text.RegularExpressions;
+using CMS.Base;
 using CMS.ContactManagement;
 using CMS.ContentEngine;
 using CMS.DataProtection;
@@ -38,7 +39,6 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                         $"{ChannelCodeSnippetInfo.OBJECT_TYPE}|all",
                         $"{ChannelInfo.OBJECT_TYPE}|all",
                         $"{WebsiteChannelInfo.OBJECT_TYPE}|all",
-
                         $"{ContactInfo.OBJECT_TYPE}|byid|{contact?.ContactID}|children|{ConsentAgreementInfo.OBJECT_TYPE}",
                     ]);
 
@@ -63,11 +63,13 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                             nameof(ConsentInfo.ConsentID));
                     })
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), channelContext.WebsiteChannelID)
+                    .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
                     .Columns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLocation),
                         nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
                         nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
                         nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier),
                         nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID),
+                        nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
                         nameof(ConsentInfo.ConsentID))
                     .GetEnumerableTypedResultAsync(r =>
                     {
@@ -87,12 +89,14 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 
     private static IEnumerable<CodeSnippetDto> CreateCodeSnippet(ChannelCodeSnippetInfo snippetInfo)
     {
-        var snippetFactory = SnippetFactoryStore.GetSnippetFactory(snippetInfo.ChannelCodeSnippetType);
+        var snippetFactory = SnippetFactoryStore.TryGetSnippetFactory(snippetInfo.ChannelCodeSnippetType) ??
+           throw new InvalidOperationException("Specified snippet is not registered.");
+
         var snippetSettings = snippetFactory.CreateCodeSnippetSettings();
 
         var tags = new List<CodeSnippetDto>();
 
-        if (snippetSettings.HasIdentifier && !string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetIdentifier))
+        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetIdentifier))
         {
             tags.AddRange(snippetFactory.CreateCodeSnippets(snippetInfo.ChannelCodeSnippetIdentifier).Select(x => new CodeSnippetDto
             {
@@ -102,15 +106,15 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
             }));
         }
 
-        if (snippetSettings.HasCustomCode && !string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetCode))
+        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetCode) && snippetSettings.TagTypeName == "Custom")
         {
-            var tag = snippetFactory.AdjustCodeSnippet(new CodeSnippetDto
+            var tag = AdjustCustomCodeSnippet(new CodeSnippetDto
             {
                 ID = snippetInfo.ChannelCodeSnippetID,
                 Code = snippetInfo.ChannelCodeSnippetCode,
                 Location = Enum.TryParse(snippetInfo.ChannelCodeSnippetLocation, out CodeSnippetLocations location)
                    ? location
-                   : throw new InvalidOperationException(),
+                   : throw new InvalidOperationException("Invalid Channel Code Snippet Location."),
             });
 
             tags.Add(tag);
@@ -118,4 +122,15 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 
         return tags;
     }
+
+    private static CodeSnippetDto AdjustCustomCodeSnippet(CodeSnippetDto codeSnippet) =>
+      new()
+      {
+          Code = codeSnippet.Code != null ? AddSnippetIds(codeSnippet.ID, codeSnippet.Code!) : codeSnippet.Code,
+          ID = codeSnippet.ID,
+          Location = codeSnippet.Location
+      };
+
+    private static string AddSnippetIds(int codeSnippetId, string codeSnippet) =>
+      Regex.Replace(codeSnippet, "<([^\\/]*?)>", $"""<$1 data-snippet-id="{codeSnippetId}">""");
 }

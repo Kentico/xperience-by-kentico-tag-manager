@@ -15,10 +15,10 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
 namespace Kentico.Xperience.TagManager.Admin;
 
 [UIEvaluatePermission(SystemPermissions.CREATE)]
-internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
+internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetConfigurationModel>
 {
-    private CodeSnippetEditModel? model;
-    protected override CodeSnippetEditModel Model => model ??= new CodeSnippetEditModel();
+    private CodeSnippetConfigurationModel? model;
+    protected override CodeSnippetConfigurationModel Model => model ??= new CodeSnippetConfigurationModel();
     private readonly IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider;
     private readonly IPageUrlGenerator pageUrlGenerator;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
@@ -36,10 +36,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
         this.websiteChannelPermissionService = websiteChannelPermissionService;
     }
 
-    [PageCommand(Permission = SystemPermissions.CREATE)]
-    public override Task<ICommandResponse<FormChangeResult>> Change(FormChangeCommandArguments args) => base.Change(args);
-
-    protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetEditModel model,
+    protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
         CreateCodeSnippetInfo(model);
@@ -49,7 +46,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
         return navigateResponse;
     }
 
-    private async Task<INavigateResponse> NavigateToEditPage(CodeSnippetEditModel model,
+    private async Task<INavigateResponse> NavigateToEditPage(CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
         var baseResult = await base.ProcessFormData(model, formItems);
@@ -87,7 +84,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetEditModel>
                     LocalizationService.GetString("customchannelsettings.codesnippets.permissionerror"));
     }
 
-    private void CreateCodeSnippetInfo(CodeSnippetEditModel model)
+    private void CreateCodeSnippetInfo(CodeSnippetConfigurationModel model)
     {
         var infoObject = new ChannelCodeSnippetInfo();
 

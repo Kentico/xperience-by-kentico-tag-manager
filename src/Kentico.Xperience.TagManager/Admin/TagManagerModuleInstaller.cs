@@ -146,7 +146,7 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
             Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
             Visible = false,
             Precision = 0,
-            Size = 25,
+            Size = 200,
             DataType = FieldDataType.Text,
             Enabled = true,
             AllowEmpty = true

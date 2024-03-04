@@ -1,11 +1,12 @@
 ﻿using CMS.ContentEngine;
 using CMS.DataProtection;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
+using Kentico.Xperience.Admin.Base.Forms;
 using Kentico.Xperience.TagManager.Snippets;
 
 namespace Kentico.Xperience.TagManager.Admin;
 
-internal class CodeSnippetEditModel
+internal class CodeSnippetConfigurationModel
 {
     [RequiredValidationRule]
     [TextInputComponent(Label = "Code name", Order = 0)]
@@ -20,22 +21,19 @@ internal class CodeSnippetEditModel
     public string? SnippetType { get; set; }
 
     [CodeEditorComponent(Label = "Code", Order = 3)]
-    [VisibleIfTrue(nameof(ShowCodeField))]
+    [VisibleIfEqualTo(nameof(SnippetType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? Code { get; set; }
 
     [RadioGroupComponent(Label = "Code snippet location", Order = 4, Options = CodeSnippetLocationsExtensions.FormComponentOptions)]
-    [VisibleIfTrue(nameof(ShowCodeField))]
+    [VisibleIfEqualTo(nameof(SnippetType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? Location { get; set; }
 
     [TextInputComponent(Label = "Tag ID", Order = 3)]
-    [VisibleIfTrue(nameof(ShowIdentifierField))]
+    [VisibleIfNotEqualTo(nameof(SnippetType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? TagIdentifier { get; set; }
 
     [ObjectIdSelectorComponent(objectType: ConsentInfo.OBJECT_TYPE, Label = "Consent", Order = 5, Placeholder = "{$customchannelsettings.codesnippets.noconsentneeded$}")]
     public IEnumerable<int> ConsentIDs { get; set; } = [];
-
-    private bool ShowIdentifierField { get; set; }
-    private bool ShowCodeField { get; set; }
 
     public void MapToChannelCodeSnippetInfo(ChannelCodeSnippetInfo info)
     {
@@ -44,11 +42,8 @@ internal class CodeSnippetEditModel
         info.ChannelCodeSnippetLocation = Location;
         info.ChannelCodeSnippetType = SnippetType;
         info.ChannelCodeSnippetName = CodeName;
-
-        var settings = SnippetFactoryStore.GetSnippetFactory(info.ChannelCodeSnippetType!).CreateCodeSnippetSettings();
-
-        ShowCodeField = settings.HasCustomCode;
-        ShowIdentifierField = settings.HasIdentifier;
+        info.ChannelCodeSnippetIdentifier = TagIdentifier;
+        info.ChannelCodeSnippetCode = Code;
     }
 }
 
