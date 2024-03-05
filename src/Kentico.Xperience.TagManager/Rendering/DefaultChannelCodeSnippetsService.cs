@@ -6,6 +6,7 @@ using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.Websites;
 using CMS.Websites.Routing;
+using Kentico.Xperience.TagManager.Admin;
 using Kentico.Xperience.TagManager.Snippets;
 
 namespace Kentico.Xperience.TagManager.Rendering;
@@ -14,13 +15,13 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 {
     private readonly IConsentAgreementService consentAgreementService;
     private readonly IWebsiteChannelContext channelContext;
-    private readonly IChannelCodeSnippetInfoProvider codeSnippetInfoProvider;
+    private readonly IChannelCodeSnippetItemInfoProvider codeSnippetInfoProvider;
     private readonly IProgressiveCache cache;
 
     public DefaultChannelCodeSnippetsService(
         IConsentAgreementService consentAgreementService,
         IWebsiteChannelContext channelContext,
-        IChannelCodeSnippetInfoProvider codeSnippetInfoProvider,
+        IChannelCodeSnippetItemInfoProvider codeSnippetInfoProvider,
         IProgressiveCache cache)
     {
         this.consentAgreementService = consentAgreementService;
@@ -36,7 +37,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
             s.GetCacheDependency = () =>
                 CacheHelper.GetCacheDependency(
                     [
-                        $"{ChannelCodeSnippetInfo.OBJECT_TYPE}|all",
+                        $"{ChannelCodeSnippetItemInfo.OBJECT_TYPE}|all",
                         $"{ChannelInfo.OBJECT_TYPE}|all",
                         $"{WebsiteChannelInfo.OBJECT_TYPE}|all",
                         $"{ContactInfo.OBJECT_TYPE}|byid|{contact?.ContactID}|children|{ConsentAgreementInfo.OBJECT_TYPE}",
@@ -51,7 +52,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                     .Source(x =>
                     {
                         x.InnerJoin<ChannelInfo>(
-                            nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
+                            nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelID),
                             nameof(ChannelInfo.ChannelID));
 
                         x.InnerJoin<WebsiteChannelInfo>(
@@ -59,23 +60,23 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                             nameof(WebsiteChannelInfo.WebsiteChannelChannelID));
 
                         x.LeftJoin<ConsentInfo>(
-                            $"kenticotagmanager_channelcodesnippet.{nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID)}",
+                            $"kenticotagmanager_channelcodesnippet.{nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentID)}",
                             nameof(ConsentInfo.ConsentID));
                     })
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), channelContext.WebsiteChannelID)
-                    .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
-                    .Columns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLocation),
-                        nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
-                        nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
-                        nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier),
-                        nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID),
-                        nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
+                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
+                    .Columns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLocation),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentID),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType),
                         nameof(ConsentInfo.ConsentID))
                     .GetEnumerableTypedResultAsync(r =>
                     {
                         var dataContainer = new DataRecordContainer(r);
                         var consent = dataContainer[nameof(ConsentInfo.ConsentID)] is > 0 ? ConsentInfo.New(dataContainer) : null;
-                        var snippet = ChannelCodeSnippetInfo.New(dataContainer);
+                        var snippet = ChannelCodeSnippetItemInfo.New(dataContainer);
 
                         return (snippet, consent);
                     }))
@@ -87,32 +88,32 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
         }
     }
 
-    private static IEnumerable<CodeSnippetDto> CreateCodeSnippet(ChannelCodeSnippetInfo snippetInfo)
+    private static IEnumerable<CodeSnippetDto> CreateCodeSnippet(ChannelCodeSnippetItemInfo snippetInfo)
     {
-        var snippetFactory = SnippetFactoryStore.TryGetSnippetFactory(snippetInfo.ChannelCodeSnippetType) ??
+        var snippetFactory = SnippetFactoryStore.TryGetSnippetFactory(snippetInfo.ChannelCodeSnippetItemType) ??
            throw new InvalidOperationException("Specified snippet is not registered.");
 
         var snippetSettings = snippetFactory.CreateCodeSnippetSettings();
 
         var tags = new List<CodeSnippetDto>();
 
-        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetIdentifier))
+        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetItemIdentifier))
         {
-            tags.AddRange(snippetFactory.CreateCodeSnippets(snippetInfo.ChannelCodeSnippetIdentifier).Select(x => new CodeSnippetDto
+            tags.AddRange(snippetFactory.CreateCodeSnippets(snippetInfo.ChannelCodeSnippetItemIdentifier).Select(x => new CodeSnippetDto
             {
                 Location = x.Location,
                 Code = x.Code,
-                ID = snippetInfo.ChannelCodeSnippetID
+                ID = snippetInfo.ChannelCodeSnippetItemID
             }));
         }
 
-        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetCode) && snippetSettings.TagTypeName == "Custom")
+        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetItemCode) && snippetSettings.TagTypeName == "Custom")
         {
             var tag = AdjustCustomCodeSnippet(new CodeSnippetDto
             {
-                ID = snippetInfo.ChannelCodeSnippetID,
-                Code = snippetInfo.ChannelCodeSnippetCode,
-                Location = Enum.TryParse(snippetInfo.ChannelCodeSnippetLocation, out CodeSnippetLocations location)
+                ID = snippetInfo.ChannelCodeSnippetItemID,
+                Code = snippetInfo.ChannelCodeSnippetItemCode,
+                Location = Enum.TryParse(snippetInfo.ChannelCodeSnippetItemLocation, out CodeSnippetLocations location)
                    ? location
                    : throw new InvalidOperationException("Invalid Channel Code Snippet Location."),
             });

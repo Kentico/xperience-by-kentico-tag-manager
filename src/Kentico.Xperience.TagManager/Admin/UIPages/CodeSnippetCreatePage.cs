@@ -5,9 +5,9 @@ using Kentico.Xperience.TagManager.Admin;
 using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider;
 
 [assembly: UIPage(
-    parentType: typeof(CodeSnippetListing),
+    parentType: typeof(CodeSnippetListingPage),
     slug: "add",
-    uiPageType: typeof(CodeSnippetModelCreate),
+    uiPageType: typeof(CodeSnippetCreatePage),
     name: "Create a code snippet",
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
@@ -15,18 +15,18 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
 namespace Kentico.Xperience.TagManager.Admin;
 
 [UIEvaluatePermission(SystemPermissions.CREATE)]
-internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetConfigurationModel>
+internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationModel>
 {
     private CodeSnippetConfigurationModel? model;
     protected override CodeSnippetConfigurationModel Model => model ??= new CodeSnippetConfigurationModel();
-    private readonly IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider;
+    private readonly IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider;
     private readonly IPageUrlGenerator pageUrlGenerator;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
-    public CodeSnippetModelCreate(
+    public CodeSnippetCreatePage(
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
-        IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider,
+        IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider,
         IPageUrlGenerator pageUrlGenerator,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
@@ -52,7 +52,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetConfigurationMo
         var baseResult = await base.ProcessFormData(model, formItems);
 
         var navigateResponse = NavigateTo(
-            pageUrlGenerator.GenerateUrl<CodeSnippetListing>());
+            pageUrlGenerator.GenerateUrl<CodeSnippetListingPage>());
 
         foreach (var message in baseResult.Messages)
         {
@@ -86,7 +86,7 @@ internal class CodeSnippetModelCreate : ModelEditPage<CodeSnippetConfigurationMo
 
     private void CreateCodeSnippetInfo(CodeSnippetConfigurationModel model)
     {
-        var infoObject = new ChannelCodeSnippetInfo();
+        var infoObject = new ChannelCodeSnippetItemInfo();
 
         model.MapToChannelCodeSnippetInfo(infoObject);
 

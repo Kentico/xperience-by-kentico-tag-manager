@@ -7,14 +7,15 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
 [assembly: UIPage(
     parentType: typeof(ChannelCodeSnippetSectionPage),
     slug: "edit",
-    uiPageType: typeof(CodeSnippetModelEdit),
+    uiPageType: typeof(CodeSnippetEditPage),
     name: "Edit code snippet",
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 
 namespace Kentico.Xperience.TagManager.Admin;
 
-internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetConfigurationModel>
+[UIEvaluatePermission(SystemPermissions.UPDATE)]
+internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel>
 {
     private CodeSnippetConfigurationModel? model;
 
@@ -35,29 +36,29 @@ internal class CodeSnippetModelEdit : ModelEditPage<CodeSnippetConfigurationMode
 
             model = new CodeSnippetConfigurationModel()
             {
-                ChannelIDs = [info.ChannelCodeSnippetChannelID],
-                CodeName = info.ChannelCodeSnippetName,
-                Code = info.ChannelCodeSnippetCode,
-                SnippetType = info.ChannelCodeSnippetType,
-                ConsentIDs = info.ChannelCodeSnippetConsentID == 0 ? [] : [info.ChannelCodeSnippetConsentID],
-                TagIdentifier = info.ChannelCodeSnippetIdentifier,
-                Location = info.ChannelCodeSnippetLocation
+                ChannelIDs = [info.ChannelCodeSnippetItemChannelID],
+                CodeName = info.ChannelCodeSnippetItemName,
+                Code = info.ChannelCodeSnippetItemCode,
+                SnippetType = info.ChannelCodeSnippetItemType,
+                ConsentIDs = info.ChannelCodeSnippetItemConsentID == 0 ? [] : [info.ChannelCodeSnippetItemConsentID],
+                TagIdentifier = info.ChannelCodeSnippetItemIdentifier,
+                Location = info.ChannelCodeSnippetItemLocation
             };
 
             return model;
         }
     }
 
-    private readonly IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider;
+    private readonly IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
     [PageParameter(typeof(IntPageModelBinder))]
     public int ObjectID { get; set; }
 
-    public CodeSnippetModelEdit(
+    public CodeSnippetEditPage(
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
-        IChannelCodeSnippetInfoProvider channelCodeSnippetInfoProvider,
+        IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
     {

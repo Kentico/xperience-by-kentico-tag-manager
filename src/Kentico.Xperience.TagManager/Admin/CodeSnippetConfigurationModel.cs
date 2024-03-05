@@ -2,6 +2,7 @@
 using CMS.DataProtection;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
 using Kentico.Xperience.Admin.Base.Forms;
+using Kentico.Xperience.TagManager.Rendering;
 using Kentico.Xperience.TagManager.Snippets;
 
 namespace Kentico.Xperience.TagManager.Admin;
@@ -35,15 +36,15 @@ internal class CodeSnippetConfigurationModel
     [ObjectIdSelectorComponent(objectType: ConsentInfo.OBJECT_TYPE, Label = "Consent", Order = 5, Placeholder = "{$customchannelsettings.codesnippets.noconsentneeded$}")]
     public IEnumerable<int> ConsentIDs { get; set; } = [];
 
-    public void MapToChannelCodeSnippetInfo(ChannelCodeSnippetInfo info)
+    public void MapToChannelCodeSnippetInfo(ChannelCodeSnippetItemInfo info)
     {
-        info.ChannelCodeSnippetChannelID = ChannelIDs.FirstOrDefault();
-        info.ChannelCodeSnippetConsentID = ConsentIDs.FirstOrDefault();
-        info.ChannelCodeSnippetLocation = Location;
-        info.ChannelCodeSnippetType = SnippetType;
-        info.ChannelCodeSnippetName = CodeName;
-        info.ChannelCodeSnippetIdentifier = TagIdentifier;
-        info.ChannelCodeSnippetCode = Code;
+        info.ChannelCodeSnippetItemChannelID = ChannelIDs.FirstOrDefault();
+        info.ChannelCodeSnippetItemConsentID = ConsentIDs.FirstOrDefault();
+        info.ChannelCodeSnippetItemLocation = Location;
+        info.ChannelCodeSnippetItemType = SnippetType;
+        info.ChannelCodeSnippetItemName = CodeName;
+        info.ChannelCodeSnippetItemIdentifier = TagIdentifier;
+        info.ChannelCodeSnippetItemCode = Code;
     }
 }
 

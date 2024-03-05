@@ -11,23 +11,27 @@ using Kentico.Xperience.TagManager.Snippets;
 [assembly: UIPage(
     parentType: typeof(TagManagerApplicationPage),
     slug: "snippets",
-    uiPageType: typeof(CodeSnippetListing),
+    uiPageType: typeof(CodeSnippetListingPage),
     name: "Code snippets",
     templateName: TemplateNames.LISTING,
     order: UIPageOrder.First)]
 
 namespace Kentico.Xperience.TagManager.Admin;
 
-internal class CodeSnippetListing : ListingPage
+/// <summary>
+/// An admin UI page that displays information about the registered tags.
+/// </summary>
+[UIEvaluatePermission(SystemPermissions.VIEW)]
+internal class CodeSnippetListingPage : ListingPage
 {
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
-    private readonly IConsentInfoProvider consentInfoProvider;
     private readonly IAuthenticatedUserAccessor authenticatedUserAccessor;
+    private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
     private readonly IInfoProvider<ChannelInfo> channelProvider;
 
-    public CodeSnippetListing(
+    public CodeSnippetListingPage(
         IWebsiteChannelPermissionService websiteChannelPermissionService,
-        IConsentInfoProvider consentInfoProvider,
+        IInfoProvider<ConsentInfo> consentInfoProvider,
         IAuthenticatedUserAccessor authenticatedUserAccessor,
         IInfoProvider<ChannelInfo> channelProvider)
     {
@@ -37,7 +41,7 @@ internal class CodeSnippetListing : ListingPage
         this.channelProvider = channelProvider;
     }
 
-    protected override string ObjectType => ChannelCodeSnippetInfo.OBJECT_TYPE;
+    protected override string ObjectType => ChannelCodeSnippetItemInfo.OBJECT_TYPE;
 
     /// <inheritdoc />
     [PageCommand(Permission = SystemPermissions.DELETE)]
@@ -48,39 +52,39 @@ internal class CodeSnippetListing : ListingPage
         var allConsents = await consentInfoProvider.Get().GetEnumerableTypedResultAsync();
         var allChannels = await channelProvider.Get().GetEnumerableTypedResultAsync();
 
-        PageConfiguration.HeaderActions.AddLink<CodeSnippetModelCreate>("Add new");
+        PageConfiguration.HeaderActions.AddLink<CodeSnippetCreatePage>("Add new");
         PageConfiguration.TableActions.AddDeleteAction(nameof(Delete));
-        PageConfiguration.AddEditRowAction<CodeSnippetModelEdit>();
+        PageConfiguration.AddEditRowAction<CodeSnippetEditPage>();
 
         PageConfiguration.ColumnConfigurations
             .AddColumn(
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
                 "ID",
                 maxWidth: 10)
             .AddColumn(
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetName),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemName),
                 "Code Name",
                 searchable: true)
             .AddColumn(
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelID),
                 "Channel",
                 sortable: false,
                 formatter: (value, _) => allChannels.FirstOrDefault(c => c.ChannelID == (int)value)?.ChannelDisplayName ?? ""
             )
             .AddColumn(
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType),
                 "Type",
                 formatter: (_, container) => FormatSnippetType(container),
                 sortable: true)
-            .AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
+            .AddColumn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
                 "Code Snippet",
                 sortable: false,
                 formatter: (_, container) => FormatCodeSnippet(container))
-            .AddColumn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier),
+            .AddColumn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
                 "Identifier",
                 formatter: (_, container) => FormatIdentifier(container))
             .AddColumn(
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentID),
                 "Consent",
                 sortable: false,
                 formatter: (value, _) =>
@@ -88,7 +92,7 @@ internal class CodeSnippetListing : ListingPage
                         ? LocalizationService.GetString("customchannelsettings.codesnippets.noconsentneeded")
                         : allConsents.FirstOrDefault(c => c.ConsentID == (int)value)?.ConsentDisplayName ?? "")
             .AddColumn(
-                nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLastModified),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLastModified),
                 "Last Modified",
                 defaultSortDirection: SortTypeEnum.Desc,
                 sortable: true);
@@ -101,9 +105,9 @@ internal class CodeSnippetListing : ListingPage
         PageConfiguration.QueryModifiers
             .AddModifier((query, _) =>
                 query
-                    .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID), channelsIDs)
-                    .WhereIn(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
-                    .AddColumns(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier), nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)));
+                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelID), channelsIDs)
+                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
+                    .AddColumns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier), nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)));
     }
 
     /// <summary>
@@ -114,7 +118,7 @@ internal class CodeSnippetListing : ListingPage
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     private static string FormatCodeSnippet(IDataContainer container)
     {
-        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)];
 
         if (string.IsNullOrEmpty(codeSnippetType))
         {
@@ -125,7 +129,7 @@ internal class CodeSnippetListing : ListingPage
 
         if (codeSnippetType == CustomSnippetFactory.TAG_TYPE_NAME)
         {
-            return container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode)] as string ?? string.Empty;
+            return container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode)] as string ?? string.Empty;
         }
 
         return string.Empty;
@@ -133,7 +137,7 @@ internal class CodeSnippetListing : ListingPage
 
     private static string FormatIdentifier(IDataContainer container)
     {
-        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)];
 
         if (string.IsNullOrEmpty(codeSnippetType))
         {
@@ -144,7 +148,7 @@ internal class CodeSnippetListing : ListingPage
 
         if (codeSnippetType != CustomSnippetFactory.TAG_TYPE_NAME)
         {
-            return (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetIdentifier)];
+            return (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier)];
         }
 
         return string.Empty;
@@ -152,7 +156,7 @@ internal class CodeSnippetListing : ListingPage
 
     private static string FormatSnippetType(IDataContainer container)
     {
-        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType)];
+        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)];
 
         if (string.IsNullOrEmpty(codeSnippetType))
         {
@@ -164,12 +168,4 @@ internal class CodeSnippetListing : ListingPage
         return SnippetFactoryStore.TryGetSnippetFactory(codeSnippetType)?.CreateCodeSnippetSettings().TagDisplayName ??
             throw new InvalidOperationException("Specified snippet is not registered.");
     }
-}
-
-internal record struct UIPermissions
-{
-    public bool View { get; set; }
-    public bool Update { get; set; }
-    public bool Delete { get; set; }
-    public bool Create { get; set; }
 }
