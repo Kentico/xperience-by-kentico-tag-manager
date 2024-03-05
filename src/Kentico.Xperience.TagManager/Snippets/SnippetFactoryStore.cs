@@ -8,12 +8,11 @@ internal static class SnippetFactoryStore
     public static void AddSnippetFactory<TSnippetFactory>(IConfiguration configuration) where TSnippetFactory : ISnippetFactory, new()
     {
         const string section = "xbyk.tagmanager.modules";
-        const string snippetTypePrefix = "Kentico";
 
         var usedTagModuleSection = configuration.GetSection(section).GetChildren();
         var snippetFactory = new TSnippetFactory();
         var settings = snippetFactory.CreateCodeSnippetSettings();
-        string configurationString = $"{snippetTypePrefix}.{settings.TagTypeName}";
+        string configurationString = settings.TagAppSettingsName;
         string tagType = settings.TagTypeName;
 
         if (usedTagModuleSection.Any() && !usedTagModuleSection.Any(x => x.Value == configurationString))

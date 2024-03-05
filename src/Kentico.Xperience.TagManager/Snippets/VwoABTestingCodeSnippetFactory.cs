@@ -6,7 +6,7 @@ internal class VwoABTestingCodeSnippetFactory : AbstractSnippetFactory
 {
     private const string TAG_APPSETTINGS_NAME = "Kentico.VWO";
     private const string TAG_TYPE_NAME = "VWO";
-    private const string TAG_DISPLAY_NAME = "VWo";
+    private const string TAG_DISPLAY_NAME = "VWO";
 
     public override CodeSnippetSettings CreateCodeSnippetSettings() =>
         new(TAG_TYPE_NAME, TAG_DISPLAY_NAME, TAG_APPSETTINGS_NAME);
