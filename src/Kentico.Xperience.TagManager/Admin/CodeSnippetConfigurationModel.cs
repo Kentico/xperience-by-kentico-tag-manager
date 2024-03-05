@@ -38,8 +38,8 @@ internal class CodeSnippetConfigurationModel
 
     public void MapToChannelCodeSnippetInfo(ChannelCodeSnippetItemInfo info)
     {
-        info.ChannelCodeSnippetItemChannelID = ChannelIDs.FirstOrDefault();
-        info.ChannelCodeSnippetItemConsentID = ConsentIDs.FirstOrDefault();
+        info.ChannelCodeSnippetItemChannelId = ChannelIDs.FirstOrDefault();
+        info.ChannelCodeSnippetItemConsentId = ConsentIDs.FirstOrDefault();
         info.ChannelCodeSnippetItemLocation = Location;
         info.ChannelCodeSnippetItemType = SnippetType;
         info.ChannelCodeSnippetItemName = CodeName;

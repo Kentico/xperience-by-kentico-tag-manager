@@ -12,7 +12,7 @@ namespace Kentico.Xperience.TagManager;
 
 internal class TagManagerModule : Module
 {
-    private ITagManagerModuleInstaller? installer;
+    private ITagManagerModuleInstaller installer = null!;
 
     public TagManagerModule() : base(nameof(TagManagerModule))
     {

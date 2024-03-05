@@ -66,7 +66,7 @@ internal class CodeSnippetListingPage : ListingPage
                 "Code Name",
                 searchable: true)
             .AddColumn(
-                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelID),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelId),
                 "Channel",
                 sortable: false,
                 formatter: (value, _) => allChannels.FirstOrDefault(c => c.ChannelID == (int)value)?.ChannelDisplayName ?? ""
@@ -84,7 +84,7 @@ internal class CodeSnippetListingPage : ListingPage
                 "Identifier",
                 formatter: (_, container) => FormatIdentifier(container))
             .AddColumn(
-                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentID),
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),
                 "Consent",
                 sortable: false,
                 formatter: (value, _) =>
@@ -105,7 +105,7 @@ internal class CodeSnippetListingPage : ListingPage
         PageConfiguration.QueryModifiers
             .AddModifier((query, _) =>
                 query
-                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelID), channelsIDs)
+                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelId), channelsIDs)
                     .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
                     .AddColumns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier), nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)));
     }

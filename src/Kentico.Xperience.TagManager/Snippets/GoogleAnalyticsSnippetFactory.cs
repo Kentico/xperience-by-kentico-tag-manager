@@ -4,11 +4,12 @@ namespace Kentico.Xperience.TagManager.Snippets;
 
 internal class GoogleAnalyticsSnippetFactory : AbstractSnippetFactory
 {
+    private const string TAG_APPSETTINGS_NAME = "Kentico.GoogleAnalytics4";
     private const string TAG_TYPE_NAME = "GoogleAnalytics4";
     private const string TAG_DISPLAY_NAME = "Google Analytics 4";
 
     public override CodeSnippetSettings CreateCodeSnippetSettings() =>
-        new(TAG_TYPE_NAME, TAG_DISPLAY_NAME);
+        new(TAG_TYPE_NAME, TAG_DISPLAY_NAME, TAG_APPSETTINGS_NAME);
 
     public override IEnumerable<CodeSnippet> CreateCodeSnippets(string thirdPartyIdentifier) =>
         new List<CodeSnippet>

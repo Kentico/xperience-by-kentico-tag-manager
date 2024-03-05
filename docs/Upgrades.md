@@ -25,13 +25,12 @@ To remove this configuration and the added database tables perform one of the fo
 
 ### Using Continuous Integration (CI)
 
-1. Remove the `Kentico.Xperience.Lucene` NuGet package from the solution
+1. Remove the `Kentico.Xperience.TagManager` NuGet package from the solution
 1. Remove any code references to the package and recompile your solution
 1. If you are using Xperience's Continuous Integration (CI), delete the files with the paths from your CI repository folder:
 
-   - `\App_Data\CIRepository\@global\cms.class\tagmanager.*\**`
-   - `\App_Data\CIRepository\@global\cms.class\kentico.xperience.tagmanager\**`
-   - `\App_Data\CIRepository\@global\kenticotagmanager.*\**`
+   - `\App_Data\CIRepository\@global\cms.class\kenticotagmanager.*\**`
+   - `\App_Data\CIRepository\@global\cms.resource\cms.integration.tagmanager.*`
 
 1. Run a CI restore, which will clean up the database tables and `CMS_Class` records.
 
@@ -43,7 +42,7 @@ If you are not using CI run the following SQL _after_ removing the NuGet package
 drop table KenticoTagManager_ChannelCodeSnippet
 
 delete
-FROM [dbo].[CMS_Class] where ClassName like 'KenticoTagManager.ChannelCodeSnippet'
+FROM [dbo].[CMS_Class] where ClassName like 'KenticoTagManager.ChannelCodeSnippetItem'
 
 delete
 from [CMS_Resource] where ResourceName = 'CMS.Integration.TagManager'

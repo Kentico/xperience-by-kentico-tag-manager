@@ -36,8 +36,8 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
         },
         DependsOn = new List<ObjectDependency>()
         {
-            new ObjectDependency(nameof(ChannelCodeSnippetItemChannelID), ChannelInfo.OBJECT_TYPE, ObjectDependencyEnum.Required),
-            new ObjectDependency(nameof(ChannelCodeSnippetItemConsentID), ConsentInfo.OBJECT_TYPE, ObjectDependencyEnum.Required),
+            new ObjectDependency(nameof(ChannelCodeSnippetItemChannelId), ChannelInfo.OBJECT_TYPE, ObjectDependencyEnum.Required),
+            new ObjectDependency(nameof(ChannelCodeSnippetItemConsentId), ConsentInfo.OBJECT_TYPE, ObjectDependencyEnum.Required),
         },
     };
 
@@ -91,10 +91,10 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
     /// Channel code snippet channel ID.
     /// </summary>
     [DatabaseField]
-    public virtual int ChannelCodeSnippetItemChannelID
+    public virtual int ChannelCodeSnippetItemChannelId
     {
-        get => ValidationHelper.GetInteger(GetValue(nameof(ChannelCodeSnippetItemChannelID)), 0);
-        set => SetValue(nameof(ChannelCodeSnippetItemChannelID), value);
+        get => ValidationHelper.GetInteger(GetValue(nameof(ChannelCodeSnippetItemChannelId)), 0);
+        set => SetValue(nameof(ChannelCodeSnippetItemChannelId), value);
     }
 
 
@@ -145,10 +145,10 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
     /// Channel code snippet consent ID.
     /// </summary>
     [DatabaseField]
-    public virtual int ChannelCodeSnippetItemConsentID
+    public virtual int ChannelCodeSnippetItemConsentId
     {
-        get => ValidationHelper.GetInteger(GetValue(nameof(ChannelCodeSnippetItemConsentID)), 0);
-        set => SetValue(nameof(ChannelCodeSnippetItemConsentID), value);
+        get => ValidationHelper.GetInteger(GetValue(nameof(ChannelCodeSnippetItemConsentId)), 0);
+        set => SetValue(nameof(ChannelCodeSnippetItemConsentId), value);
     }
 
 

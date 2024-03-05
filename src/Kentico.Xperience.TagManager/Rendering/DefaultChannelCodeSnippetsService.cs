@@ -52,7 +52,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                     .Source(x =>
                     {
                         x.InnerJoin<ChannelInfo>(
-                            nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelID),
+                            nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelId),
                             nameof(ChannelInfo.ChannelID));
 
                         x.InnerJoin<WebsiteChannelInfo>(
@@ -60,14 +60,14 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                             nameof(WebsiteChannelInfo.WebsiteChannelChannelID));
 
                         x.LeftJoin<ConsentInfo>(
-                            $"kenticotagmanager_channelcodesnippet.{nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentID)}",
+                            $"{ChannelCodeSnippetItemInfo.OBJECT_TYPE.Replace('.', '_')}.{nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId)}",
                             nameof(ConsentInfo.ConsentID));
                     })
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), channelContext.WebsiteChannelID)
                     .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
                     .Columns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLocation),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
-                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentID),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType),

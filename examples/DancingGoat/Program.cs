@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
+using DancingGoat.TagManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,11 @@ builder.Services.AddLocalization()
     });
 
 builder.Services.AddDancingGoatServices();
-builder.Services.AddKenticoTagManager(builder.Configuration);
+
+builder.Services.AddKenticoTagManager(builder.Configuration, builder =>
+{
+    builder.AddSnippetFactory<DancingGoatSnippetFactory>();
+});
 
 ConfigureMembershipServices(builder.Services);
 

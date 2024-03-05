@@ -36,11 +36,11 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
 
             model = new CodeSnippetConfigurationModel()
             {
-                ChannelIDs = [info.ChannelCodeSnippetItemChannelID],
+                ChannelIDs = [info.ChannelCodeSnippetItemChannelId],
                 CodeName = info.ChannelCodeSnippetItemName,
                 Code = info.ChannelCodeSnippetItemCode,
                 SnippetType = info.ChannelCodeSnippetItemType,
-                ConsentIDs = info.ChannelCodeSnippetItemConsentID == 0 ? [] : [info.ChannelCodeSnippetItemConsentID],
+                ConsentIDs = info.ChannelCodeSnippetItemConsentId == 0 ? [] : [info.ChannelCodeSnippetItemConsentId],
                 TagIdentifier = info.ChannelCodeSnippetItemIdentifier,
                 Location = info.ChannelCodeSnippetItemLocation
             };

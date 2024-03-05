@@ -52,7 +52,7 @@ dotnet add package Kentico.Xperience.TagManager
 
    // ...
 
-   builder.Services.AddKenticoTagManager();
+   builder.Services.AddKenticoTagManager(builder.configuration);
    ```
 
 3. In the administration go to UI application 'Tag Management'.
