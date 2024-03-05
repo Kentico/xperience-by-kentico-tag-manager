@@ -17,16 +17,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DancingGoat", "examples\Dan
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{09AFE138-1980-445D-A1B1-5CE3C28BFD98}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		.markdownlint.json = .markdownlint.json
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5AC3E3D1-A97D-42C3-A6D4-CC44897DD5E6}"
+	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		Directory.build.targets = Directory.build.targets
 		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
-		LICENSE.md = LICENSE.md
 		nuget.config = nuget.config
-		README.md = README.md
 	EndProjectSection
 EndProject
 Global

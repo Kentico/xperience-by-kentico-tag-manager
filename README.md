@@ -20,7 +20,7 @@ Tag Manager integration enabling marketers to author custom tags that can be emb
 
 | Xperience Version | Library Version |
 | ----------------- | --------------- |
-| >= 28.1.0         | >= 1.0.0        |
+| >= 28.3.1         | >= 1.0.0        |
 
 ### Dependencies
 

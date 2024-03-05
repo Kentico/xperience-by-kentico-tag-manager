@@ -134,11 +134,7 @@ node_modules
 segments_2i
 
 # Generated files
-nuget-local/*.nupkg
-nuget-local/*.snupkg
 **/Client/dist/*
 
 **/CMSModules/WebFarm/*
 
-#wwwroot folder
-/src/Kentico.Xperience.TagManager/wwwroot/
