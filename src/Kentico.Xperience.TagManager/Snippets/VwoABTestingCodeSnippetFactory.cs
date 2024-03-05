@@ -1,6 +1,8 @@
-﻿namespace Kentico.Xperience.TagManager.Snippets;
+﻿using Kentico.Xperience.TagManager.Rendering;
 
-public class VwoABTestingCodeSnippetFactory : AbstractSnippetFactory
+namespace Kentico.Xperience.TagManager.Snippets;
+
+internal class VwoABTestingCodeSnippetFactory : AbstractSnippetFactory
 {
     private const string TAG_TYPE_NAME = "VWO";
     private const string TAG_DISPLAY_NAME = "Google Tag Manager";
@@ -16,23 +18,19 @@ public class VwoABTestingCodeSnippetFactory : AbstractSnippetFactory
 
     private static string GenerateScript(string identifier) =>
     $$"""
-    <script type='text/javascript'>
-        (function(){
-        var settings = {
-            async: true,
-            attr: { },
-            url: "//dev.visualwebsiteoptimizer.com/j.php",
-            a: "{{identifier}}"
-        };
-        window._vwo_code = window._vwo_code || (function(){
-        var account_id=settings.a, settings_tolerance=2000, library_tolerance=2500, use_existing_jquery=false, 
-        /* DO NOT EDIT BELOW THIS LINE */
-        f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;}, library_tolerance:function(){return library_tolerance;},
-        settings_tolerance:function(){return settings_tolerance;},account_id:function(){return account_id;},end:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);{{'}'}}},init:function(){
-        var a=d.createElement('script');a.type='text/javascript';a.setAttribute('async','true');a.setAttribute('src',settings.url+'?a='+settings.a+'&url='+encodeURIComponent(d.URL)+'&random='+Math.random()+'&f='+settings.attr.f+(settings.attr.u?'&u='+settings.attr.u:''));d.getElementsByTagName('head')[0].appendChild(a);},init_again:function(e){if(!e)return;var t=d.createElement('script');t.type='text/javascript';t.async=!f;t.setAttribute('src',settings.url+'a='+settings.a+'&url='+encodeURIComponent(settings.url)+'&random='+Math.random()+'&f='+e.f+(e.u?'&u='+e.u:''));d.getElementsByTagName('head')[0].appendChild(t);}{{'}'}};})();
-        window._vwo_settings_timer = window._vwo_settings_timer || setTimeout(function(){window._vwo_code.end();}, settings.settings_tolerance);
-        window._vwo_code.init();
-        })();
-    </script>
+    <!-- Start VWO Async SmartCode -->
+        <link rel="preconnect" href="https://dev.visualwebsiteoptimizer.com"/>
+        <script type='text/javascript' id='vwoCode'>
+            window._vwo_code || (function() {
+            var account_id={{identifier}},
+            version=2.0,
+            settings_tolerance=2000,
+            hide_element='body',
+            hide_element_style = 'opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important',
+            /* DO NOT EDIT BELOW THIS LINE */
+            f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+'_settings',cc={};try{var c=JSON.parse(localStorage.getItem('_vwo_'+account_id+'_config'));cc=c&&typeof c==='object'?c:{{{'}'}}}catch(e){}var stT=cc.stT==='session'?w.sessionStorage:w.localStorage;code={use_existing_jquery:function(){return typeof use_existing_jquery!=='undefined'?use_existing_jquery:undefined},library_tolerance:function(){return typeof library_tolerance!=='undefined'?library_tolerance:undefined},settings_tolerance:function(){return cc.sT||settings_tolerance},hide_element_style:function(){return'{'+(cc.hES||hide_element_style)+'}'},hide_element:function(){return typeof cc.hE==='string'?cc.hE:hide_element},getVersion:function(){return version},finish:function(){if(!f){f=true;var e=d.getElementById('_vis_opt_path_hides');if(e)e.parentNode.removeChild(e)}{{'}'}},finished:function(){return f},load:function(e){var t=this.getSettings(),n=d.createElement('script'),i=this;if(t){n.textContent=t;d.getElementsByTagName('head')[0].appendChild(n);if(!w.VWO||VWO.caE){stT.removeItem(cK);i.load(e){{'}'}}}else{n.fetchPriority='high';n.src=e;n.type='text/javascript';n.onerror=function(){_vwo_code.finish()};d.getElementsByTagName('head')[0].appendChild(n){{'}'}}},getSettings:function(){try{var e=stT.getItem(cK);if(!e){return}e=JSON.parse(e);if(Date.now()>e.e){stT.removeItem(cK);return}return e.s}catch(e){return{{'}'}}},init:function(){if(d.URL.indexOf('__vwo_disable__')>-1)return;var e=this.settings_tolerance();w._vwo_settings_timer=setTimeout(function(){_vwo_code.finish();stT.removeItem(cK)},e);var t=d.currentScript,n=d.createElement('style'),i=this.hide_element(),r=t&&!t.async&&i?i+this.hide_element_style():'',c=d.getElementsByTagName('head')[0];n.setAttribute('id','_vis_opt_path_hides');v&&n.setAttribute('nonce',v.nonce);n.setAttribute('type','text/css');if(n.styleSheet)n.styleSheet.cssText=r;else n.appendChild(d.createTextNode(r));c.appendChild(n);this.load('
+            https://dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&vn='+version){{'}'}}};w._vwo_code=code;code.init();})();
+        </script>
+    <!-- End VWO Async SmartCode -->
     """;
 }

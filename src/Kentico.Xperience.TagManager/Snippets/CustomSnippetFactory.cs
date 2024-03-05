@@ -1,6 +1,6 @@
 ﻿namespace Kentico.Xperience.TagManager.Snippets;
 
-public class CustomSnippetFactory : AbstractSnippetFactory
+internal class CustomSnippetFactory : AbstractSnippetFactory
 {
     public const string TAG_TYPE_NAME = "CustomTag";
     private const string TAG_DISPLAY_NAME = "Custom Snippet";

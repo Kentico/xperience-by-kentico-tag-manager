@@ -1,4 +1,6 @@
-﻿namespace Kentico.Xperience.TagManager.Snippets;
+﻿using Kentico.Xperience.TagManager.Rendering;
+
+namespace Kentico.Xperience.TagManager.Snippets;
 
 internal class MicrosoftClaritySnippetFactory : AbstractSnippetFactory
 {
