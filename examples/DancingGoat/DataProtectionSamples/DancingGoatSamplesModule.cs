@@ -32,7 +32,7 @@ namespace Samples.DancingGoat
 
         private IContactInfoProvider contactInfoProvider;
         private IMemberInfoProvider memberInfoProvider;
-        private IConsentAgreementInfoProvider consentAgreementInfoProvider;
+        private IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider;
         private IBizFormInfoProvider bizFormInfoProvider;
         private IAccountContactInfoProvider accountContactInfoProvider;
         private ISettingsKeyInfoProvider settingsKeyInfoProvider;
@@ -59,7 +59,7 @@ namespace Samples.DancingGoat
 
             contactInfoProvider = Service.Resolve<IContactInfoProvider>();
             memberInfoProvider = Service.Resolve<IMemberInfoProvider>();
-            consentAgreementInfoProvider = Service.Resolve<IConsentAgreementInfoProvider>();
+            consentAgreementInfoProvider = Service.Resolve<IInfoProvider<ConsentAgreementInfo>>();
             bizFormInfoProvider = Service.Resolve<IBizFormInfoProvider>();
             accountContactInfoProvider = Service.Resolve<IAccountContactInfoProvider>();
             settingsKeyInfoProvider = Service.Resolve<ISettingsKeyInfoProvider>();

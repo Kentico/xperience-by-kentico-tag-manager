@@ -40,7 +40,7 @@ namespace DancingGoat.AdminComponents
 
         private readonly IFormBuilderConfigurationSerializer formBuilderConfigurationSerializer;
         private readonly IEventLogService eventLogService;
-        private readonly IConsentInfoProvider consentInfoProvider;
+        private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
         private readonly IBizFormInfoProvider bizFormInfoProvider;
         private readonly IContactGroupInfoProvider contactGroupInfoProvider;
         private readonly ISettingsKeyInfoProvider settingsKeyInfoProvider;
@@ -60,7 +60,7 @@ namespace DancingGoat.AdminComponents
         public SampleDataGeneratorApplication(
             IFormBuilderConfigurationSerializer formBuilderConfigurationSerializer,
             IEventLogService eventLogService,
-            IConsentInfoProvider consentInfoProvider,
+            IInfoProvider<ConsentInfo> consentInfoProvider,
             IBizFormInfoProvider bizFormInfoProvider,
             IContactGroupInfoProvider contactGroupInfoProvider,
             ISettingsKeyInfoProvider settingsKeyInfoProvider,
