@@ -6,15 +6,22 @@
 
 Tag Manager integration enabling marketers to author custom tags that can be embedded in a website channel. For example web analytics tools like Google Analytics, Google Tag Manager, various cookie banners, marketing tags and optimization tools.
 
+By default we provide support for the following third-party snippets:
+- [VWO A/B testing](https://vwo.com/)
+- [Intercom chatbot](https://www.intercom.com/ai-chatbot)
+- [Google Tag Manager](https://tagmanager.google.com/)
+- [Google Analytics](https://marketingplatform.google.com/)
+- [Microsoft Clarity](https://clarity.microsoft.com/)
+
 ## Screenshots
 
-![UI Application](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/ui_application.png)
+![UI Application](/images/screenshots/ui_application.png)
 
-![Custom tags listing](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/listing.png)
+![Custom tags listing](/images/screenshots/listing.png)
 
-![Create custom code snippet](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_snippet.png)
+![Create custom code snippet](/images/screenshots/create_snippet.png)
 
-![Create GTM tag snippet](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_gtmid.png)
+![Create GTM tag snippet](/images/screenshots/create_custom_snippet.png)
 
 ## Library Version Matrix
 
@@ -58,7 +65,7 @@ dotnet add package Kentico.Xperience.TagManager
 3. In the administration go to UI application 'Tag Management'.
 4. Create a new record:
     * Select one of the channels. 
-    * Select code snippet type - either 'Google Tag Manager' or 'Custom code snippet':
+    * Select code snippet type - we have prepared some of often used types:
         * For 'Google Tag Manager' simply enter the GTM ID.
         * For 'Custom code snippet' fill in entire code you want to render.
     * Select a location:
