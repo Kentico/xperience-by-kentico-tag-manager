@@ -20,7 +20,7 @@ internal class GoogleAnalyticsSnippetFactory : AbstractSnippetFactory
     private static string GenerateScript(string identifier) =>
       $$"""
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WT7J3QS9E8"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{identifier}}"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

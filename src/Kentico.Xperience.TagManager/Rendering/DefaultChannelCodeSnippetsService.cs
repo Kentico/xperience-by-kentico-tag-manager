@@ -107,7 +107,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
             }));
         }
 
-        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetItemCode) && snippetSettings.TagTypeName == "Custom")
+        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetItemCode) && snippetSettings.TagTypeName == CustomSnippetFactory.TAG_TYPE_NAME)
         {
             var tag = AdjustCustomCodeSnippet(new CodeSnippetDto
             {
