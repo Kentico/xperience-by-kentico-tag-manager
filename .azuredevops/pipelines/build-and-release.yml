@@ -22,7 +22,7 @@ stages:
   - stage: Build
     jobs:
       - job: Build
-        displayName: Build, Sign, Test & Pack
+        displayName: Build, Sign, and Pack
 
         pool:
           name: ${{ parameters.AgentPoolName }}
@@ -39,7 +39,7 @@ stages:
           - name: ProjectFolder
             value: src/Kentico.Xperience.TagManager
 
-          - name: ProjectFilePath
+          - name: ProjectPath
             value: src/Kentico.Xperience.TagManager/Kentico.Xperience.TagManager.csproj
 
         steps:
@@ -48,7 +48,7 @@ stages:
             inputs:
               targetType: inline
               script: |
-                $fileContent = Get-Content -Path './${{ variables.ProjectFolder }}/Admin/Client/package.json' -Raw
+                $fileContent = Get-Content -Path './${{ variables.ProjectFolder }}/Frontend/package.json' -Raw
                 $jsonObject = ConvertFrom-Json -InputObject $fileContent
 
                 # Get the value of engines.node
@@ -79,17 +79,30 @@ stages:
             displayName: Restore dependencies
             inputs:
               command: restore
-              projects: ${{ variables.ProjectFilePath }}
+              projects: ${{ variables.ProjectPath }}
               feedsToUse: select
               restoreArguments: --locked-mode
+
+          - task: Npm@1
+            displayName: npm ci - Frontend
+            inputs:
+              command: "ci"
+              workingDir: ${{ variables.ProjectFolder }}/Frontend
+
+          - task: Npm@1
+            displayName: npm run build:prod - Frontend
+            inputs:
+              command: "custom"
+              customCommand: run build:prod
+              workingDir: ${{ variables.ProjectFolder }}/Frontend
 
           - task: DotNetCoreCLI@2
             displayName: Build
             inputs:
               command: build
-              projects: ${{ variables.ProjectFilePath }}
+              projects: ${{ variables.ProjectPath }}
               configuration: ${{ variables.Configuration }}
-              arguments: --no-restore
+              arguments: --no-restore --verbosity Detailed
             env:
               AuthenticodeClientSecret: $(AuthenticodeClientSecret)
 
@@ -97,7 +110,7 @@ stages:
             displayName: Create NuGet package
             inputs:
               command: pack
-              packagesToPack: ${{ variables.ProjectFilePath }}
+              packagesToPack: ${{ variables.ProjectPath }}
               configuration: ${{ variables.Configuration }}
               packDirectory: $(System.DefaultWorkingDirectory)/packages
               includesymbols: true
