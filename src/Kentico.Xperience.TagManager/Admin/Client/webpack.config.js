@@ -1,42 +1,30 @@
-const TerserPlugin = require("terser-webpack-plugin");
-const path = require("path");
+const webpackMerge = require('webpack-merge');
+const baseWebpackConfig = require('@kentico/xperience-webpack-config');
 
-const isProduction = process.env.NODE_ENV == "production";
+module.exports = (opts) => {
+    const baseConfig = (webpackConfigEnv, argv) => {
+        return baseWebpackConfig({
+            orgName: 'kentico',
+            projectName: 'xperience-integrations-tagmanager',
+            webpackConfigEnv: webpackConfigEnv,
+            argv: argv,
+        });
+    };
 
-const config = {
-    entry: "./src/index.js",
-    output: {
-        path: path.resolve(__dirname, "..", "wwwroot", "Scripts"),
-        filename: "ktc-tagmanager.js",
-        module: true,
-    },
-    experiments: {
-        outputModule: true,
-    },
+    const projectConfig = {
+        module: {
+            rules: [
+                {
+                    test: /\.(js|ts)x?$/,
+                    exclude: [/node_modules/],
+                    loader: 'babel-loader',
+                },
+            ],
+        },
+        devServer: {
+            port: 3009,
+        },
+    };
 
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/i,
-                loader: "babel-loader",
-            },
-            {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: "asset",
-            },
-        ],
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin()],
-    },
-};
-
-module.exports = () => {
-    if (isProduction) {
-        config.mode = "production";
-    } else {
-        config.mode = "development";
-    }
-    return config;
+    return webpackMerge.merge(projectConfig, baseConfig(opts));
 };

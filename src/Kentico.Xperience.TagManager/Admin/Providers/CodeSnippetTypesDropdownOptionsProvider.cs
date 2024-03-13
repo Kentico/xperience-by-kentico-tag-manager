@@ -17,7 +17,8 @@ internal class CodeSnippetTypesDropdownOptionsProvider : IDropDownOptionsProvide
             options.Add(new DropDownOptionItem
             {
                 Value = settings.TagTypeName,
-                Text = settings.TagDisplayName
+                Text = settings.TagDisplayName,
+
             });
         }
 

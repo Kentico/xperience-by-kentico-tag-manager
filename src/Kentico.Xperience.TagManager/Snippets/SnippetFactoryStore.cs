@@ -30,7 +30,7 @@ internal static class SnippetFactoryStore
     /// 
     /// </summary>
     /// <param name="channelCodeSnippetType"></param>
-    /// <returns>true if the store contains the specified snippet factory; otherwise, false.</returns>
+    /// <returns><see cref="ISnippetFactory"/> if the store contains the specified snippet factory; otherwise, null.</returns>
     public static ISnippetFactory? TryGetSnippetFactory(string channelCodeSnippetType)
     {
         if (snippetFactories.TryGetValue(channelCodeSnippetType, out var factory))

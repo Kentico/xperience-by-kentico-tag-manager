@@ -136,5 +136,7 @@ segments_2i
 # Generated files
 **/Client/dist/*
 
+./src/Kentico.Xperience.TagManager/wwwroot/Scripts/ktc-tagmanager.js
+
 **/CMSModules/WebFarm/*
 

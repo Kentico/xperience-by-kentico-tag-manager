@@ -1,12 +1,8 @@
-﻿using CMS.Localization;
-using Kentico.Xperience.TagManager.Admin;
+﻿using Kentico.Xperience.TagManager.Admin;
 using Kentico.Xperience.TagManager.Rendering;
-using Kentico.Xperience.TagManager.Resources;
 using Kentico.Xperience.TagManager.Snippets;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
-
-[assembly: RegisterLocalizationResource(markedType: typeof(Localization), cultureCodes: "en-us")]
 
 namespace Microsoft.Extensions.DependencyInjection;
 

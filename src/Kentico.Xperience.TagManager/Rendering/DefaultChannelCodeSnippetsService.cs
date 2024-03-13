@@ -97,7 +97,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 
         var tags = new List<CodeSnippetDto>();
 
-        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetItemIdentifier))
+        if (snippetSettings.TagTypeName != CustomSnippetFactory.TAG_TYPE_NAME)
         {
             tags.AddRange(snippetFactory.CreateCodeSnippets(snippetInfo.ChannelCodeSnippetItemIdentifier).Select(x => new CodeSnippetDto
             {
@@ -106,8 +106,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                 ID = snippetInfo.ChannelCodeSnippetItemID
             }));
         }
-
-        if (!string.IsNullOrEmpty(snippetInfo.ChannelCodeSnippetItemCode) && snippetSettings.TagTypeName == CustomSnippetFactory.TAG_TYPE_NAME)
+        else
         {
             var tag = AdjustCustomCodeSnippet(new CodeSnippetDto
             {
