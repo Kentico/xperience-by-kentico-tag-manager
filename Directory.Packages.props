@@ -11,6 +11,7 @@
     <PackageVersion Include="kentico.xperience.azurestorage" Version="28.3.1" />
     <PackageVersion Include="kentico.xperience.imageprocessing" Version="28.3.1" />
     <PackageVersion Include="Kentico.Xperience.TagManager" Version="" Condition="'$(LOCAL_NUGET)' == 'true'" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-preview.1.24080.9" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />

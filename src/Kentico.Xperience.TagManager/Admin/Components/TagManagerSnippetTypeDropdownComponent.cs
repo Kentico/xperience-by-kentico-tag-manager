@@ -16,9 +16,9 @@ public class TagManagerSnippetTypeDropdownComponentProperties : FormComponentPro
 }
 #pragma warning restore
 
-public class TagManagerSnippetTypeDropdownComponentClientProperties : FormComponentClientProperties<TagManagerSnippet>
+public class TagManagerSnippetTypeDropdownComponentClientProperties : FormComponentClientProperties<string>
 {
-    public IEnumerable<TagManagerSnippet>? SnippetTypes { get; set; }
+    public IEnumerable<TagManagerSnippetDto>? SnippetTypes { get; set; }
 }
 
 public sealed class TagManagerSnippetTypeDropdownComponentAttribute : FormComponentAttribute
@@ -26,22 +26,21 @@ public sealed class TagManagerSnippetTypeDropdownComponentAttribute : FormCompon
 }
 
 [ComponentAttribute(typeof(TagManagerSnippetTypeDropdownComponentAttribute))]
-public class TagManagerSnippetTypeDropdownComponent : FormComponent<TagManagerSnippetTypeDropdownComponentProperties, TagManagerSnippetTypeDropdownComponentClientProperties, TagManagerSnippet>
+public class TagManagerSnippetTypeDropdownComponent : FormComponent<TagManagerSnippetTypeDropdownComponentProperties, TagManagerSnippetTypeDropdownComponentClientProperties, string>
 {
     public const string IDENTIFIER = "kentico.xperience-integrations-tag-manager.tag-manager-snippet-type-dropdown";
     public override string ClientComponentName => "@kentico/xperience-integrations-tagmanager/TagManagerSnippetTypeDropdown";
 
-    public override TagManagerSnippet GetValue() => Value ?? new();
-    public override void SetValue(TagManagerSnippet value) => Value = value;
-    internal TagManagerSnippet? Value { get; set; }
+    public override string GetValue() => Value ?? "";
+    public override void SetValue(string value) => Value = value;
+    internal string? Value { get; set; }
     protected override async Task ConfigureClientProperties(TagManagerSnippetTypeDropdownComponentClientProperties properties)
     {
-        properties.Value = Value ?? new();
+        properties.Value = Value ?? "";
 
         properties.SnippetTypes = SnippetFactoryStore.GetRegisteredSnippetFactories()
             .Select(x => x.CreateCodeSnippetSettings())
-            .Where(x => x.TagTypeName != CustomSnippetFactory.TAG_TYPE_NAME)
-            .Select(x => new TagManagerSnippet
+            .Select(x => new TagManagerSnippetDto
             {
                 DisplayName = x.TagDisplayName,
                 TypeName = x.TagTypeName,
@@ -52,22 +51,10 @@ public class TagManagerSnippetTypeDropdownComponent : FormComponent<TagManagerSn
     }
 }
 
-public class TagManagerSnippet
+public class TagManagerSnippetDto
 {
     public string DisplayName { get; set; } = "";
     public string TypeName { get; set; } = "";
     public string? Icon { get; set; }
-
-    public static TagManagerSnippet FromSnippetStore(string typeName)
-    {
-        var factorySettings = SnippetFactoryStore.TryGetSnippetFactory(typeName)?.CreateCodeSnippetSettings();
-
-        return new TagManagerSnippet
-        {
-            DisplayName = factorySettings?.TagDisplayName ?? "",
-            TypeName = factorySettings?.TagTypeName ?? "",
-            Icon = factorySettings?.TagSVGIconCode
-        };
-    }
 }
 

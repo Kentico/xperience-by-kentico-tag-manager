@@ -2,8 +2,6 @@
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
 using Kentico.Xperience.TagManager.Admin;
-using Kentico.Xperience.TagManager.Admin.Components;
-using Kentico.Xperience.TagManager.Snippets;
 using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.IFormItemCollectionProvider;
 
 [assembly: UIPage(
@@ -41,11 +39,10 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
                 ChannelIDs = [info.ChannelCodeSnippetItemChannelId],
                 CodeName = info.ChannelCodeSnippetItemName,
                 Code = info.ChannelCodeSnippetItemCode,
-                SnippetType = TagManagerSnippet.FromSnippetStore(info.ChannelCodeSnippetItemType),
+                SnippetType = info.ChannelCodeSnippetItemType,
                 ConsentIDs = info.ChannelCodeSnippetItemConsentId == 0 ? [] : [info.ChannelCodeSnippetItemConsentId],
                 TagIdentifier = info.ChannelCodeSnippetItemIdentifier,
                 Location = info.ChannelCodeSnippetItemLocation,
-                IsCustomCode = info.ChannelCodeSnippetItemType == CustomSnippetFactory.TAG_TYPE_NAME
             };
 
             return model;

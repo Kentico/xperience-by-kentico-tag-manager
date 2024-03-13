@@ -18,24 +18,20 @@ internal class CodeSnippetConfigurationModel
     [ObjectIdSelectorComponent(objectType: ChannelInfo.OBJECT_TYPE, Label = "Channel", Order = 1, WhereConditionProviderType = typeof(ChannelSelectorWhereConditionProvider))]
     public IEnumerable<int> ChannelIDs { get; set; } = [];
 
-    [CheckBoxComponent(Order = 2, Label = "Is Custom Code Snippet")]
-    public bool IsCustomCode { get; set; }
-
     [RequiredValidationRule]
     [TagManagerSnippetTypeDropdownComponent(Label = "Code snippet type", Order = 3)]
-    [VisibleIfFalse(nameof(IsCustomCode))]
-    public TagManagerSnippet? SnippetType { get; set; }
+    public string? SnippetType { get; set; }
 
     [CodeEditorComponent(Label = "Code", Order = 4)]
-    [VisibleIfTrue(nameof(IsCustomCode))]
+    [VisibleIfEqualTo(nameof(SnippetType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? Code { get; set; }
 
     [RadioGroupComponent(Label = "Code snippet location", Order = 5, Options = CodeSnippetLocationsExtensions.FormComponentOptions)]
-    [VisibleIfTrue(nameof(IsCustomCode))]
+    [VisibleIfEqualTo(nameof(SnippetType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? Location { get; set; }
 
     [TextInputComponent(Label = "Tag ID", Order = 4)]
-    [VisibleIfFalse(nameof(IsCustomCode))]
+    [VisibleIfNotEqualTo(nameof(SnippetType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? TagIdentifier { get; set; }
 
     [ObjectIdSelectorComponent(objectType: ConsentInfo.OBJECT_TYPE, Label = "Consent", Order = 6, Placeholder = "No consent needed")]
@@ -46,15 +42,10 @@ internal class CodeSnippetConfigurationModel
         info.ChannelCodeSnippetItemChannelId = ChannelIDs.FirstOrDefault();
         info.ChannelCodeSnippetItemConsentId = ConsentIDs.FirstOrDefault();
         info.ChannelCodeSnippetItemLocation = Location;
-        info.ChannelCodeSnippetItemType = SnippetType?.TypeName;
+        info.ChannelCodeSnippetItemType = SnippetType;
         info.ChannelCodeSnippetItemName = CodeName;
         info.ChannelCodeSnippetItemIdentifier = TagIdentifier;
         info.ChannelCodeSnippetItemCode = Code;
-
-        if (IsCustomCode)
-        {
-            info.ChannelCodeSnippetItemType = CustomSnippetFactory.TAG_TYPE_NAME;
-        }
     }
 }
 

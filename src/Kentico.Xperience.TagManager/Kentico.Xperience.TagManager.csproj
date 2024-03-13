@@ -14,6 +14,7 @@
 
 		<!-- Required to prevent type conflicts with existing types -->
 		<HotChocolateImplicitUsings>disable</HotChocolateImplicitUsings>
+		<UserSecretsId>abdf20e2-0374-41d7-88ef-78d1b51c4328</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -54,6 +55,7 @@
 	<ItemGroup>
 		<PackageReference Include="Kentico.Xperience.Admin" />
 		<PackageReference Include="Kentico.Xperience.WebApp" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 

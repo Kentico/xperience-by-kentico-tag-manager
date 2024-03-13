@@ -1,9 +1,9 @@
 import { type FormComponentProps } from '@kentico/xperience-admin-base';
 import Parse from 'html-react-parser';
 import React from 'react';
-import Select, { components, type StylesConfig, type OptionProps, type SingleValueProps, type SingleValue, type ActionMeta} from 'react-select'
+import Select, { components, type ActionMeta, type OptionProps, type SingleValue, type SingleValueProps, type StylesConfig } from 'react-select';
 
-export interface TagManagerSnippet {
+export interface TagManagerSnippetDto {
     displayName: string;
     typeName: string;
     icon: string;
@@ -11,8 +11,8 @@ export interface TagManagerSnippet {
 
 export interface TagManagerSnippetTypeDropdownComponentClientProperties
     extends FormComponentProps {
-    value: TagManagerSnippet;
-    snippetTypes: TagManagerSnippet[];
+    value: string;
+    snippetTypes: TagManagerSnippetDto[];
 }
 
 interface OptionType {
@@ -58,25 +58,23 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
         <components.Option {...props}>
             <div style={badgeStyle} className="css-1dimb5e-singleValue">
                 {props.data.icon !== '' && props.data.icon !== null ? Parse(props.data.icon) : ''}
-                    {props.data.label}
+                {props.data.label}
             </div>
         </components.Option>
     );
 
     const Save = (newValue: SingleValue<OptionType>, action: ActionMeta<OptionType>): void => {
-        if (action.action === 'select-option')
-        {
-            const tagManagerSnippet: TagManagerSnippet =
+        if (action.action === 'select-option') {
+            const tagManagerSnippet: TagManagerSnippetDto =
             {
                 icon: newValue?.icon ?? '',
                 displayName: newValue?.label ?? '',
                 typeName: newValue?.value ?? ''
             };
 
-            props.value = tagManagerSnippet;
+            props.value = tagManagerSnippet.typeName;
 
-            if (props.onChange != null)
-            {
+            if (props.onChange !== undefined) {
                 props.onChange(props.value);
             }
         }
@@ -119,16 +117,16 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
 
     return (
         <div className="container___zbhlz">
-                <div className="label-wrapper___AcszK">
-                    <div>
-                        <label className="label___WET63" aria-disabled="false">
-                            <span className="required___yY_P2">*</span>
-                            <span>Snippet type</span>
-                        </label>
-                    </div>
+            <div className="label-wrapper___AcszK">
+                <div>
+                    <label className="label___WET63" aria-disabled="false">
+                        <span className="required___yY_P2">*</span>
+                        <span>Snippet type</span>
+                    </label>
                 </div>
+            </div>
             <Select<OptionType, false>
-                defaultValue={options.find(option => option.value === props.value.typeName)}
+                defaultValue={options.find(option => option.value === props.value)}
                 options={options}
                 styles={customStyle}
                 components={{ SingleValue: CustomSingleValue, Option: CustomOption }}

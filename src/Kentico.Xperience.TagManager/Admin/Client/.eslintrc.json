@@ -45,28 +45,30 @@
 		"import/order": [
 			"warn",
 			{
-				"newlines-between": "never",
-				"pathGroups": [
-					{
-						"pattern": "./**.scss",
-						"group": "index",
-						"position": "after"
-					}
-				],
-				"groups": [
-					"builtin",
-					"external",
-					"internal",
-					"parent",
-					"sibling",
-					"index"
-				],
-				"alphabetize": {
-					"order": "asc",
-					"caseInsensitive": true
+			  "newlines-between": "never",
+			  "groups": [
+				"builtin",
+				"external",
+				"internal",
+				"parent",
+				"sibling",
+				"index",
+				"type"
+			  ],
+			  "pathGroups": [
+				{
+				  "pattern": "./**.scss",
+				  "group": "index",
+				  "position": "after"
 				}
+			  ],
+			  "pathGroupsExcludedImportTypes": ["builtin"],
+			  "alphabetize": {
+				"order": "ignore",
+				"caseInsensitive": true
+			  }
 			}
-		],
+		  ],
 		"import/no-default-export": "warn",
 		"import/no-duplicates": "warn",
 		"react/prefer-es6-class": [ "warn", "always" ],
@@ -82,6 +84,14 @@
 				"filter": {
 					"regex": "^((data|aria|xp|invalid|--[a-z]+)[-].+)|[0-9]+$",
 					"match": false
+				}
+			},
+			{
+				"selector": "objectLiteralProperty",
+				"format": null,
+				"filter": {
+					"regex": "^&:",
+					"match": true
 				}
 			},
 			{
