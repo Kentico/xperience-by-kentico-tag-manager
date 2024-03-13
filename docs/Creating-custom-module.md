@@ -52,6 +52,32 @@ builder.Services.AddKenticoTagManager(builder.Configuration, builder =>
 
 This registers all default snippet types and adds our `ExampleSnippetFactory`.
 
+You can also add image which is shown in Administration UI in the dropdown which is used to select type of the snippet.
+All you need to do is paste svg code to the `CodeSnippetSettings` constructor in `CreateCodeSnippetSettings` method
+
+You can extend your `ExampleSnippetFactory` like this:
+
+```csharp
+
+//...class definition
+
+    private const string TAG_APPSETTINGS_NAME = "Custom.ExampleSnippet";
+    private const string TAG_TYPE_NAME = "Example";
+    private const string TAG_DISPLAY_NAME = "Example";
+
+    private const string TAG_SVG_ICON = "<?xml version=\"1.0\" encoding=\"utf-8\"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->\r\n<svg width=\"40\" height=\"30\" viewBox=\"0 0 24 24\" id=\"code_snippet\" data-name=\"code snippet\" xmlns=\"http://www.w3.org/2000/svg\">\r\n  <rect id=\"Rectangle\" width=\"24\" height=\"24\" fill=\"none\"/>\r\n  <path id=\"Rectangle-2\" data-name=\"Rectangle\" d=\"M0,6.586V0H6.586\" transform=\"translate(2.343 12) rotate(-45)\" fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" stroke-width=\"1.5\"/>\r\n  <path id=\"Line\" d=\"M4.659,0,0,17.387\" transform=\"translate(9.671 3.307)\" fill=\"none\" stroke=\"#000000\" stroke-linecap=\"square\" stroke-miterlimit=\"10\" stroke-width=\"1.5\"/>\r\n  <path id=\"Rectangle-3\" data-name=\"Rectangle\" d=\"M0,6.586V0H6.586\" transform=\"translate(21.657 12) rotate(135)\" fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" stroke-width=\"1.5\"/>\r\n</svg>";
+
+
+    public override CodeSnippetSettings CreateCodeSnippetSettings() =>
+        new(TAG_TYPE_NAME, TAG_DISPLAY_NAME, TAG_APPSETTINGS_NAME, TAG_SVG_ICON);
+
+//...other code...
+```
+
+Which will result in the following:
+
+![Create Custom Snippet Type](/images/screenshots/create_snippet.png)
+
 You can now add this snippet to `appsettings.json` as specified in the 
 
 See [Using provided snippets](Usage-Guide.md)

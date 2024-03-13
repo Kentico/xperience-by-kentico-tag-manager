@@ -19,9 +19,9 @@ By default we provide support for the following third-party snippets:
 
 ![Custom tags listing](/images/screenshots/listing.png)
 
-![Create custom code snippet](/images/screenshots/create_snippet.png)
+![Create GTM tag snippet](/images/screenshots/create_snippet.png)
 
-![Create GTM tag snippet](/images/screenshots/create_custom_snippet.png)
+![Create custom code snippet](/images/screenshots/create_custom_snippet.png)
 
 ## Library Version Matrix
 
@@ -65,10 +65,18 @@ dotnet add package Kentico.Xperience.TagManager
 3. In the administration go to UI application 'Tag Management'.
 4. Create a new record:
     * Select one of the channels. 
-    * Select code snippet type - we have prepared some of often used types:
-        * For 'Google Tag Manager' simply enter the GTM ID.
-        * For 'Custom code snippet' fill in entire code you want to render.
-    * Select a location:
+    * Select whether you want to use Custom Code Snippet or other Snippet type
+    * We have prepared some of the most often used types:
+        * For 
+          * 'Google Tag Manager',
+          * 'Google Analytics 4',
+          * 'VWO',
+          * 'Intercom',
+          * 'Microsoft Clarity',
+          * or Your own type
+        * select one of these options from the Snippet type dropdown
+    * For 'Custom code snippet' fill in entire code you want to render.
+      * Select a location:
         * Top of the head - inserts a script immediately after the opening head tag.
         * Bottom of the head - inserts a script right before the closing head tag.
         * Top of the body - inserts a script immediately after the opening body tag.
