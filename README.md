@@ -6,21 +6,28 @@
 
 Tag Manager integration enabling marketers to author custom tags that can be embedded in a website channel. For example web analytics tools like Google Analytics, Google Tag Manager, various cookie banners, marketing tags and optimization tools.
 
+By default we provide support for the following third-party snippets:
+- [VWO A/B testing](https://vwo.com/)
+- [Intercom chatbot](https://www.intercom.com/ai-chatbot)
+- [Google Tag Manager](https://tagmanager.google.com/)
+- [Google Analytics](https://marketingplatform.google.com/)
+- [Microsoft Clarity](https://clarity.microsoft.com/)
+
 ## Screenshots
 
-![UI Application](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/ui_application.png)
+![UI Application](/images/screenshots/ui_application.png)
 
-![Custom tags listing](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/listing.png)
+![Custom tags listing](/images/screenshots/listing.png)
 
-![Create custom code snippet](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_snippet.png)
+![Create GTM tag snippet](/images/screenshots/create_snippet.png)
 
-![Create GTM tag snippet](https://raw.githubusercontent.com/Kentico/xperience-by-kentico-tag-manager/main/images/screenshots/create_gtmid.png)
+![Create custom code snippet](/images/screenshots/create_custom_snippet.png)
 
 ## Library Version Matrix
 
 | Xperience Version | Library Version |
 | ----------------- | --------------- |
-| >= 28.1.0         | >= 1.0.0        |
+| >= 28.3.1         | >= 1.0.0        |
 
 ### Dependencies
 
@@ -52,16 +59,24 @@ dotnet add package Kentico.Xperience.TagManager
 
    // ...
 
-   builder.Services.AddKenticoTagManager();
+   builder.Services.AddKenticoTagManager(builder.configuration);
    ```
 
 3. In the administration go to UI application 'Tag Management'.
 4. Create a new record:
     * Select one of the channels. 
-    * Select code snippet type - either 'Google Tag Manager' or 'Custom code snippet':
-        * For 'Google Tag Manager' simply enter the GTM ID.
-        * For 'Custom code snippet' fill in entire code you want to render.
-    * Select a location:
+    * Select whether you want to use Custom Code Snippet or other Snippet type
+    * We have prepared some of the most often used types:
+        * For 
+          * 'Google Tag Manager',
+          * 'Google Analytics 4',
+          * 'VWO',
+          * 'Intercom',
+          * 'Microsoft Clarity',
+          * or Your own type
+        * select one of these options from the Snippet type dropdown
+    * For 'Custom code snippet' fill in entire code you want to render.
+      * Select a location:
         * Top of the head - inserts a script immediately after the opening head tag.
         * Bottom of the head - inserts a script right before the closing head tag.
         * Top of the body - inserts a script immediately after the opening body tag.

@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 using DancingGoat;
 using DancingGoat.Models;
 
@@ -11,18 +8,11 @@ using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Web.Mvc;
 
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Kentico.Xperience.TagManager;
-
-
+using DancingGoat.TagManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +48,11 @@ builder.Services.AddLocalization()
     });
 
 builder.Services.AddDancingGoatServices();
-builder.Services.AddKenticoTagManager();
+
+builder.Services.AddKenticoTagManager(builder.Configuration, builder =>
+{
+    builder.AddSnippetFactory<DancingGoatSnippetFactory>();
+});
 
 ConfigureMembershipServices(builder.Services);
 

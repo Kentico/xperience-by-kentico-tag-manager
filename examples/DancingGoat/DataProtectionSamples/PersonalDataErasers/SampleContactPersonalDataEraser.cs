@@ -35,7 +35,7 @@ namespace Samples.DancingGoat
             { new Guid("DAAA080A-7B6B-489E-8150-290B1F24E715"), "Email" }
         };
 
-        private readonly IConsentAgreementInfoProvider consentAgreementInfoProvider;
+        private readonly IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider;
         private readonly IBizFormInfoProvider bizFormInfoProvider;
         private readonly IAccountContactInfoProvider accountContactInfoProvider;
         private readonly IContactInfoProvider contactInfoProvider;
@@ -49,7 +49,7 @@ namespace Samples.DancingGoat
         /// <param name="accountContactInfoProvider">Account contact info provider.</param>
         /// <param name="contactInfoProvider">Contact info provider.</param>
         public SampleContactPersonalDataEraser(
-            IConsentAgreementInfoProvider consentAgreementInfoProvider,
+            IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider,
             IBizFormInfoProvider bizFormInfoProvider,
             IAccountContactInfoProvider accountContactInfoProvider,
             IContactInfoProvider contactInfoProvider)

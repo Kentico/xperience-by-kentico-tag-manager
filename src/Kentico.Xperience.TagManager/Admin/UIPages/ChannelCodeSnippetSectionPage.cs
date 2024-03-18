@@ -3,7 +3,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.TagManager.Admin;
 
 [assembly: UIPage(
-    parentType: typeof(CodeSnippetListing),
+    parentType: typeof(CodeSnippetListingPage),
     slug: PageParameterConstants.PARAMETERIZED_SLUG,
     uiPageType: typeof(ChannelCodeSnippetSectionPage),
     name: "Edit",
@@ -12,17 +12,17 @@ using Kentico.Xperience.TagManager.Admin;
 
 namespace Kentico.Xperience.TagManager.Admin;
 
-internal class ChannelCodeSnippetSectionPage : EditSectionPage<ChannelCodeSnippetInfo>
+internal class ChannelCodeSnippetSectionPage : EditSectionPage<ChannelCodeSnippetItemInfo>
 {
     protected override async Task<string> GetObjectDisplayName(BaseInfo infoObject)
     {
-        if (infoObject is not ChannelCodeSnippetInfo snippet)
+        if (infoObject is not ChannelCodeSnippetItemInfo snippet)
         {
             return await base.GetObjectDisplayName(infoObject);
         }
 
-        return string.IsNullOrWhiteSpace(snippet.ChannelCodeSnippetName)
+        return string.IsNullOrWhiteSpace(snippet.ChannelCodeSnippetItemName)
             ? await base.GetObjectDisplayName(infoObject)
-            : snippet.ChannelCodeSnippetName;
+            : snippet.ChannelCodeSnippetItemName;
     }
 }

@@ -1,13 +1,28 @@
 {
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:30512",
+      "sslPort": 0
+    }
+  },
   "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "DancingGoat": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:44351",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:30512",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DOTNET_WATCH_RESTART_ON_RUDE_EDIT": "true"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
 }
+

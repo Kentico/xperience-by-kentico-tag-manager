@@ -4,21 +4,21 @@
     <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-    <!-- When NuGet supports this property, we can specify a * as the Kentico.Xperience.TagManager package version for local testing -->
-    <CentralPackageFloatingVersionsEnabled Condition="'$(LOCAL_NUGET)' == 'true'">true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Kentico.Xperience.Admin" Version="28.1.0" />
-    <PackageVersion Include="Kentico.Xperience.WebApp" Version="28.1.0" />
-    <PackageVersion Include="kentico.xperience.azurestorage" Version="28.1.0" />
-    <PackageVersion Include="kentico.xperience.imageprocessing" Version="28.1.0" />
+    <PackageVersion Include="Kentico.Xperience.Admin" Version="28.3.1" />
+    <PackageVersion Include="Kentico.Xperience.WebApp" Version="28.3.1" />
+    <PackageVersion Include="kentico.xperience.azurestorage" Version="28.3.1" />
+    <PackageVersion Include="kentico.xperience.imageprocessing" Version="28.3.1" />
     <PackageVersion Include="Kentico.Xperience.TagManager" Version="" Condition="'$(LOCAL_NUGET)' == 'true'" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.17.0.82934" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-preview.1.24080.9" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageVersion Include="NUnit" Version="4.0.1" />
+    <PackageVersion Include="NUnit" Version="4.1.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageVersion Include="NUnit.Analyzers" Version="3.10.0" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="4.0.1" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.1" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 </Project>

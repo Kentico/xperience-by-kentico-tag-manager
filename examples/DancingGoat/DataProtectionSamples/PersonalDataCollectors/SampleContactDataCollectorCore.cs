@@ -23,7 +23,7 @@ namespace Samples.DancingGoat
         private readonly IActivityInfoProvider activityInfoProvider;
         private readonly ICountryInfoProvider countryInfoProvider;
         private readonly IStateInfoProvider stateInfoProvider;
-        private readonly IConsentAgreementInfoProvider consentAgreementInfoProvider;
+        private readonly IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider;
         private readonly IAccountContactInfoProvider accountContactInfoProvider;
         private readonly IAccountInfoProvider accountInfoProvider;
         private readonly IBizFormInfoProvider bizFormInfoProvider;
@@ -328,7 +328,7 @@ namespace Samples.DancingGoat
             IActivityInfoProvider activityInfoProvider,
             ICountryInfoProvider countryInfoProvider,
             IStateInfoProvider stateInfoProvider,
-            IConsentAgreementInfoProvider consentAgreementInfoProvider,
+            IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider,
             IAccountContactInfoProvider accountContactInfoProvider,
             IAccountInfoProvider accountInfoProvider,
             IBizFormInfoProvider bizFormInfoProvider)

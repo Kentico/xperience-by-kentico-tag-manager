@@ -14,11 +14,14 @@ using Kentico.Xperience.TagManager.Admin;
 
 namespace Kentico.Xperience.TagManager.Admin;
 
+/// <summary>
+/// The root application page for Tag Managment integration.
+/// </summary>
 [UIPermission(SystemPermissions.VIEW)]
 [UIPermission(SystemPermissions.CREATE)]
 [UIPermission(SystemPermissions.UPDATE)]
 [UIPermission(SystemPermissions.DELETE)]
 internal class TagManagerApplicationPage : ApplicationPage
 {
-    public const string IDENTIFIER = "tag-management";
+    public const string IDENTIFIER = "Kentico.Xperience.Integrations.TagManager";
 }

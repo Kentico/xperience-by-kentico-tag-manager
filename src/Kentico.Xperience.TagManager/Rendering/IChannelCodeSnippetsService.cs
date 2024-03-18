@@ -4,5 +4,5 @@ namespace Kentico.Xperience.TagManager.Rendering;
 
 public interface IChannelCodeSnippetsService
 {
-    Task<ILookup<CodeSnippetLocations, ChannelCodeSnippetDto>> GetConsentedCodeSnippets(ContactInfo? contact);
+    Task<ILookup<CodeSnippetLocations, CodeSnippetDto>> GetConsentedCodeSnippets(ContactInfo? contact);
 }

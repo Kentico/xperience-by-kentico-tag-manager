@@ -48,18 +48,18 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
     private static void InstallChannelCodeSnippetClass(ResourceInfo resourceInfo)
     {
-        var info = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName) ??
-                                      DataClassInfo.New(ChannelCodeSnippetInfo.OBJECT_TYPE);
+        var info = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetItemInfo.OBJECT_TYPE) ??
+                                      DataClassInfo.New(ChannelCodeSnippetItemInfo.OBJECT_TYPE);
 
-        info.ClassName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName;
-        info.ClassTableName = ChannelCodeSnippetInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
-        info.ClassDisplayName = "Channel Code Snippet";
+        info.ClassName = ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName;
+        info.ClassTableName = ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
+        info.ClassDisplayName = "Channel Code Snippet Item";
         info.ClassResourceID = resourceInfo.ResourceID;
         info.ClassType = ClassType.OTHER;
-        var formInfo = FormHelper.GetBasicFormDefinition(nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetID));
+        var formInfo = FormHelper.GetBasicFormDefinition(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID));
         var formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetChannelID),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemChannelId),
             Visible = false,
             DataType = FieldDataType.Integer,
             Enabled = true,
@@ -70,7 +70,7 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetConsentID),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),
             Visible = false,
             DataType = FieldDataType.Integer,
             Enabled = true,
@@ -78,12 +78,11 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
             ReferenceToObjectType = ConsentInfo.OBJECT_TYPE,
             ReferenceType = ObjectDependencyEnum.Required,
         };
-        formItem.SetComponentName(ObjectIdSelectorComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGuid),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemGuid),
             Visible = false,
             DataType = FieldDataType.Guid,
             Enabled = true,
@@ -93,7 +92,7 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetName),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemName),
             Visible = true,
             DataType = FieldDataType.Text,
             Enabled = true,
@@ -103,12 +102,11 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
                 { nameof(TextInputProperties.Label), "Code name" },
             }
         };
-        formItem.SetComponentName(TextInputComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLastModified),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLastModified),
             Visible = false,
             DataType = FieldDataType.DateTime,
             Enabled = true,
@@ -118,7 +116,7 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetCode),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
             Visible = false,
             Precision = 0,
             Size = 5000,
@@ -126,15 +124,14 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
             Enabled = true,
             AllowEmpty = true
         };
-        formItem.SetComponentName(CodeEditorComponent.IDENTIFIER);
         formInfo.AddFormItem(formItem);
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetGTMID),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
             Visible = false,
             Precision = 0,
-            Size = 25,
+            Size = 200,
             DataType = FieldDataType.Text,
             Enabled = true,
             AllowEmpty = true
@@ -143,10 +140,10 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetType),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType),
             Visible = false,
             Precision = 0,
-            Size = 25,
+            Size = 200,
             DataType = FieldDataType.Text,
             Enabled = true,
             AllowEmpty = true
@@ -155,7 +152,7 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
 
         formItem = new FormFieldInfo
         {
-            Name = nameof(ChannelCodeSnippetInfo.ChannelCodeSnippetLocation),
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLocation),
             Visible = false,
             Precision = 0,
             Size = 25,

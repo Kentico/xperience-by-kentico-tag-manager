@@ -1,4 +1,5 @@
 ﻿using CMS.ContactManagement;
+using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.Helpers;
 using DancingGoat;
@@ -19,7 +20,7 @@ namespace DancingGoat.Controllers
 
         private readonly ICurrentCookieLevelProvider cookieLevelProvider;
         private readonly IConsentAgreementService consentAgreementService;
-        private readonly IConsentInfoProvider consentInfoProvider;
+        private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
         private readonly IPreferredLanguageRetriever currentLanguageRetriever;
         private ContactInfo currentContact;
 
@@ -41,7 +42,7 @@ namespace DancingGoat.Controllers
         public DancingGoatPrivacyController(
             ICurrentCookieLevelProvider cookieLevelProvider,
             IConsentAgreementService consentAgreementService,
-            IConsentInfoProvider consentInfoProvider,
+            IInfoProvider<ConsentInfo> consentInfoProvider,
             IPreferredLanguageRetriever currentLanguageRetriever)
         {
             this.cookieLevelProvider = cookieLevelProvider;
