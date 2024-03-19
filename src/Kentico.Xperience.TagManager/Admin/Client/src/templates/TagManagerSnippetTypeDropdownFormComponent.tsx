@@ -121,7 +121,7 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
                 <div>
                     <label className="label___WET63" aria-disabled="false">
                         <span className="required___yY_P2">*</span>
-                        <span>Snippet type</span>
+                        <span>Tag type</span>
                     </label>
                 </div>
             </div>
@@ -132,7 +132,7 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
                 components={{ SingleValue: CustomSingleValue, Option: CustomOption }}
                 isSearchable={false}
                 onChange={Save}
-                placeholder="Select a snippet type"
+                placeholder="Select a tag type"
                 theme={(theme) => ({
                     ...theme,
                     borderRadius: 0,

@@ -27,7 +27,7 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
     /// <summary>
     /// Type information.
     /// </summary>
-    public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetItemInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippetItem", nameof(ChannelCodeSnippetItemID), nameof(ChannelCodeSnippetItemLastModified), nameof(ChannelCodeSnippetItemGuid), nameof(ChannelCodeSnippetItemName), null, null, null, null)
+    public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetItemInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippetItem", nameof(ChannelCodeSnippetItemID), nameof(ChannelCodeSnippetItemLastModified), nameof(ChannelCodeSnippetItemGuid), null, nameof(ChannelCodeSnippetItemName), null, null, null)
     {
         TouchCacheDependencies = true,
         ContinuousIntegrationSettings =

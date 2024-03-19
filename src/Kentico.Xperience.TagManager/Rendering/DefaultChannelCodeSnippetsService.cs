@@ -91,7 +91,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
     private static IEnumerable<CodeSnippetDto> CreateCodeSnippet(ChannelCodeSnippetItemInfo snippetInfo)
     {
         var snippetFactory = SnippetFactoryStore.TryGetSnippetFactory(snippetInfo.ChannelCodeSnippetItemType) ??
-           throw new InvalidOperationException("Specified snippet is not registered.");
+           throw new InvalidOperationException("Specified tag is not registered.");
 
         var snippetSettings = snippetFactory.CreateCodeSnippetSettings();
 
@@ -114,7 +114,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                 Code = snippetInfo.ChannelCodeSnippetItemCode,
                 Location = Enum.TryParse(snippetInfo.ChannelCodeSnippetItemLocation, out CodeSnippetLocations location)
                    ? location
-                   : throw new InvalidOperationException("Invalid Channel Code Snippet Location."),
+                   : throw new InvalidOperationException("Invalid Channel Tag Location."),
             });
 
             tags.Add(tag);
