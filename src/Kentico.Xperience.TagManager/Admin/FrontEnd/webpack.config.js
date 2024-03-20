@@ -6,7 +6,7 @@ const isProduction = process.env.NODE_ENV == "production";
 const config = {
     entry: "./src/index.js",
     output: {
-        path: path.resolve(__dirname, "../.././wwwroot/scripts"),
+        path: path.resolve(__dirname, "../.././wwwroot/js"),
         filename: "ktc-tagmanager.js",
         module: true,
     },

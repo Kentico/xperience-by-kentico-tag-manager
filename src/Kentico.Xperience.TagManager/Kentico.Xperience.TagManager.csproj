@@ -61,7 +61,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Admin\Client\dist\" />
-	  <Folder Include="wwwroot\Scripts\" />
+	  <Folder Include="wwwroot\js\" />
 	</ItemGroup>
 
 </Project>
