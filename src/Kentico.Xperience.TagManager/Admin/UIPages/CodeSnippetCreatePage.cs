@@ -8,7 +8,7 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
     parentType: typeof(CodeSnippetListingPage),
     slug: "add",
     uiPageType: typeof(CodeSnippetCreatePage),
-    name: "Create a code snippet",
+    name: "Create a tag",
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 

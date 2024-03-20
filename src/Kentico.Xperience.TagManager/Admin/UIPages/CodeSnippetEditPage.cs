@@ -8,7 +8,7 @@ using IFormItemCollectionProvider = Kentico.Xperience.Admin.Base.Forms.Internal.
     parentType: typeof(ChannelCodeSnippetSectionPage),
     slug: "edit",
     uiPageType: typeof(CodeSnippetEditPage),
-    name: "Edit code snippet",
+    name: "Edit tag",
     templateName: TemplateNames.EDIT,
     order: UIPageOrder.First)]
 
@@ -37,9 +37,9 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
             model = new CodeSnippetConfigurationModel()
             {
                 ChannelIDs = [info.ChannelCodeSnippetItemChannelId],
-                CodeName = info.ChannelCodeSnippetItemName,
+                Name = info.ChannelCodeSnippetItemName,
                 Code = info.ChannelCodeSnippetItemCode,
-                SnippetType = info.ChannelCodeSnippetItemType,
+                TagType = info.ChannelCodeSnippetItemType,
                 ConsentIDs = info.ChannelCodeSnippetItemConsentId == 0 ? [] : [info.ChannelCodeSnippetItemConsentId],
                 TagIdentifier = info.ChannelCodeSnippetItemIdentifier,
                 Location = info.ChannelCodeSnippetItemLocation,

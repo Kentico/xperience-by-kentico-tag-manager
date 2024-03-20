@@ -27,6 +27,7 @@ By default we provide support for the following third-party snippets:
 
 | Xperience Version | Library Version |
 | ----------------- | --------------- |
+| >= 28.1.0         | >= 2.0.0        |
 | >= 28.3.1         | >= 1.0.0        |
 
 ### Dependencies

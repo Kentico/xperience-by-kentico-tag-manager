@@ -536,8 +536,8 @@
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
-        "resolved": "9.0.0-preview.1.24080.9",
-        "contentHash": "hdqPvxgStlyS89paua7lDTP0Z05SS/Fta7d9fFGAYXKtsw1R1CtbJebEMuHOqSxxvL4qO7rS0b1m00QGj+cI5A=="
+        "resolved": "8.0.0",
+        "contentHash": "cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg=="
       },
       "Microsoft.Extensions.FileProviders.Abstractions": {
         "type": "Transitive",
@@ -960,7 +960,7 @@
           "Kentico.Xperience.Admin": "[28.3.1, )",
           "Kentico.Xperience.WebApp": "[28.3.1, )",
           "Microsoft.Extensions.Configuration.UserSecrets": "[6.0.1, )",
-          "Microsoft.Extensions.DependencyInjection": "[9.0.0-preview.1.24080.9, )"
+          "Microsoft.Extensions.DependencyInjection": "[8.0.0, )"
         }
       },
       "Kentico.Xperience.Admin": {
@@ -1005,11 +1005,11 @@
       },
       "Microsoft.Extensions.DependencyInjection": {
         "type": "CentralTransitive",
-        "requested": "[9.0.0-preview.1.24080.9, )",
-        "resolved": "9.0.0-preview.1.24080.9",
-        "contentHash": "kHFV9pu0wgXrb3/Me1EbZkvK8/0ROosTlfMcsrs1oCkgSJTFunUiHlUWROxofMKtz5ug3knxLiywtiNtMlruHg==",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "V8S3bsm50ig6JSyrbcJJ8bW2b9QLGouz+G1miK3UTaOWmMtFwNNNzUf4AleyDWUmTrWMLNnFSLEQtxmxgNQnNQ==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.1.24080.9"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
         }
       }
     }

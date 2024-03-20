@@ -10,9 +10,9 @@ using Kentico.Xperience.TagManager.Snippets;
 
 [assembly: UIPage(
     parentType: typeof(TagManagerApplicationPage),
-    slug: "snippets",
+    slug: "tags",
     uiPageType: typeof(CodeSnippetListingPage),
-    name: "Code snippets",
+    name: "Tags",
     templateName: TemplateNames.LISTING,
     order: UIPageOrder.First)]
 
@@ -60,7 +60,7 @@ internal class CodeSnippetListingPage : ListingPage
             .AddColumn(
                 nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
                 "ID",
-                maxWidth: 10)
+                maxWidth: 4)
             .AddColumn(
                 nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemName),
                 "Code Name",
@@ -76,13 +76,6 @@ internal class CodeSnippetListingPage : ListingPage
                 "Type",
                 formatter: (_, container) => FormatSnippetType(container),
                 sortable: true)
-            .AddColumn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
-                "Code Snippet",
-                sortable: false,
-                formatter: (_, container) => FormatCodeSnippet(container))
-            .AddColumn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
-                "Identifier",
-                formatter: (_, container) => FormatIdentifier(container))
             .AddColumn(
                 nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),
                 "Consent",
@@ -124,7 +117,7 @@ internal class CodeSnippetListingPage : ListingPage
         {
             throw new ArgumentNullException(
                 nameof(container),
-                "Invalid ChannelCodeSnippetType!");
+                "Invalid ChannelCodeTagType!");
         }
 
         if (codeSnippetType == CustomSnippetFactory.TAG_TYPE_NAME)
@@ -143,7 +136,7 @@ internal class CodeSnippetListingPage : ListingPage
         {
             throw new ArgumentNullException(
                 nameof(container),
-                "Invalid ChannelCodeSnippetType!");
+                "Invalid ChannelCodeTagType!");
         }
 
         if (codeSnippetType != CustomSnippetFactory.TAG_TYPE_NAME)
@@ -166,6 +159,6 @@ internal class CodeSnippetListingPage : ListingPage
         }
 
         return SnippetFactoryStore.TryGetSnippetFactory(codeSnippetType)?.CreateCodeSnippetSettings().TagDisplayName ??
-            throw new InvalidOperationException("Specified snippet is not registered.");
+            throw new InvalidOperationException("Specified tag is not registered.");
     }
 }
