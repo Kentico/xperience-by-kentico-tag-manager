@@ -103,50 +103,6 @@ internal class CodeSnippetListingPage : ListingPage
                     .AddColumns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier), nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)));
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="container"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    private static string FormatCodeSnippet(IDataContainer container)
-    {
-        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)];
-
-        if (string.IsNullOrEmpty(codeSnippetType))
-        {
-            throw new ArgumentNullException(
-                nameof(container),
-                "Invalid ChannelCodeTagType!");
-        }
-
-        if (codeSnippetType == CustomSnippetFactory.TAG_TYPE_NAME)
-        {
-            return container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode)] as string ?? string.Empty;
-        }
-
-        return string.Empty;
-    }
-
-    private static string FormatIdentifier(IDataContainer container)
-    {
-        string codeSnippetType = (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)];
-
-        if (string.IsNullOrEmpty(codeSnippetType))
-        {
-            throw new ArgumentNullException(
-                nameof(container),
-                "Invalid ChannelCodeTagType!");
-        }
-
-        if (codeSnippetType != CustomSnippetFactory.TAG_TYPE_NAME)
-        {
-            return (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier)];
-        }
-
-        return string.Empty;
-    }
-
     private static string FormatSnippetType(IDataContainer container)
     {
         string codeSnippetType = (string)container[nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType)];

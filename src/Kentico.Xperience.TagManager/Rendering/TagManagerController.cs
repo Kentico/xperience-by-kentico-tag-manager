@@ -7,9 +7,11 @@ namespace Kentico.Xperience.TagManager.Rendering;
 
 [ApiController]
 [Route("/kentico.tagmanager/[action]")]
-public sealed class TagManagerController(IChannelCodeSnippetsService channelCodeSnippetsContext) : Controller
+public sealed class TagManagerController : Controller
 {
-    private readonly IChannelCodeSnippetsService channelCodeSnippetsContext = channelCodeSnippetsContext;
+    private readonly IChannelCodeSnippetsService channelCodeSnippetsContext;
+
+    public TagManagerController(IChannelCodeSnippetsService channelCodeSnippetsContext) => this.channelCodeSnippetsContext = channelCodeSnippetsContext;
 
     private static readonly JsonSerializerOptions jsonSerializerOptions = new()
     {
