@@ -7,9 +7,9 @@ internal static class SnippetFactoryStore
     private static readonly Dictionary<string, ISnippetFactory> snippetFactories = [];
     public static void AddSnippetFactory<TSnippetFactory>(IConfiguration configuration) where TSnippetFactory : ISnippetFactory, new()
     {
-        const string section = "xbyk.tagmanager.modules";
+        const string section = "CMSTagManager";
 
-        var usedTagModuleSection = configuration.GetSection(section).GetChildren();
+        var usedTagModuleSection = configuration.GetSection(section).GetSection("modules").GetChildren();
         var snippetFactory = new TSnippetFactory();
         var settings = snippetFactory.CreateCodeSnippetSettings();
         string configurationString = settings.TagAppSettingsName;
