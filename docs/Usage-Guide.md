@@ -11,14 +11,16 @@ For backwards compatibility all snippet types are allowed by default and user do
 If you need to customize this you should configure the following section:
 
 ``` json
-"xbyk.tagmanager.modules": [
-  "Kentico.VWO",
-  "Kentico.GoogleTagManager",
-  "Kentico.GoogleAnalytics4",
-  "Kentico.MicrosoftClarity",
-  "Kentico.Intercom",
-  "Kentico.CustomTag"
-]
+"CMSTagManager": {
+  "modules": [
+    "Kentico.VWO",
+    "Kentico.GoogleTagManager",
+    "Kentico.GoogleAnalytics4",
+    "Kentico.MicrosoftClarity",
+    "Kentico.Intercom",
+    "Kentico.Custom"
+  ]
+}
 ```
 
 If any module is specified only the specified modules are included. If no module is specified or the section is not present all modules are included.
