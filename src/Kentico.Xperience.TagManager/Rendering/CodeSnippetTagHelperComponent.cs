@@ -92,7 +92,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
                 ["type"] = "module",
                 ["src"] = fileVersionProvider.AddFileVersionToPath(
                     ViewContext.HttpContext.Request.PathBase,
-                    urlHelper.Content("./_content/Kentico.Xperience.TagManager/js/ktc-tagmanager.js"))
+                    urlHelper.Content("~/_content/Kentico.Xperience.TagManager/js/ktc-tagmanager.js"))
             }
         };
 
