@@ -10,10 +10,10 @@
         </ItemGroup>
     </Target>
 
-	<ItemGroup>
-		<Content Remove="Admin/Client/*.json" />
-		<Content Remove="Admin/FrontEnd/*.json" />
-		<Content Remove="Admin/*.json" />
-		<Content Remove="./*.json" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Remove="Admin/Client/*.json" />
+        <Content Remove="Admin/FrontEnd/*.json" />
+        <Content Remove="Admin/*.json" />
+		<Content Remove="../Kentico.Xperience.TagManager/*.json"/>
+    </ItemGroup>
 </Project>
