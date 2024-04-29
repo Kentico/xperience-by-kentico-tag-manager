@@ -8,6 +8,12 @@
             <AssemblyToSign Include="$(TargetPath)" />
             <AssemblyToSign Include="$(XmlSerializersTargetPath)" Condition="Exists('$(XmlSerializersTargetPath)')" />
         </ItemGroup>
-
     </Target>
+
+	<ItemGroup>
+		<Content Remove="Admin/Client/*.json" />
+		<Content Remove="Admin/FrontEnd/*.json" />
+		<Content Remove="Admin/*.json" />
+		<Content Remove="./*.json" />
+	</ItemGroup>
 </Project>
