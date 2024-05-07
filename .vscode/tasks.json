@@ -89,36 +89,36 @@
     {
       "type": "npm",
       "script": "install",
-      "path": "src/Kentico.Xperience.TagManager/Frontend",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Frontend",
       "group": "build",
       "problemMatcher": [],
-      "label": "npm: install - src/Kentico.Xperience.TagManager/Frontend",
+      "label": "npm: install - src/Kentico.Xperience.TagManager/Admin/Frontend",
       "detail": "install dependencies from package"
     },
     {
       "type": "npm",
       "script": "build",
-      "path": "src/Kentico.Xperience.TagManager/Frontend",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Frontend",
       "group": "build",
       "problemMatcher": [],
-      "label": "npm: build - src/Kentico.Xperience.TagManager/Frontend",
+      "label": "npm: build - src/Kentico.Xperience.TagManager/Admin/Frontend",
       "detail": "webpack --mode=production"
     },
     {
       "type": "npm",
       "script": "build:dev",
-      "path": "src/Kentico.Xperience.TagManager/Frontend",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Frontend",
       "group": "build",
       "problemMatcher": [],
-      "label": "npm: build:dev - src/Kentico.Xperience.TagManager/Frontend",
+      "label": "npm: build:dev - src/Kentico.Xperience.TagManager/Admin/Frontend",
       "detail": "webpack --mode=development"
     },
     {
       "type": "npm",
       "script": "start",
-      "path": "src/Kentico.Xperience.TagManager/Frontend",
+      "path": "src/Kentico.Xperience.TagManager/Admin/Frontend",
       "problemMatcher": [],
-      "label": "npm: start - src/Kentico.Xperience.TagManager/Frontend",
+      "label": "npm: start - src/Kentico.Xperience.TagManager/Admin/Frontend",
       "detail": "webpack serve --mode development"
     },
     {
