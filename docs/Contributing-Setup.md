@@ -82,6 +82,8 @@ To run the Sample app Admin customization in development mode, add the following
 
    > In the future, we will be able to use floating versions to automatically select the highest (local) package version
 
+1. Update the `nuget.config` by uncommenting the `<package pattern="Kentico.Xperience.TagManager" />` entry in `<packageSource key="LocalPackages">`. This will tell NuGet to resolve the current library from the local nuget package folder instead of the class library.
+
 1. Build the solution with the `LOCAL_NUGET=true` property
 
    > You can use the VS Code `.NET: build (Solution) - LOCAL_NUGET` task
@@ -92,9 +94,9 @@ To run the Sample app Admin customization in development mode, add the following
 
    > You can use the `.NET Launch (DancingGoat) - LOCAL_NUGET` lauch setting in VS Code
 
-1. Undo the `Directory.Packages.props` version number change to ensure it is not committed to the repository
+1. Undo the `Directory.Packages.props` version number and `nuget.config` changes to ensure they are not committed to the repository
 
-1. Perform a normal build to reset any modified `packages.lock.json` files
+1. Perform a normal build to reset any modified `packages.lock.json` files, which were modified when switching from a class library to a NuGet reference
 
 ### Create a PR
 
