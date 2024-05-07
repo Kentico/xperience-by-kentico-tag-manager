@@ -94,7 +94,7 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
         CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
-        var info = channelCodeSnippetInfoProvider.Get(ObjectID);
+        var info = await channelCodeSnippetInfoProvider.GetAsync(ObjectID);
 
         model.MapToChannelCodeSnippetInfo(info);
 

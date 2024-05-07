@@ -29,7 +29,7 @@ namespace DancingGoat.Helpers.Generator
 
         private readonly IFormBuilderConfigurationSerializer formBuilderConfigurationSerializer;
         private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
-        private readonly IBizFormInfoProvider bizFormInfoProvider;
+        private readonly IInfoProvider<BizFormInfo> bizFormInfoProvider;
 
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace DancingGoat.Helpers.Generator
         public FormConsentGenerator(
             IFormBuilderConfigurationSerializer formBuilderConfigurationSerializer,
             IInfoProvider<ConsentInfo> consentInfoProvider,
-            IBizFormInfoProvider bizFormInfoProvider)
+            IInfoProvider<BizFormInfo> bizFormInfoProvider)
         {
             this.formBuilderConfigurationSerializer = formBuilderConfigurationSerializer;
             this.consentInfoProvider = consentInfoProvider;
