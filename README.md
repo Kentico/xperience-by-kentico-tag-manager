@@ -5,32 +5,31 @@
 ## Description
 
 Tag Manager integration enabling marketers to include prebuilt and custom tags into a website channel. By default we provide support for the following tags:
+
 - Google Tag Manager
-    - Google Tag Manager is the standard for implementing front-end services, marketing and tracking tags to a website. This integration makes it easy to include Google Tag Manager into your website to leverage andvanced tag setup.
-    - [Integration information and installation guide](./docs/Google-Tag-Manager.md)
-    - [Google Tag Manager homepage](https://tagmanager.google.com/)
+  - Google Tag Manager is the standard for implementing front-end services, marketing and tracking tags to a website. This integration makes it easy to include Google Tag Manager into your website to leverage andvanced tag setup.
+  - [Integration information and installation guide](./docs/Google-Tag-Manager.md)
+  - [Google Tag Manager homepage](https://tagmanager.google.com/)
 - Google Analytics 4
-    - Google Analytics 4 lets you track users on your website. The default installation enables pageview tracking and basic events.
-    - [Integration information and installation guide](./docs/Google-Analytics-4.md)
-    - [Google Analytics homepage](https://tagmanager.google.com/)
+  - Google Analytics 4 lets you track users on your website. The default installation enables pageview tracking and basic events.
+  - [Integration information and installation guide](./docs/Google-Analytics-4.md)
+  - [Google Analytics homepage](https://tagmanager.google.com/)
 - Microsoft Clarity recordings and heatmaps
-    - Microsoft Clarity lets you record user sessions, generate heatmaps, scrollmaps and further analyze your website users. The service is completely free.
-    - [Integration information and installation guide](./docs/Microsoft-Clarity.md)
-    - [Microsoft Clarity homepage](https://clarity.microsoft.com/)
+  - Microsoft Clarity lets you record user sessions, generate heatmaps, scrollmaps and further analyze your website users. The service is completely free.
+  - [Integration information and installation guide](./docs/Microsoft-Clarity.md)
+  - [Microsoft Clarity homepage](https://clarity.microsoft.com/)
 - VWO A/B Testing
-    - VWO lets you optimize digital experiences and maximize conversions using their suite of tools. This integration is focusing on front-end A/B testing capability. It installs VWO SmartCode into your wesite
-    - [Integration information and installation guide](./docs/VWO.md)
-    - Visit [VWO homepage](https://vwo.com/) to learn more about the product
+  - VWO lets you optimize digital experiences and maximize conversions using their suite of tools. This integration is focusing on front-end A/B testing capability. It installs VWO SmartCode into your wesite
+  - [Integration information and installation guide](./docs/VWO.md)
+  - Visit [VWO homepage](https://vwo.com/) to learn more about the product
 - Intercom Messenger
-    - Intercom offers a suite of tools to promising they are "The only AI customer service solution you need". The focus of this integration is their Messenger allowing you to communicate with customers live through your website.
-    - [Integration information and installation guide](./docs/Intercom.md)
-    - [Intercom homepage](https://www.intercom.com)
+  - Intercom offers a suite of tools to promising they are "The only AI customer service solution you need". The focus of this integration is their Messenger allowing you to communicate with customers live through your website.
+  - [Integration information and installation guide](./docs/Intercom.md)
+  - [Intercom homepage](https://www.intercom.com)
 - Custom HTML Snippet
-    - Whenever you need to copy and paste a simple code snippet form another service into your website.
+  - Whenever you need to copy and paste a simple code snippet form another service into your website.
 - Custom Tag Module
-    - When the site admin wants to enable a new pre-defined code snippet to be used by marketers.
-
-
+  - When the site admin wants to enable a new pre-defined code snippet to be used by marketers.
 
 ## Screenshots
 
@@ -84,24 +83,24 @@ dotnet add package Kentico.Xperience.TagManager
 
 3. In the administration go to UI application 'Tag Management'.
 4. Create a new record:
-    * Select one of the channels. 
-    * Select whether you want to use Custom Code Snippet or other Snippet type
-    * We have prepared some of the most often used types:
-        * For 
-          * 'Google Tag Manager',
-          * 'Google Analytics 4',
-          * 'VWO',
-          * 'Intercom',
-          * 'Microsoft Clarity',
-          * or Your own type
-        * select one of these options from the Snippet type dropdown
-    * For 'Custom code snippet' fill in entire code you want to render.
-      * Select a location:
-        * Top of the head - inserts a script immediately after the opening head tag.
-        * Bottom of the head - inserts a script right before the closing head tag.
-        * Top of the body - inserts a script immediately after the opening body tag.
-        * Bottom of the body - inserts a script right before the closing body tag.
-    * Fill in a consent if required. 
+   - Select one of the channels.
+   - Select whether you want to use Custom Code Snippet or other Snippet type
+   - We have prepared some of the most often used types:
+     - For
+       - 'Google Tag Manager',
+       - 'Google Analytics 4',
+       - 'VWO',
+       - 'Intercom',
+       - 'Microsoft Clarity',
+       - or Your own type
+     - select one of these options from the Snippet type dropdown
+   - For 'Custom code snippet' fill in entire code you want to render.
+     - Select a location:
+       - Top of the head - inserts a script immediately after the opening head tag.
+       - Bottom of the head - inserts a script right before the closing head tag.
+       - Top of the body - inserts a script immediately after the opening body tag.
+       - Bottom of the body - inserts a script right before the closing body tag.
+   - Fill in a consent if required.
 5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
 6. To dynamically update the rendered code snippets, for example if a consent is accepted, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
 
