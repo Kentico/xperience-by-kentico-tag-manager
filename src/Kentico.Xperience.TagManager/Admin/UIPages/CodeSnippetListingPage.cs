@@ -3,6 +3,7 @@ using CMS.ContentEngine;
 using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.Membership;
+
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Authentication;
 using Kentico.Xperience.TagManager.Admin;
@@ -49,6 +50,8 @@ internal class CodeSnippetListingPage : ListingPage
 
     public override async Task ConfigurePage()
     {
+        await base.ConfigurePage();
+
         var allConsents = await consentInfoProvider.Get().GetEnumerableTypedResultAsync();
         var allChannels = await channelProvider.Get().GetEnumerableTypedResultAsync();
 

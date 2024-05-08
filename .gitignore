@@ -135,8 +135,9 @@ segments_2i
 
 # Generated files
 **/Client/dist/*
+**/nuget-local/*.*pkg
 
-./src/Kentico.Xperience.TagManager/wwwroot/Scripts/ktc-tagmanager.js
+**/src/Kentico.Xperience.TagManager/wwwroot/*
 
 **/CMSModules/WebFarm/*
 

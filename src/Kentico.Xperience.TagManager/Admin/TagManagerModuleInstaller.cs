@@ -3,7 +3,9 @@ using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.FormEngine;
 using CMS.Modules;
+
 using Kentico.Xperience.Admin.Base.Forms;
+
 using static Kentico.Xperience.TagManager.Constants.TagManagerConstants;
 
 namespace Kentico.Xperience.TagManager.Admin;
@@ -13,11 +15,9 @@ internal interface ITagManagerModuleInstaller
     void Install();
 }
 
-internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
+internal class TagManagerModuleInstaller(IInfoProvider<ResourceInfo> resourceInfoProvider) : ITagManagerModuleInstaller
 {
-    private readonly IResourceInfoProvider resourceInfoProvider;
-
-    public TagManagerModuleInstaller(IResourceInfoProvider resourceInfoProvider) => this.resourceInfoProvider = resourceInfoProvider;
+    private readonly IInfoProvider<ResourceInfo> resourceInfoProvider = resourceInfoProvider;
 
     public void Install()
     {
@@ -28,7 +28,6 @@ internal class TagManagerModuleInstaller : ITagManagerModuleInstaller
     private ResourceInfo InstallModule()
     {
         var resourceInfo = resourceInfoProvider.Get(ResourceConstants.ResourceName)
-            // Handle v1.0.0 resource name
             ?? resourceInfoProvider.Get("Kentico.Xperience.TagManager")
             ?? new ResourceInfo();
 

@@ -2,8 +2,10 @@
 using CMS.Base;
 using CMS.Core;
 using CMS.DataEngine;
+
 using Kentico.Xperience.TagManager;
 using Kentico.Xperience.TagManager.Admin;
+
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: RegisterModule(type: typeof(TagManagerModule))]

@@ -41,8 +41,8 @@ namespace DancingGoat.AdminComponents
         private readonly IFormBuilderConfigurationSerializer formBuilderConfigurationSerializer;
         private readonly IEventLogService eventLogService;
         private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
-        private readonly IBizFormInfoProvider bizFormInfoProvider;
-        private readonly IContactGroupInfoProvider contactGroupInfoProvider;
+        private readonly IInfoProvider<BizFormInfo> bizFormInfoProvider;
+        private readonly IInfoProvider<ContactGroupInfo> contactGroupInfoProvider;
         private readonly ISettingsKeyInfoProvider settingsKeyInfoProvider;
         private readonly IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider;
 
@@ -61,8 +61,8 @@ namespace DancingGoat.AdminComponents
             IFormBuilderConfigurationSerializer formBuilderConfigurationSerializer,
             IEventLogService eventLogService,
             IInfoProvider<ConsentInfo> consentInfoProvider,
-            IBizFormInfoProvider bizFormInfoProvider,
-            IContactGroupInfoProvider contactGroupInfoProvider,
+            IInfoProvider<BizFormInfo> bizFormInfoProvider,
+            IInfoProvider<ContactGroupInfo> contactGroupInfoProvider,
             ISettingsKeyInfoProvider settingsKeyInfoProvider,
             IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider)
         {

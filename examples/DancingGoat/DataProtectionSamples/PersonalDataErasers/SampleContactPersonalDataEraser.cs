@@ -36,9 +36,9 @@ namespace Samples.DancingGoat
         };
 
         private readonly IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider;
-        private readonly IBizFormInfoProvider bizFormInfoProvider;
-        private readonly IAccountContactInfoProvider accountContactInfoProvider;
-        private readonly IContactInfoProvider contactInfoProvider;
+        private readonly IInfoProvider<BizFormInfo> bizFormInfoProvider;
+        private readonly IInfoProvider<AccountContactInfo> accountContactInfoProvider;
+        private readonly IInfoProvider<ContactInfo> contactInfoProvider;
 
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace Samples.DancingGoat
         /// <param name="contactInfoProvider">Contact info provider.</param>
         public SampleContactPersonalDataEraser(
             IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider,
-            IBizFormInfoProvider bizFormInfoProvider,
-            IAccountContactInfoProvider accountContactInfoProvider,
-            IContactInfoProvider contactInfoProvider)
+            IInfoProvider<BizFormInfo> bizFormInfoProvider,
+            IInfoProvider<AccountContactInfo> accountContactInfoProvider,
+            IInfoProvider<ContactInfo> contactInfoProvider)
         {
             this.consentAgreementInfoProvider = consentAgreementInfoProvider;
             this.bizFormInfoProvider = bizFormInfoProvider;
