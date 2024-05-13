@@ -17,6 +17,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 {
     private readonly IConsentAgreementService consentAgreementService;
     private readonly IWebsiteChannelContext channelContext;
+    
     private readonly IChannelCodeSnippetItemInfoProvider codeSnippetInfoProvider;
     private readonly IProgressiveCache cache;
 
@@ -70,6 +71,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                     .Columns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLocation),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetAdministrationDisplayMode),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType),
@@ -99,13 +101,18 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 
         var tags = new List<CodeSnippetDto>();
 
+        if (!Enum.TryParse(snippetInfo.ChannelCodeSnippetAdministrationDisplayMode, out CodeSnippetAdministrationDisplayMode displayMode))
+        {
+            displayMode = CodeSnippetAdministrationDisplayMode.None;
+        }
         if (snippetSettings.TagTypeName != CustomSnippetFactory.TAG_TYPE_NAME)
         {
             tags.AddRange(snippetFactory.CreateCodeSnippets(snippetInfo.ChannelCodeSnippetItemIdentifier).Select(x => new CodeSnippetDto
             {
                 Location = x.Location,
                 Code = x.Code,
-                ID = snippetInfo.ChannelCodeSnippetItemID
+                ID = snippetInfo.ChannelCodeSnippetItemID,
+                DisplayMode = displayMode
             }));
         }
         else
@@ -117,6 +124,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                 Location = Enum.TryParse(snippetInfo.ChannelCodeSnippetItemLocation, out CodeSnippetLocations location)
                    ? location
                    : throw new InvalidOperationException("Invalid Channel Tag Location."),
+                DisplayMode = displayMode
             });
 
             tags.Add(tag);
@@ -130,7 +138,8 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
       {
           Code = codeSnippet.Code != null ? AddSnippetIds(codeSnippet.ID, codeSnippet.Code!) : codeSnippet.Code,
           ID = codeSnippet.ID,
-          Location = codeSnippet.Location
+          Location = codeSnippet.Location,
+          DisplayMode = codeSnippet.DisplayMode
       };
 
     private static string AddSnippetIds(int codeSnippetId, string codeSnippet) =>

@@ -41,6 +41,7 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
                 ChannelIDs = [info.ChannelCodeSnippetItemChannelId],
                 Name = info.ChannelCodeSnippetItemName,
                 Code = info.ChannelCodeSnippetItemCode,
+                DisplayMode = info.ChannelCodeSnippetAdministrationDisplayMode,
                 TagType = info.ChannelCodeSnippetItemType,
                 ConsentIDs = info.ChannelCodeSnippetItemConsentId == 0 ? [] : [info.ChannelCodeSnippetItemConsentId],
                 TagIdentifier = info.ChannelCodeSnippetItemIdentifier,
