@@ -47,6 +47,7 @@ Tag Manager integration enabling marketers to include prebuilt and custom tags i
 | ----------------- | --------------- |
 | >= 28.1.0         | >= 1.0.0        |
 | >= 28.3.1         | >= 2.0.0        |
+| >= 29.0.0         | >= 3.0.0        |
 
 ### Dependencies
 
@@ -101,6 +102,7 @@ dotnet add package Kentico.Xperience.TagManager
        - Top of the body - inserts a script immediately after the opening body tag.
        - Bottom of the body - inserts a script right before the closing body tag.
    - Fill in a consent if required.
+   - Select whether you want to display tags in the Xperience administration preview or pagebuilder, or both. This option defaults to None.
 5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
 6. To dynamically update the rendered code snippets, for example if a consent is accepted, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
 
