@@ -64,5 +64,5 @@ internal static class CodeSnippetExtensions
     public const string DisplayModeFormComponentOptions = $"{nameof(CodeSnippetAdministrationDisplayMode.None)};Do not display in Administration\r\n" +
                                                 $"{nameof(CodeSnippetAdministrationDisplayMode.PreviewOnly)};Display in the Preview view mode only\r\n" +
                                                 $"{nameof(CodeSnippetAdministrationDisplayMode.PageBuilderOnly)};Display in the Page Builder only\r\n" +
-                                                $"{nameof(CodeSnippetAdministrationDisplayMode.Both)};Display in Preview and Pagebuilder";
+                                                $"{nameof(CodeSnippetAdministrationDisplayMode.Both)};Display in the Preview view mode and the Page Builder";
 }
