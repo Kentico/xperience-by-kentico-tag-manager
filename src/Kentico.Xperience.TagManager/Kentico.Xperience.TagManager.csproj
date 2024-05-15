@@ -6,7 +6,7 @@
 		<Description>Enables marketers to author custom tags that can be embedded in a website channel. Example: GA4, cookie banners, custom CSS.</Description>
 		<RepositoryUrl>https://github.com/kentico/xperience-by-kentico-tag-manager</RepositoryUrl>
 	</PropertyGroup>
-	
+
 	<PropertyGroup>
 		<AdminOrgName>kentico</AdminOrgName>
 		<RootNamespace>Kentico.Xperience.TagManager</RootNamespace>
@@ -58,10 +58,4 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Admin\Client\dist\" />
-	  <Folder Include="wwwroot\js\" />
-	</ItemGroup>
-
 </Project>
