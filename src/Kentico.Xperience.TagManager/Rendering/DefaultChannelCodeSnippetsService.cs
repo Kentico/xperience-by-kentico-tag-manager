@@ -105,6 +105,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
         {
             displayMode = CodeSnippetAdministrationDisplayMode.None;
         }
+
         if (snippetSettings.TagTypeName != CustomSnippetFactory.TAG_TYPE_NAME)
         {
             tags.AddRange(snippetFactory.CreateCodeSnippets(snippetInfo.ChannelCodeSnippetItemIdentifier).Select(x => new CodeSnippetDto
