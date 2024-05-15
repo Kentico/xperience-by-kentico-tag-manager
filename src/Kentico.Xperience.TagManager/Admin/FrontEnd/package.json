@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Xperience by Kentico Tag manager",
   "scripts": {
+    "start": "npm run watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
