@@ -45,9 +45,9 @@ Tag Manager integration enabling marketers to include prebuilt and custom tags i
 
 | Xperience Version | Library Version |
 | ----------------- | --------------- |
-| >= 28.1.0         | >= 1.0.0        |
-| >= 28.3.1         | >= 2.0.0        |
 | >= 29.0.0         | >= 3.0.0        |
+| >= 28.3.1         | >= 2.0.0        |
+| >= 28.1.0         | >= 1.0.0        |
 
 ### Dependencies
 
