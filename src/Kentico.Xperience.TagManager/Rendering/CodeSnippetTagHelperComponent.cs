@@ -1,6 +1,11 @@
 ﻿using CMS.ContactManagement;
 
+using Kentico.Content.Web.Mvc;
+using Kentico.PageBuilder.Web.Mvc;
+using Kentico.Web.Mvc;
+
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -18,14 +23,17 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     private readonly IChannelCodeSnippetsService codeSnippetsContext;
     private readonly IUrlHelperFactory urlHelperFactory;
     private readonly IFileVersionProvider fileVersionProvider;
+    private readonly IHttpContextAccessor httpContextAccessor;
 
     public CodeSnippetTagHelperComponent(
         IChannelCodeSnippetsService codeSnippetsContext,
         IUrlHelperFactory urlHelperFactory,
-        IFileVersionProvider fileVersionProvider)
+        IFileVersionProvider fileVersionProvider,
+        IHttpContextAccessor httpContextAccessor)
     {
         this.codeSnippetsContext = codeSnippetsContext;
         this.urlHelperFactory = urlHelperFactory;
+        this.httpContextAccessor = httpContextAccessor;
         this.fileVersionProvider = fileVersionProvider;
     }
 
@@ -40,27 +48,53 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     {
         var contact = ContactManagementContext.CurrentContact;
 
+        var codeSnippets = await codeSnippetsContext.GetConsentedCodeSnippets(contact);
+
         if (string.Equals(context.TagName, HeadTag, StringComparison.OrdinalIgnoreCase))
         {
-            ProcessHead(output, await codeSnippetsContext.GetConsentedCodeSnippets(contact));
+            ProcessHead(output, codeSnippets, httpContextAccessor.HttpContext);
         }
 
         if (string.Equals(context.TagName, BodyTag, StringComparison.OrdinalIgnoreCase))
         {
-            ProcessBody(output, await codeSnippetsContext.GetConsentedCodeSnippets(contact));
+            ProcessBody(output, codeSnippets, httpContextAccessor.HttpContext);
         }
     }
 
     private static void ProcessHead(
         TagHelperOutput output,
-        ILookup<CodeSnippetLocations, CodeSnippetDto> codeSnippets)
+        ILookup<CodeSnippetLocations, CodeSnippetDto> codeSnippets,
+        HttpContext? httpContext)
     {
-        foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.HeadTop])
+        bool isEditMode = httpContext.Kentico().PageBuilder().EditMode;
+        bool isPreviewMode = httpContext.Kentico().Preview().Enabled;
+
+        var headTopSnippets = codeSnippets[CodeSnippetLocations.HeadTop];
+        var headBottomSnippets = codeSnippets[CodeSnippetLocations.HeadBottom];
+
+        if (isEditMode)
+        {
+            headTopSnippets = headTopSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PageBuilderOnly);
+
+            headBottomSnippets = headBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PageBuilderOnly);
+        }
+        else if (isPreviewMode)
+        {
+            headTopSnippets = headTopSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+               CodeSnippetAdministrationDisplayMode.PreviewOnly);
+
+            headBottomSnippets = headBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PreviewOnly);
+        }
+
+        foreach (var codeSnippet in headTopSnippets)
         {
             output.PreContent.AppendHtml(codeSnippet.Code);
         }
 
-        foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.HeadBottom])
+        foreach (var codeSnippet in headBottomSnippets)
         {
             output.PostContent.AppendHtml(codeSnippet.Code);
         }
@@ -68,14 +102,38 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
 
     private void ProcessBody(
         TagHelperOutput output,
-        ILookup<CodeSnippetLocations, CodeSnippetDto> codeSnippets)
+        ILookup<CodeSnippetLocations, CodeSnippetDto> codeSnippets,
+        HttpContext? httpContext)
     {
-        foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.BodyTop])
+        bool isEditMode = httpContext.Kentico().PageBuilder().EditMode;
+        bool isPreviewMode = httpContext.Kentico().Preview().Enabled;
+
+        var bodyTopSnippets = codeSnippets[CodeSnippetLocations.BodyTop];
+        var bodyBottomSnippets = codeSnippets[CodeSnippetLocations.BodyBottom];
+
+        if (isEditMode)
+        {
+            bodyTopSnippets = bodyTopSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PageBuilderOnly);
+
+            bodyBottomSnippets = bodyBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PageBuilderOnly);
+        }
+        else if (isPreviewMode)
+        {
+            bodyTopSnippets = bodyTopSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PreviewOnly);
+            
+            bodyBottomSnippets = bodyBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
+                CodeSnippetAdministrationDisplayMode.PreviewOnly);
+        }
+
+        foreach (var codeSnippet in bodyTopSnippets)
         {
             output.PreContent.AppendHtml(codeSnippet.Code);
         }
 
-        foreach (var codeSnippet in codeSnippets[CodeSnippetLocations.BodyBottom])
+        foreach (var codeSnippet in bodyBottomSnippets)
         {
             output.PostContent.AppendHtml(codeSnippet.Code);
         }

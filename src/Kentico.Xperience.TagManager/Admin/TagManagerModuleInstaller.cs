@@ -139,6 +139,18 @@ internal class TagManagerModuleInstaller(IInfoProvider<ResourceInfo> resourceInf
 
         formItem = new FormFieldInfo
         {
+            Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetAdministrationDisplayMode),
+            Visible = false,
+            Precision = 0,
+            Size = 200,
+            DataType = FieldDataType.Text,
+            Enabled = true,
+            AllowEmpty = true
+        };
+        formInfo.AddFormItem(formItem);
+
+        formItem = new FormFieldInfo
+        {
             Name = nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType),
             Visible = false,
             Precision = 0,

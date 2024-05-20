@@ -27,7 +27,7 @@ internal class CodeSnippetConfigurationModel
     [VisibleIfEqualTo(nameof(TagType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? Code { get; set; }
 
-    [RadioGroupComponent(Label = "Tag location", Order = 5, Options = CodeSnippetLocationsExtensions.FormComponentOptions)]
+    [RadioGroupComponent(Label = "Tag location", Order = 5, Options = CodeSnippetExtensions.LocationFormComponentOptions)]
     [VisibleIfEqualTo(nameof(TagType), CustomSnippetFactory.TAG_TYPE_NAME)]
     public string? Location { get; set; }
 
@@ -38,6 +38,9 @@ internal class CodeSnippetConfigurationModel
     [ObjectIdSelectorComponent(objectType: ConsentInfo.OBJECT_TYPE, Label = "Consent", Order = 6, Placeholder = "No consent needed")]
     public IEnumerable<int> ConsentIDs { get; set; } = [];
 
+    [DropDownComponent(Label = "Kentico administration Display Mode", Options = CodeSnippetExtensions.DisplayModeFormComponentOptions, Order = 7)]
+    public string DisplayMode { get; set; } = "None";
+
     public void MapToChannelCodeSnippetInfo(ChannelCodeSnippetItemInfo info)
     {
         info.ChannelCodeSnippetItemChannelId = ChannelIDs.FirstOrDefault();
@@ -47,13 +50,6 @@ internal class CodeSnippetConfigurationModel
         info.ChannelCodeSnippetItemName = Name;
         info.ChannelCodeSnippetItemIdentifier = TagIdentifier;
         info.ChannelCodeSnippetItemCode = Code;
+        info.ChannelCodeSnippetAdministrationDisplayMode = DisplayMode;
     }
-}
-
-internal static class CodeSnippetLocationsExtensions
-{
-    public const string FormComponentOptions = $"{nameof(CodeSnippetLocations.HeadTop)};Insert at the top of the head\r\n" +
-                                               $"{nameof(CodeSnippetLocations.HeadBottom)};Insert at the bottom of the head\r\n" +
-                                               $"{nameof(CodeSnippetLocations.BodyTop)};Insert at the top of the body\r\n" +
-                                               $"{nameof(CodeSnippetLocations.BodyBottom)};Insert at the bottom of the body\r\n";
 }

@@ -6,6 +6,7 @@ using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.ContentEngine;
 using CMS.DataProtection;
+
 using Kentico.Xperience.TagManager.Admin;
 
 [assembly: RegisterObjectType(typeof(ChannelCodeSnippetItemInfo), ChannelCodeSnippetItemInfo.OBJECT_TYPE)]
@@ -120,7 +121,7 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
 
 
     /// <summary>
-    /// Channel code snippet GTMID.
+    /// Channel code snippet third party identifier.
     /// </summary>
     [DatabaseField]
     public virtual string ChannelCodeSnippetItemIdentifier
@@ -138,6 +139,16 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
     {
         get => ValidationHelper.GetString(GetValue(nameof(ChannelCodeSnippetItemCode)), String.Empty);
         set => SetValue(nameof(ChannelCodeSnippetItemCode), value, String.Empty);
+    }
+
+    /// <summary>
+    /// Channel code snippet administration display mode.
+    /// </summary>
+    [DatabaseField]
+    public virtual string ChannelCodeSnippetAdministrationDisplayMode
+    {
+        get => ValidationHelper.GetString(GetValue(nameof(ChannelCodeSnippetAdministrationDisplayMode)), String.Empty);
+        set => SetValue(nameof(ChannelCodeSnippetAdministrationDisplayMode), value, String.Empty);
     }
 
 
