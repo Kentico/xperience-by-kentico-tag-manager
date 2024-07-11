@@ -84,6 +84,7 @@ dotnet add package Kentico.Xperience.TagManager
 
 3. In the administration go to UI application 'Tag Management'.
 4. Create a new record:
+   - Fill in a tag name
    - Select one of the channels.
    - Select whether you want to use Custom Code Snippet or other Snippet type
    - We have prepared some of the most often used types:
@@ -101,7 +102,9 @@ dotnet add package Kentico.Xperience.TagManager
        - Bottom of the head - inserts a script right before the closing head tag.
        - Top of the body - inserts a script immediately after the opening body tag.
        - Bottom of the body - inserts a script right before the closing body tag.
+   - Select tag location within the rendered page HTML
    - Fill in a consent if required.
+   - Check 'Enable tag rendering' to activate the tag or uncheck to deactivate
    - Select whether you want to display tags in the Xperience administration preview or Page Builder, or both. This option defaults to None.
 5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
 6. To dynamically update the rendered code snippets, for example if a consent is accepted, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.

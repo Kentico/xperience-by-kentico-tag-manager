@@ -46,6 +46,7 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
                 ConsentIDs = info.ChannelCodeSnippetItemConsentId == 0 ? [] : [info.ChannelCodeSnippetItemConsentId],
                 TagIdentifier = info.ChannelCodeSnippetItemIdentifier,
                 Location = info.ChannelCodeSnippetItemLocation,
+                Enable = info.ChannelCodeSnippetItemEnable
             };
 
             return model;
