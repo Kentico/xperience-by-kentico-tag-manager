@@ -45,7 +45,7 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="NpmInstallHelpScript" BeforeTargets="NpmBuildClient" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
+	<Target Name="NpmInstallHelpScript" BeforeTargets="NpmBuildHelpScript" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
 		<Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)\Admin\FrontEnd" />
 	</Target>
 	<Target Name="NpmBuildHelpScript" BeforeTargets="BeforeBuild" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
