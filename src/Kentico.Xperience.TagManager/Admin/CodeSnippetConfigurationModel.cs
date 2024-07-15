@@ -38,7 +38,10 @@ internal class CodeSnippetConfigurationModel
     [ObjectIdSelectorComponent(objectType: ConsentInfo.OBJECT_TYPE, Label = "Consent", Order = 6, Placeholder = "No consent needed")]
     public IEnumerable<int> ConsentIDs { get; set; } = [];
 
-    [DropDownComponent(Label = "Kentico administration Display Mode", Options = CodeSnippetExtensions.DisplayModeFormComponentOptions, Order = 7)]
+    [CheckBoxComponent(Label = "Enable tag rendering", Order = 7)]
+    public bool Enable { get; set; } = true;
+
+    [DropDownComponent(Label = "Kentico administration Display Mode", Options = CodeSnippetExtensions.DisplayModeFormComponentOptions, Order = 8)]
     public string DisplayMode { get; set; } = "None";
 
     public void MapToChannelCodeSnippetInfo(ChannelCodeSnippetItemInfo info)
@@ -51,5 +54,6 @@ internal class CodeSnippetConfigurationModel
         info.ChannelCodeSnippetItemIdentifier = TagIdentifier;
         info.ChannelCodeSnippetItemCode = Code;
         info.ChannelCodeSnippetAdministrationDisplayMode = DisplayMode;
+        info.ChannelCodeSnippetItemEnable = Enable;
     }
 }

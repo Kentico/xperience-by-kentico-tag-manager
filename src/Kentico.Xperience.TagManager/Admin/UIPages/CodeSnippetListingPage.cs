@@ -88,6 +88,10 @@ internal class CodeSnippetListingPage : ListingPage
                         ? LocalizationService.GetString("No consent needed")
                         : allConsents.FirstOrDefault(c => c.ConsentID == (int)value)?.ConsentDisplayName ?? "")
             .AddColumn(
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemEnable),
+                "Enable",
+                sortable: true)
+            .AddColumn(
                 nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLastModified),
                 "Last Modified",
                 defaultSortDirection: SortTypeEnum.Desc,

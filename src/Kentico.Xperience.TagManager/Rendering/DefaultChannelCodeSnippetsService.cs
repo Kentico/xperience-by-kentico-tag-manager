@@ -66,11 +66,13 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                             $"{ChannelCodeSnippetItemInfo.OBJECT_TYPE.Replace('.', '_')}.{nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId)}",
                             nameof(ConsentInfo.ConsentID));
                     })
+                    .WhereTrue(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemEnable))
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), channelContext.WebsiteChannelID)
                     .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
                     .Columns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLocation),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemEnable),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetAdministrationDisplayMode),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemIdentifier),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),

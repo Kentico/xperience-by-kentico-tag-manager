@@ -162,6 +162,16 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
         set => SetValue(nameof(ChannelCodeSnippetItemConsentId), value);
     }
 
+    /// <summary>
+    /// Channel code snippet consent ID.
+    /// </summary>
+    [DatabaseField]
+    public virtual bool ChannelCodeSnippetItemEnable
+    {
+        get => ValidationHelper.GetBoolean(GetValue(nameof(ChannelCodeSnippetItemEnable)), true);
+        set => SetValue(nameof(ChannelCodeSnippetItemEnable), value);
+    }
+
 
     /// <summary>
     /// Deletes the object using appropriate provider.
