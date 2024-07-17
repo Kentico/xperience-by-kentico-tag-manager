@@ -58,4 +58,8 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\js\" />
+	</ItemGroup>
 </Project>

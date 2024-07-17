@@ -7,7 +7,7 @@ const config = {
     entry: "./src/index.js",
     output: {
         path: path.resolve(__dirname, "../.././wwwroot/js"),
-        filename: "ktc-tagmanager.js",
+        filename: "@kentico/xperience-tag-manager.js",
         module: true,
     },
     experiments: {
