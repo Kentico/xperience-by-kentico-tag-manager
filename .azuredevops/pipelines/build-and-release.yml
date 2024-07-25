@@ -108,7 +108,7 @@ stages:
               configuration: ${{ variables.Configuration }}
               packDirectory: $(System.DefaultWorkingDirectory)/packages
               includesymbols: true
-              nobuild: true
+              nobuild: false
               versioningScheme: off
 
           - publish: $(System.DefaultWorkingDirectory)/packages
