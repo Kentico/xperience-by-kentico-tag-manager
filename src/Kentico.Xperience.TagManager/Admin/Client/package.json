@@ -1,5 +1,5 @@
 {
-  "name": "xperience-tagmanager-web-admin",
+  "name": "@kentico/xperience-tag-manager-web-admin",
   "version": "1.0.0",
   "description": "Xperience by Kentico Tag manager",
   "private": true,

@@ -1,5 +1,5 @@
 {
-  "name": "ktc-tagmanager",
+  "name": "@kentico/xperience-tag-manager",
   "version": "1.0.0",
   "description": "Xperience by Kentico Tag manager",
   "scripts": {
