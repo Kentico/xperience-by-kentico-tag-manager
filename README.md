@@ -30,6 +30,7 @@ Tag Manager integration enabling marketers to include prebuilt and custom tags i
   - Whenever you need to copy and paste a simple code snippet form another service into your website.
 - Custom Tag Module
   - When the site admin wants to enable a new pre-defined code snippet to be used by marketers.
+  - [Integration information and installation guide](./docs/Creating-custom-module.md)
 
 ## Screenshots
 
