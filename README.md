@@ -109,6 +109,26 @@ dotnet add package Kentico.Xperience.TagManager
 5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
 6. To dynamically update the rendered code snippets, for example if a consent is accepted, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
 
+## Continuous Deployment configuration
+
+If you use the [Continuous Deployment](https://docs.kentico.com/x/YgaiCQ) feature to deploy data to an environment with Xperience by Kentico Tag Manager, you may need to adjust your *repository.config* [configuration file](https://docs.kentico.com/x/ygAcCQ). The Tag Manager works with the following object types:
+
+* `kenticotagmanager.channelcodesnippet`
+* `kenticotagmanager.channelcodesnippetitem`
+
+Running the CD restore (with `<RestoreMode>` set to `Full`) removes any Tag Manager scripts that exist on the target instance, but are not included in the CD data. 
+
+You can prevent this issue by adding excluded object types to your *repository.config* file, for example:
+
+```
+<ExcludedObjectTypes>
+    <ObjectType>kenticotagmanager.channelcodesnippet</ObjectType>
+    <ObjectType>kenticotagmanager.channelcodesnippetitem</ObjectType>
+</ExcludedObjectTypes>
+```
+
+With this configuration, the Tag Manager script object types are ignored by CD, and can only be managed directly on the target instance (for example your production environment).
+
 ## Contributing
 
 To see the guidelines for Contributing to Kentico open source software, please see [Kentico's `CONTRIBUTING.md`](https://github.com/Kentico/.github/blob/main/CONTRIBUTING.md) for more information and follow the [Kentico's `CODE_OF_CONDUCT`](https://github.com/Kentico/.github/blob/main/CODE_OF_CONDUCT.md).
