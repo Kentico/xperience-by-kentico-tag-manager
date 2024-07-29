@@ -30,6 +30,7 @@ Tag Manager integration enabling marketers to include prebuilt and custom tags i
   - Whenever you need to copy and paste a simple code snippet form another service into your website.
 - Custom Tag Module
   - When the site admin wants to enable a new pre-defined code snippet to be used by marketers.
+  - [Integration information and installation guide](./docs/Creating-custom-module.md)
 
 ## Screenshots
 
@@ -108,6 +109,26 @@ dotnet add package Kentico.Xperience.TagManager
    - Select whether you want to display tags in the Xperience administration preview or Page Builder, or both. This option defaults to None.
 5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
 6. To dynamically update the rendered code snippets, for example if a consent is accepted, call javascript function `window.xperience.tagManager.updateCodeSnippets()`.
+
+## Continuous Deployment configuration
+
+If you use the [Continuous Deployment](https://docs.kentico.com/x/YgaiCQ) feature to deploy data to an environment with Xperience by Kentico Tag Manager, you may need to adjust your *repository.config* [configuration file](https://docs.kentico.com/x/ygAcCQ). The Tag Manager works with the following object types:
+
+* `kenticotagmanager.channelcodesnippet`
+* `kenticotagmanager.channelcodesnippetitem`
+
+Running the CD restore (with `<RestoreMode>` set to `Full`) removes any Tag Manager scripts that exist on the target instance, but are not included in the CD data. 
+
+You can prevent this issue by adding excluded object types to your *repository.config* file, for example:
+
+```
+<ExcludedObjectTypes>
+    <ObjectType>kenticotagmanager.channelcodesnippet</ObjectType>
+    <ObjectType>kenticotagmanager.channelcodesnippetitem</ObjectType>
+</ExcludedObjectTypes>
+```
+
+With this configuration, the Tag Manager script object types are ignored by CD, and can only be managed directly on the target instance (for example your production environment).
 
 ## Contributing
 
