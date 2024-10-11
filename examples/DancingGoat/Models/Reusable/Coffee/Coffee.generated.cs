@@ -18,7 +18,8 @@ namespace DancingGoat.Models
 	/// <summary>
 	/// Represents a content item of type <see cref="Coffee"/>.
 	/// </summary>
-	public partial class Coffee : IContentItemFieldsSource
+	[RegisterContentTypeMapping(CONTENT_TYPE_NAME)]
+	public partial class Coffee : IContentItemFieldsSource, IProductFields
 	{
 		/// <summary>
 		/// Code name of the content type.
@@ -29,30 +30,43 @@ namespace DancingGoat.Models
 		/// <summary>
 		/// Represents system properties for a content item.
 		/// </summary>
+		[SystemField]
 		public ContentItemFields SystemFields { get; set; }
 
 
 		/// <summary>
-		/// CoffeeName.
+		/// CoffeeProcessing.
 		/// </summary>
-		public string CoffeeName { get; set; }
+		public IEnumerable<TagReference> CoffeeProcessing { get; set; }
 
 
 		/// <summary>
-		/// CoffeeShortDescription.
+		/// CoffeeTastes.
 		/// </summary>
-		public string CoffeeShortDescription { get; set; }
+		public IEnumerable<TagReference> CoffeeTastes { get; set; }
 
 
 		/// <summary>
-		/// CoffeeDescription.
+		/// ProductFieldsName.
 		/// </summary>
-		public string CoffeeDescription { get; set; }
+		public string ProductFieldsName { get; set; }
 
 
 		/// <summary>
-		/// CoffeeImage.
+		/// ProductFieldsDescription.
 		/// </summary>
-		public IEnumerable<Image> CoffeeImage { get; set; }
+		public string ProductFieldsDescription { get; set; }
+
+
+		/// <summary>
+		/// ProductFieldsShortDescription.
+		/// </summary>
+		public string ProductFieldsShortDescription { get; set; }
+
+
+		/// <summary>
+		/// ProductFieldsImage.
+		/// </summary>
+		public IEnumerable<Image> ProductFieldsImage { get; set; }
 	}
 }

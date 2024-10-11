@@ -22,19 +22,19 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
     private CodeSnippetConfigurationModel? model;
     protected override CodeSnippetConfigurationModel Model => model ??= new CodeSnippetConfigurationModel();
     private readonly IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider;
-    private readonly IPageUrlGenerator pageUrlGenerator;
+    private readonly IPageLinkGenerator pageLinkGenerator;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
     public CodeSnippetCreatePage(
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
         IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider,
-        IPageUrlGenerator pageUrlGenerator,
+        IPageLinkGenerator pageLinkGenerator,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
     {
         this.channelCodeSnippetInfoProvider = channelCodeSnippetInfoProvider;
-        this.pageUrlGenerator = pageUrlGenerator;
+        this.pageLinkGenerator = pageLinkGenerator;
         this.websiteChannelPermissionService = websiteChannelPermissionService;
     }
 
@@ -54,7 +54,7 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
         var baseResult = await base.ProcessFormData(model, formItems);
 
         var navigateResponse = NavigateTo(
-            pageUrlGenerator.GenerateUrl<CodeSnippetListingPage>());
+            pageLinkGenerator.GetPath<CodeSnippetListingPage>());
 
         foreach (var message in baseResult.Messages)
         {

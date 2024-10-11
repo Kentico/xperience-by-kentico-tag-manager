@@ -1,12 +1,19 @@
-﻿using CMS.ContactManagement;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using CMS.ContactManagement;
 using CMS.DataEngine;
 using CMS.DataProtection;
-using CMS.Helpers;
+
 using DancingGoat;
 using DancingGoat.Controllers;
 using DancingGoat.Helpers.Generator;
 using DancingGoat.Models;
+
+using Kentico.Content.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
+
 using Microsoft.AspNetCore.Mvc;
 
 [assembly: RegisterWebPageRoute(PrivacyPage.CONTENT_TYPE_NAME, typeof(DancingGoatPrivacyController), WebsiteChannelNames = new[] { DancingGoatConstants.WEBSITE_CHANNEL_NAME })]
@@ -18,10 +25,11 @@ namespace DancingGoat.Controllers
         private const string SUCCESS_RESULT = "success";
         private const string ERROR_RESULT = "error";
 
-        private readonly ICurrentCookieLevelProvider cookieLevelProvider;
         private readonly IConsentAgreementService consentAgreementService;
         private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
         private readonly IPreferredLanguageRetriever currentLanguageRetriever;
+        private readonly IWebPageDataContextRetriever webPageDataContextRetriever;
+        private readonly PrivacyPageRepository privacyPageRepository;
         private ContactInfo currentContact;
 
 
@@ -39,29 +47,33 @@ namespace DancingGoat.Controllers
         }
 
 
-        public DancingGoatPrivacyController(
-            ICurrentCookieLevelProvider cookieLevelProvider,
-            IConsentAgreementService consentAgreementService,
-            IInfoProvider<ConsentInfo> consentInfoProvider,
-            IPreferredLanguageRetriever currentLanguageRetriever)
+        public DancingGoatPrivacyController(PrivacyPageRepository privacyPageRepository, IConsentAgreementService consentAgreementService, IInfoProvider<ConsentInfo> consentInfoProvider, IPreferredLanguageRetriever currentLanguageRetriever, IWebPageDataContextRetriever webPageDataContextRetriever)
         {
-            this.cookieLevelProvider = cookieLevelProvider;
+            this.privacyPageRepository = privacyPageRepository;
             this.consentAgreementService = consentAgreementService;
             this.consentInfoProvider = consentInfoProvider;
             this.currentLanguageRetriever = currentLanguageRetriever;
+            this.webPageDataContextRetriever = webPageDataContextRetriever;
         }
 
 
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            var model = new PrivacyViewModel();
+            var webPage = webPageDataContextRetriever.Retrieve().WebPage;
+
+            var privacyPage = await privacyPageRepository.GetPrivacyPage(webPage.WebPageItemID, webPage.LanguageName, HttpContext.RequestAborted);
+
+            var model = new PrivacyViewModel { WebPage = privacyPage };
 
             if (!IsDemoEnabled())
             {
                 model.DemoDisabled = true;
             }
+            else if (CurrentContact != null)
+            {
+                model.Consents = GetAgreedConsentsForCurrentContact();
+            }
 
-            model.Consents = await GetAgreedConsentsForCurrentContact();
             model.ShowSavedMessage = TempData[SUCCESS_RESULT] != null;
             model.ShowErrorMessage = TempData[ERROR_RESULT] != null;
             model.PrivacyPageUrl = HttpContext.Request.Path;
@@ -69,28 +81,6 @@ namespace DancingGoat.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("/Agree")]
-        public ActionResult Agree(string returnUrl, string consentName)
-        {
-            var consentToAgree = consentInfoProvider.Get(consentName);
-
-            cookieLevelProvider.SetCurrentCookieLevel(Kentico.Web.Mvc.CookieLevel.All.Level);
-
-            if (consentToAgree != null && CurrentContact != null)
-            {
-                consentAgreementService.Agree(CurrentContact, consentToAgree);
-
-                TempData[SUCCESS_RESULT] = true;
-            }
-            else
-            {
-                TempData[ERROR_RESULT] = true;
-            }
-
-            return Redirect(returnUrl);
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -114,17 +104,15 @@ namespace DancingGoat.Controllers
         }
 
 
-        private async Task<IEnumerable<PrivacyConsentViewModel>> GetAgreedConsentsForCurrentContact()
+        private IEnumerable<PrivacyConsentViewModel> GetAgreedConsentsForCurrentContact()
         {
-            return await consentInfoProvider.Get()
-                .ToAsyncEnumerable()
-                .SelectAwait(async consent => new PrivacyConsentViewModel
+            return consentAgreementService.GetAgreedConsents(CurrentContact)
+                .Select(consent => new PrivacyConsentViewModel
                 {
-                    Name = consent.ConsentName,
-                    Title = consent.ConsentDisplayName,
-                    Text = (await consent.GetConsentTextAsync(currentLanguageRetriever.Get())).ShortText,
-                    Agreed = CurrentContact is not null && consentAgreementService.IsAgreed(CurrentContact, consent)
-                }).ToListAsync();
+                    Name = consent.Name,
+                    Title = consent.DisplayName,
+                    Text = consent.GetConsentText(currentLanguageRetriever.Get()).ShortText
+                });
         }
 
 
