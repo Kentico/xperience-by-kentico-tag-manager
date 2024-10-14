@@ -2,7 +2,6 @@
 
 @{
     ViewData["PageClass"] = "inverted no-bg";
-    ViewBag.Title = HtmlLocalizer["Privacy"].Value;
 }
 
 <div class="container">
@@ -31,37 +30,16 @@
         if (Model.Consents.Any())
         {
             var routeData = new Dictionary<string, string> { { "returnUrl", Model.PrivacyPageUrl } };
-            <form asp-antiforgery="true" method="post">
+            <form asp-controller="DancingGoatPrivacy" asp-action="Revoke" asp-all-route-data="routeData" asp-antiforgery="true" method="post">
                 @foreach (var consent in Model.Consents)
                 {
                     <div class="consent-item">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-10">
                                 <h3 class="consent-heading">@consent.Title</h3>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit"
-                                        name="consentName"
-                                        value="@consent.Name"
-                                        asp-action="@(consent.Agreed ? "Revoke" : "Agree")"
-                                        asp-all-route-data="routeData"
-                                        asp-controller="DancingGoatPrivacy"
-                                        class="btn btn-primary">
-                                    @HtmlLocalizer[consent.Agreed ? "Revoke" : "Agree"]
-                                </button>
-                            </div>
-
-                            <div class="col-md-2">
-                                <button type="submit"
-                                        name="consentName"
-                                        value="@consent.Name"
-                                        asp-action="@(consent.Agreed ? "Revoke" : "Agree")"
-                                        asp-all-route-data="routeData"
-                                        asp-controller="DancingGoatPrivacy"
-                                        class="btn btn-primary"
-                                        onclick="asyncSubmit(event)">
-                                    @HtmlLocalizer[consent.Agreed ? "Revoke" : "Agree"] Async
-                                </button>
+                                <button type="submit" name="consentName" value="@consent.Name" class="btn btn-primary">@HtmlLocalizer["Revoke"]</button>
                             </div>
                         </div>
                         <div class="row">
@@ -77,27 +55,3 @@
         }
     }
 </div>
-
-<script>
-    function asyncSubmit(e){
-        e.preventDefault();
-        const btn = e.target;
-        const form = btn.closest("form");
-        const $submitBtn = $(btn);
-        const formData = new FormData(form);
-        formData.append(btn.name, btn.value);
-
-        $.ajax({
-            method: $submitBtn.attr("formmethod") || form.method || "POST",
-            url: $submitBtn.attr("formAction") || form.action,
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data, status, xhr) {
-                window.xperience.tagManager.updateCodeSnippets()
-
-                btn.innerText = btn.innerText === "AGREE ASYNC" ? "REVOKE ASYNC" : "AGREE ASYNC";
-            }
-        });
-    }
-</script>
