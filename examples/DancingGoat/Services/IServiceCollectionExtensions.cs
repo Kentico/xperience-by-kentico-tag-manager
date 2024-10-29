@@ -1,7 +1,11 @@
 ﻿using DancingGoat.Models;
 using DancingGoat.ViewComponents;
 
+using Kentico.OnlineMarketing.Web.Mvc;
+
 using Microsoft.Extensions.DependencyInjection;
+
+using Samples.DancingGoat;
 
 namespace DancingGoat
 {
@@ -14,8 +18,9 @@ namespace DancingGoat
         {
             AddViewComponentServices(services);
             AddRepositories(services);
-            
+
             services.AddSingleton<ICurrentWebsiteChannelPrimaryLanguageRetriever, CurrentWebsiteChannelPrimaryLanguageRetriever>();
+            services.AddSingleton<IEmailActivityTrackingEvaluator, EmailActivityTrackingEvaluator>();
         }
 
 
@@ -27,10 +32,15 @@ namespace DancingGoat
             services.AddSingleton<ArticlePageRepository>();
             services.AddSingleton<ArticlesSectionRepository>();
             services.AddSingleton<ConfirmationPageRepository>();
-            services.AddSingleton<CoffeeRepository>();
             services.AddSingleton<ImageRepository>();
             services.AddSingleton<CafeRepository>();
             services.AddSingleton<NavigationItemRepository>();
+            services.AddSingleton<ContactsPageRepository>();
+            services.AddSingleton<PrivacyPageRepository>();
+            services.AddSingleton<LandingPageRepository>();
+            services.AddSingleton<ProductSectionRepository>();
+            services.AddSingleton<ProductPageRepository>();
+            services.AddSingleton<ProductRepository>();
         }
 
 
