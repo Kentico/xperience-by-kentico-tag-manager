@@ -15,7 +15,7 @@
   "dependencies": {
     "@kentico/xperience-admin-base": "^29.5.3",
     "@kentico/xperience-admin-components": "^29.5.3",
-    "html-react-parser": "^5.1.13",
+    "html-react-parser": "^5.1.18",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-select": "^5.8.1"
