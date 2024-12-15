@@ -1,5 +1,4 @@
 using System.Data;
-using System.Runtime.Serialization;
 
 using CMS;
 using CMS.DataEngine;
@@ -17,7 +16,7 @@ namespace Kentico.Xperience.TagManager.Admin;
 /// Data container class for <see cref="ChannelCodeSnippetItemInfo"/>.
 /// </summary>
 [Serializable]
-public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippetItemInfo, IChannelCodeSnippetItemInfoProvider>
+public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippetItemInfo, IInfoProvider<ChannelCodeSnippetItemInfo>>
 {
     /// <summary>
     /// Object type.
@@ -28,7 +27,7 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
     /// <summary>
     /// Type information.
     /// </summary>
-    public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(ChannelCodeSnippetItemInfoProvider), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippetItem", nameof(ChannelCodeSnippetItemID), nameof(ChannelCodeSnippetItemLastModified), nameof(ChannelCodeSnippetItemGuid), null, nameof(ChannelCodeSnippetItemName), null, null, null)
+    public static readonly ObjectTypeInfo TYPEINFO = new ObjectTypeInfo(typeof(IInfoProvider<ChannelCodeSnippetItemInfo>), OBJECT_TYPE, "KenticoTagManager.ChannelCodeSnippetItem", nameof(ChannelCodeSnippetItemID), nameof(ChannelCodeSnippetItemLastModified), nameof(ChannelCodeSnippetItemGuid), null, nameof(ChannelCodeSnippetItemName), null, null, null)
     {
         TouchCacheDependencies = true,
         ContinuousIntegrationSettings =
@@ -188,17 +187,6 @@ public partial class ChannelCodeSnippetItemInfo : AbstractInfo<ChannelCodeSnippe
     protected override void SetObject()
     {
         Provider.Set(this);
-    }
-
-
-    /// <summary>
-    /// Constructor for de-serialization.
-    /// </summary>
-    /// <param name="info">Serialization info.</param>
-    /// <param name="context">Streaming context.</param>
-    protected ChannelCodeSnippetItemInfo(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
     }
 
 

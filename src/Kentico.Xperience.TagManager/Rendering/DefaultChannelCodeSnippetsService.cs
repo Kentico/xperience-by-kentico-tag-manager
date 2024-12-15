@@ -3,6 +3,7 @@
 using CMS.Base;
 using CMS.ContactManagement;
 using CMS.ContentEngine;
+using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.Helpers;
 using CMS.Websites;
@@ -17,14 +18,14 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
 {
     private readonly IConsentAgreementService consentAgreementService;
     private readonly IWebsiteChannelContext channelContext;
-    
-    private readonly IChannelCodeSnippetItemInfoProvider codeSnippetInfoProvider;
+
+    private readonly IInfoProvider<ChannelCodeSnippetItemInfo> codeSnippetInfoProvider;
     private readonly IProgressiveCache cache;
 
     public DefaultChannelCodeSnippetsService(
         IConsentAgreementService consentAgreementService,
         IWebsiteChannelContext channelContext,
-        IChannelCodeSnippetItemInfoProvider codeSnippetInfoProvider,
+        IInfoProvider<ChannelCodeSnippetItemInfo> codeSnippetInfoProvider,
         IProgressiveCache cache)
     {
         this.consentAgreementService = consentAgreementService;
