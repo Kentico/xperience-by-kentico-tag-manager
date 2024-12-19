@@ -1,4 +1,5 @@
-﻿using CMS.Membership;
+﻿using CMS.DataEngine;
+using CMS.Membership;
 
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
@@ -30,7 +31,12 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
                 return model;
             }
 
-            var info = channelCodeSnippetInfoProvider.Get(ObjectID);
+            var info = channelCodeSnippetInfoProvider
+                .Get()
+                .WhereEquals(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID), ObjectID)
+                .GetEnumerableTypedResult()
+                .Single();
+
             if (info == null)
             {
                 return new CodeSnippetConfigurationModel();
@@ -53,7 +59,7 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
         }
     }
 
-    private readonly IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider;
+    private readonly IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
     [PageParameter(typeof(IntPageModelBinder))]
@@ -62,7 +68,7 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
     public CodeSnippetEditPage(
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
-        IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider,
+        IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
     {
@@ -96,7 +102,11 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
         CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
-        var info = await channelCodeSnippetInfoProvider.GetAsync(ObjectID);
+        var info = (await channelCodeSnippetInfoProvider
+            .Get()
+            .WhereEquals(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID), ObjectID)
+            .GetEnumerableTypedResultAsync())
+            .Single();
 
         model.MapToChannelCodeSnippetInfo(info);
 

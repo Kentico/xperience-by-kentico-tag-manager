@@ -13,9 +13,10 @@
     "node": ">=20.11.0 <21"
   },
   "dependencies": {
-    "@kentico/xperience-admin-base": "^29.5.3",
-    "@kentico/xperience-admin-components": "^29.5.3",
+    "@kentico/xperience-admin-base": "^30.0.0",
+    "@kentico/xperience-admin-components": "^30.0.0",
     "html-react-parser": "^5.1.13",
+    "latest-version": "^9.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-select": "^5.8.1"
@@ -27,7 +28,7 @@
     "@babel/preset-env": "7.23.9",
     "@babel/preset-react": "7.23.3",
     "@babel/preset-typescript": "7.23.3",
-    "@kentico/xperience-webpack-config": "29.5.3",
+    "@kentico/xperience-webpack-config": "30.0.0",
     "@types/react": "18.2.58",
     "@types/react-dom": "18.2.19",
     "@typescript-eslint/eslint-plugin": "6.20.0",

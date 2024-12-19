@@ -1,4 +1,5 @@
-﻿using CMS.Membership;
+﻿using CMS.DataEngine;
+using CMS.Membership;
 
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.Forms;
@@ -21,14 +22,14 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
 {
     private CodeSnippetConfigurationModel? model;
     protected override CodeSnippetConfigurationModel Model => model ??= new CodeSnippetConfigurationModel();
-    private readonly IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider;
+    private readonly IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider;
     private readonly IPageLinkGenerator pageLinkGenerator;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
     public CodeSnippetCreatePage(
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
-        IChannelCodeSnippetItemInfoProvider channelCodeSnippetInfoProvider,
+        IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider,
         IPageLinkGenerator pageLinkGenerator,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
