@@ -110,7 +110,7 @@ internal class CodeSnippetEditPage : ModelEditPage<CodeSnippetConfigurationModel
 
         model.MapToChannelCodeSnippetInfo(info);
 
-        channelCodeSnippetInfoProvider.Set(info);
+        await channelCodeSnippetInfoProvider.SetAsync(info);
 
         return await base.ProcessFormData(model, formItems);
     }
