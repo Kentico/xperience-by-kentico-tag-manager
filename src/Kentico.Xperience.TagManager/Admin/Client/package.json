@@ -13,7 +13,7 @@
     "node": ">=20.11.0 <21"
   },
   "dependencies": {
-    "@kentico/xperience-admin-base": "^30.0.0",
+    "@kentico/xperience-admin-base": "^30.3.0",
     "@kentico/xperience-admin-components": "^30.0.0",
     "html-react-parser": "^5.1.13",
     "latest-version": "^9.0.0",
