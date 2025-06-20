@@ -66,9 +66,9 @@ namespace DancingGoat.Models
 
 
 		/// <summary>
-		/// ArticleRelatedArticles.
+		/// ArticleRelatedPages.
 		/// </summary>
-		public IEnumerable<WebPageRelatedItem> ArticleRelatedArticles { get; set; }
+		public IEnumerable<IWebPageFieldsSource> ArticleRelatedPages { get; set; }
 
 
 		/// <summary>

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using CMS.Websites;
 
 namespace DancingGoat.Models
 {
-    public record ArticleDetailViewModel(string Title, string TeaserUrl, string Summary, string Text, DateTime PublicationDate, Guid Guid, bool IsSecured, string Url, IEnumerable<RelatedArticleViewModel> RelatedArticles)
+    public record ArticleDetailViewModel(string Title, string TeaserUrl, string Summary, string Text, DateTime PublicationDate, Guid Guid, bool IsSecured, string Url, IEnumerable<RelatedPageViewModel> RelatedPages)
         : IWebPageBasedViewModel
     {
         /// <inheritdoc/>
@@ -17,21 +16,16 @@ namespace DancingGoat.Models
         /// <summary>
         /// Validates and maps <see cref="ArticlePage"/> to a <see cref="ArticleDetailViewModel"/>.
         /// </summary>
-        public static async Task<ArticleDetailViewModel> GetViewModel(ArticlePage articlePage, string languageName, ArticlePageRepository articlePageRepository, IWebPageUrlRetriever urlRetriever)
+        public static ArticleDetailViewModel GetViewModel(ArticlePage articlePage)
         {
             var teaser = articlePage.ArticlePageTeaser.FirstOrDefault();
 
-            var relatedArticles = await articlePageRepository
-                .GetArticles(articlePage.ArticleRelatedArticles.Select(article => article.WebPageGuid).ToList(), languageName);
+            var relatedPageViewModels = new List<RelatedPageViewModel>();
 
-            var relatedArticlesViewModels = new List<RelatedArticleViewModel>();
-
-            foreach (var relatedArticle in relatedArticles)
+            foreach (var relatedPage in articlePage.ArticleRelatedPages)
             {
-                relatedArticlesViewModels.Add(await RelatedArticleViewModel.GetViewModel(relatedArticle, urlRetriever, languageName));
+                relatedPageViewModels.Add(RelatedPageViewModel.GetViewModel(relatedPage));
             }
-
-            var url = await urlRetriever.Retrieve(articlePage, languageName);
 
             return new ArticleDetailViewModel(
                 articlePage.ArticleTitle,
@@ -41,8 +35,8 @@ namespace DancingGoat.Models
                 articlePage.ArticlePagePublishDate,
                 articlePage.SystemFields.ContentItemGUID,
                 articlePage.SystemFields.ContentItemIsSecured,
-                url.RelativePath,
-                relatedArticlesViewModels)
+                articlePage.GetUrl().RelativePath,
+                relatedPageViewModels)
             {
                 WebPage = articlePage
             };

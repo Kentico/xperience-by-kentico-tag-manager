@@ -30,6 +30,7 @@
     <PackageReference Include="kentico.xperience.imageprocessing" />
     <PackageReference Include="kentico.xperience.webapp" />
     <PackageReference Include="Kentico.Xperience.TagManager" Condition="'$(LOCAL_NUGET)' == 'true'" />
+    <PackageReference Include="Kentico.Xperience.Mjml" />
     <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 import { type FormComponentProps } from '@kentico/xperience-admin-base';
 import Parse from 'html-react-parser';
 import React from 'react';
-import Select, { components, type ActionMeta, type OptionProps, type SingleValue, type SingleValueProps, type StylesConfig } from 'react-select';
+import Select, { type ActionMeta, type OptionProps, type SingleValue, type SingleValueProps, type StylesConfig, components} from 'react-select';
 
 export interface TagManagerSnippetDto {
     displayName: string;
@@ -47,9 +47,13 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
         icon: snippet.icon,
     }));
 
+    const safeParse = (html: string): React.ReactNode => {
+        return (Parse as (input: string) => React.ReactNode)(html);
+    };
+
     const CustomSingleValue = ({ data }: SingleValueProps<OptionType>): JSX.Element => (
         <div style={singleValueStyle} className="css-1dimb5e-singleValue">
-            {data.icon !== '' && data.icon !== null ? Parse(data.icon) : ''}
+            {data.icon ? safeParse(data.icon) : ''}
             {data.label}
         </div>
     );
@@ -57,7 +61,7 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
     const CustomOption = (props: OptionProps<OptionType, false>): JSX.Element => (
         <components.Option {...props}>
             <div style={badgeStyle} className="css-1dimb5e-singleValue">
-                {props.data.icon !== '' && props.data.icon !== null ? Parse(props.data.icon) : ''}
+                {props.data.icon ? safeParse(props.data.icon) : ''}
                 {props.data.label}
             </div>
         </components.Option>
@@ -80,6 +84,7 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
         }
     }
 
+    /* eslint-disable @typescript-eslint/naming-convention */
     const customStyle: StylesConfig<OptionType> = {
         control: (styles, { isFocused }) => ({
             ...styles,
@@ -114,6 +119,7 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
             transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)'
         })
     };
+    /* eslint-enable @typescript-eslint/naming-convention */
 
     return (
         <div className="container___zbhlz">
