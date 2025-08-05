@@ -141,3 +141,7 @@ segments_2i
 
 **/CMSModules/WebFarm/*
 
+# MCP server definitions
+mcp.json
+claude_desktop_config.json
+mcp_config.json
