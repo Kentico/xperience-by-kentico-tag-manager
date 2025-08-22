@@ -43,12 +43,11 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                     [
                         $"{ChannelCodeSnippetItemInfo.OBJECT_TYPE}|all",
                         $"{ChannelInfo.OBJECT_TYPE}|all",
-                        $"{WebsiteChannelInfo.OBJECT_TYPE}|all",
+                        $"{WebsiteChannelInfo.OBJECT_TYPE}|byid|{channelContext.WebsiteChannelID}",
                         $"{ContactInfo.OBJECT_TYPE}|byid|{contact?.ContactID}|children|{ConsentAgreementInfo.OBJECT_TYPE}",
                     ]);
-
             return GetCodeSnippetsInternal();
-        }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(DefaultChannelCodeSnippetsService)}.{nameof(GetConsentedCodeSnippets)}|{contact?.ContactID}"));
+        }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(DefaultChannelCodeSnippetsService)}.{nameof(GetConsentedCodeSnippets)}|{contact?.ContactID}|{channelContext.WebsiteChannelID}"));
 
         async Task<ILookup<CodeSnippetLocations, CodeSnippetDto>> GetCodeSnippetsInternal()
         {
