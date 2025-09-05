@@ -5,7 +5,7 @@
     <Authors>$(Company)</Authors>
     <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
     <Trademark>$(Company)™</Trademark>
-    <VersionPrefix>4.2.1</VersionPrefix>
+    <VersionPrefix>4.2.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
@@ -32,7 +32,7 @@
     <CopyDebugSymbolFilesFromPackages>true</CopyDebugSymbolFilesFromPackages>
     <NoWarn>$(NoWarn);1591;S3267</NoWarn>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-	<HotChocolateImplicitUsings>disable</HotChocolateImplicitUsings>
+    <HotChocolateImplicitUsings>disable</HotChocolateImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(Configuration) == 'Release' ">
