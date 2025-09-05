@@ -85,7 +85,7 @@ internal class CodeSnippetListingPage : ListingPage
                 sortable: false,
                 formatter: (value, _) =>
                     value is null or 0
-                        ? LocalizationService.GetString("No consent needed")
+                        ? LocalizationService.GetString("customchannelsettings.codesnippets.noconsentneeded")
                         : allConsents.FirstOrDefault(c => c.ConsentID == (int)value)?.ConsentDisplayName ?? "")
             .AddColumn(
                 nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemEnable),
