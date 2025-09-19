@@ -105,7 +105,7 @@ public sealed class OrderService
                 OrderAddressCountryID = customerDto.AddressCountryId,
                 OrderAddressStateID = customerDto.AddressStateId,
                 OrderAddressOrderID = order.OrderID,
-                OrderAddressType = "Billing",
+                OrderAddressType = OrderAddressType.Billing,
             };
             await orderAddressInfoProvider.SetAsync(orderAddress);
 
@@ -120,7 +120,7 @@ public sealed class OrderService
                 var orderItem = new OrderItemInfo()
                 {
                     OrderItemOrderID = order.OrderID,
-                    OrderItemUnitCount = item.Quantity,
+                    OrderItemQuantity = item.Quantity,
                     OrderItemUnitPrice = unitPrice,
                     OrderItemTotalPrice = CalculationService.CalculateItemPrice(item.Quantity, unitPrice),
                     OrderItemSKU = variantSKU ?? (product as IProductSKU).ProductSKUCode,
