@@ -13,10 +13,9 @@ internal class IntercomSnippetFactory : AbstractSnippetFactory
         new(TAG_TYPE_NAME, TAG_DISPLAY_NAME, TAG_APPSETTINGS_NAME, TAG_SVG_ICON);
 
     public override IEnumerable<CodeSnippet> CreateCodeSnippets(string thirdPartyIdentifier) =>
-        new List<CodeSnippet>
-        {
+        [
             new (GenerateScript(thirdPartyIdentifier), CodeSnippetLocations.HeadBottom),
-        };
+        ];
 
     private static string GenerateScript(string identifier) =>
     $$"""

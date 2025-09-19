@@ -13,10 +13,9 @@ internal class GoogleAnalyticsSnippetFactory : AbstractSnippetFactory
         new(TAG_TYPE_NAME, TAG_DISPLAY_NAME, TAG_APPSETTINGS_NAME, SVG_ICON_CODE);
 
     public override IEnumerable<CodeSnippet> CreateCodeSnippets(string thirdPartyIdentifier) =>
-        new List<CodeSnippet>
-        {
+        [
             new (GenerateScript(thirdPartyIdentifier), CodeSnippetLocations.HeadBottom),
-        };
+        ];
 
     private static string GenerateScript(string identifier) =>
       $$"""
