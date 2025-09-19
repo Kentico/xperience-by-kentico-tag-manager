@@ -13,11 +13,10 @@ internal class GoogleTagManagerSnippetFactory : AbstractSnippetFactory
         new(TAG_TYPE_NAME, TAG_DISPLAY_NAME, TAG_APPSETTINGS_NAME, TAG_ICON_SVG);
 
     public override IEnumerable<CodeSnippet> CreateCodeSnippets(string thirdPartyIdentifier) =>
-        new List<CodeSnippet>
-        {
+        [
             new (GenerateGtmHeadScript(thirdPartyIdentifier), CodeSnippetLocations.HeadBottom),
             new (GenerateGtmBodyScript(thirdPartyIdentifier), CodeSnippetLocations.BodyTop)
-        };
+        ];
 
     private static string GenerateGtmHeadScript(string gtmId) =>
       $$"""

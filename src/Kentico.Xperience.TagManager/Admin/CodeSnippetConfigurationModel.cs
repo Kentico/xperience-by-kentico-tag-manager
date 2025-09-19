@@ -4,7 +4,6 @@ using CMS.DataProtection;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
 using Kentico.Xperience.Admin.Base.Forms;
 using Kentico.Xperience.TagManager.Admin.Components;
-using Kentico.Xperience.TagManager.Rendering;
 using Kentico.Xperience.TagManager.Snippets;
 
 namespace Kentico.Xperience.TagManager.Admin;

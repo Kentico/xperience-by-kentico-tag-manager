@@ -19,5 +19,5 @@ public abstract class AbstractSnippetFactory : ISnippetFactory
 {
     public virtual CodeSnippetSettings CreateCodeSnippetSettings() => new("", "", "");
 
-    public virtual IEnumerable<CodeSnippet> CreateCodeSnippets(string thirdPartyIdentifier) => new List<CodeSnippet>();
+    public virtual IEnumerable<CodeSnippet> CreateCodeSnippets(string thirdPartyIdentifier) => [];
 }

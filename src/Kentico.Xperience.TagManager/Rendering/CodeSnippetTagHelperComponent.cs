@@ -123,7 +123,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
         {
             bodyTopSnippets = bodyTopSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
                 CodeSnippetAdministrationDisplayMode.PreviewOnly);
-            
+
             bodyBottomSnippets = bodyBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
                 CodeSnippetAdministrationDisplayMode.PreviewOnly);
         }
