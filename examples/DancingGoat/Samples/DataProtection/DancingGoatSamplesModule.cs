@@ -13,6 +13,8 @@ using CMS.Helpers;
 using CMS.Membership;
 using CMS.OnlineForms;
 
+#pragma warning disable CS0618 // 'AccountContactInfo' and 'AccountInfo' are obsolete but still functional in this sample
+
 using DancingGoat.Helpers.Generator;
 
 using Kentico.Web.Mvc;

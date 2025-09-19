@@ -21,6 +21,7 @@ public class TagManagerSnippetTypeDropdownComponentClientProperties : FormCompon
     public IEnumerable<TagManagerSnippetDto>? SnippetTypes { get; set; }
 }
 
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 public sealed class TagManagerSnippetTypeDropdownComponentAttribute : FormComponentAttribute
 {
 }

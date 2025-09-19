@@ -7,6 +7,8 @@ using CMS.DataProtection;
 using CMS.Globalization;
 using CMS.OnlineForms;
 
+#pragma warning disable CS0618 // 'AccountContactInfo' and 'AccountInfo' are obsolete but still functional in this sample
+
 namespace Samples.DancingGoat
 {
     /// <summary>
