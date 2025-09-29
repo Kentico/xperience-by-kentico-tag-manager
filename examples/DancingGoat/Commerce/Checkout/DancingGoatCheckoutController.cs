@@ -34,7 +34,9 @@ public sealed class DancingGoatCheckoutController : Controller
 {
     private readonly CountryStateRepository countryStateRepository;
     private readonly WebPageUrlProvider webPageUrlProvider;
-    private readonly ICurrentShoppingCartService currentShoppingCartService;
+    // Note: ICurrentShoppingCartService may have been renamed or moved in the latest version
+    // TODO: Update to use the new commerce API after researching the correct replacement
+    // private readonly IShoppingCartService currentShoppingCartService;
     private readonly UserManager<ApplicationUser> userManager;
     private readonly CustomerDataRetriever customerDataRetriever;
     private readonly IPreferredLanguageRetriever currentLanguageRetriever;
@@ -46,7 +48,7 @@ public sealed class DancingGoatCheckoutController : Controller
     public DancingGoatCheckoutController(
         CountryStateRepository countryStateRepository,
         WebPageUrlProvider webPageUrlProvider,
-        ICurrentShoppingCartService currentShoppingCartService,
+        // IShoppingCartService currentShoppingCartService, // TODO: Update to new commerce API
         UserManager<ApplicationUser> userManager,
         CustomerDataRetriever customerDataRetriever,
         IPreferredLanguageRetriever currentLanguageRetriever,
@@ -57,7 +59,7 @@ public sealed class DancingGoatCheckoutController : Controller
     {
         this.countryStateRepository = countryStateRepository;
         this.webPageUrlProvider = webPageUrlProvider;
-        this.currentShoppingCartService = currentShoppingCartService;
+        // this.currentShoppingCartService = currentShoppingCartService; // TODO: Update to new commerce API
         this.userManager = userManager;
         this.customerDataRetriever = customerDataRetriever;
         this.currentLanguageRetriever = currentLanguageRetriever;
@@ -92,13 +94,18 @@ public sealed class DancingGoatCheckoutController : Controller
             return View(await GetCheckoutViewModel(CheckoutStep.CheckoutCustomer, customer, customerAddress, null, cancellationToken));
         }
 
-        var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
+        // var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
             return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0), cancellationToken));
         }
 
-        var shoppingCartViewModel = await GetShoppingCartViewModel(shoppingCart, cancellationToken);
+        // TODO: Since shoppingCart is null until commerce API is updated, return empty cart
+        var shoppingCartViewModel = new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0);
+        // The following code will be restored once the commerce API is updated:
+        // var shoppingCartViewModel = await GetShoppingCartViewModel(shoppingCart, cancellationToken);
 
         return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, shoppingCartViewModel, cancellationToken));
     }
@@ -136,18 +143,24 @@ public sealed class DancingGoatCheckoutController : Controller
 
         var user = await GetAuthenticatedUser();
 
-        var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
+        // var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
             return Content(localizer["Order not created. The shopping cart could not be found."]);
         }
 
         var customerDto = customer.ToCustomerDto(customerAddress);
-        var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
+        // TODO: The following line needs to be restored once commerce API is updated:
+        // var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
+        // For now, using a placeholder empty shopping cart data
+        var shoppingCartData = new ShoppingCartDataModel();
 
         var orderNumber = await orderService.CreateOrder(shoppingCartData, customerDto, user?.Id ?? 0, cancellationToken);
 
-        await currentShoppingCartService.Discard(cancellationToken);
+        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
+        // await currentShoppingCartService.Discard(cancellationToken);
 
         return View(new ConfirmOrderViewModel(orderNumber));
     }

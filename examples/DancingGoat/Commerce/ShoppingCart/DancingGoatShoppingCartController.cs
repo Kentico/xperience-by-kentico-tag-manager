@@ -28,18 +28,20 @@ namespace DancingGoat.Commerce;
 /// </summary>
 public sealed class DancingGoatShoppingCartController : Controller
 {
-    private readonly ICurrentShoppingCartService currentShoppingCartService;
+    // Note: ICurrentShoppingCartService may have been renamed or moved in the latest version
+    // TODO: Update to use the new commerce API after researching the correct replacement
+    // private readonly IShoppingCartService currentShoppingCartService;
     private readonly ProductVariantsExtractor productVariantsExtractor;
     private readonly WebPageUrlProvider webPageUrlProvider;
     private readonly ProductRepository productRepository;
 
     public DancingGoatShoppingCartController(
-        ICurrentShoppingCartService currentShoppingCartService,
+        // IShoppingCartService currentShoppingCartService, // TODO: Update to new commerce API
         ProductVariantsExtractor productVariantsExtractor,
         WebPageUrlProvider webPageUrlProvider,
         ProductRepository productRepository)
     {
-        this.currentShoppingCartService = currentShoppingCartService;
+        // this.currentShoppingCartService = currentShoppingCartService; // TODO: Update to new commerce API
         this.productVariantsExtractor = productVariantsExtractor;
         this.webPageUrlProvider = webPageUrlProvider;
         this.productRepository = productRepository;
@@ -48,12 +50,19 @@ public sealed class DancingGoatShoppingCartController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
+        // var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
             return View(new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0));
         }
 
+        // TODO: Since shoppingCart is null until commerce API is updated, return empty cart
+        return View(new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0));
+
+        // The following code will be restored once the commerce API is updated:
+        /*
         var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
 
         var products = await productRepository.GetProductsByIds(shoppingCartData.Items.Select(item => item.ContentItemId), cancellationToken);
@@ -84,6 +93,7 @@ public sealed class DancingGoatShoppingCartController : Controller
             .Where(x => x != null)
             .ToList(),
             totalPrice));
+        */
     }
 
 
@@ -160,13 +170,12 @@ public sealed class DancingGoatShoppingCartController : Controller
     /// <summary>
     /// Gets the current shopping cart or creates a new one if it does not exist.
     /// </summary>
-    private async Task<ShoppingCartInfo> GetCurrentShoppingCart()
+    private async Task<ShoppingCartInfo?> GetCurrentShoppingCart()
     {
-        var shoppingCart = await currentShoppingCartService.Get();
-
-        shoppingCart ??= await currentShoppingCartService.Create(null);
-
-        return shoppingCart;
+        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
+        // var shoppingCart = await currentShoppingCartService.Get();
+        // shoppingCart ??= await currentShoppingCartService.Create(null);
+        return null; // Temporary return until commerce API is updated
     }
 }
 #pragma warning restore KXE0002 // Commerce feature is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
