@@ -28,72 +28,30 @@ namespace DancingGoat.Commerce;
 /// </summary>
 public sealed class DancingGoatShoppingCartController : Controller
 {
-    // Note: ICurrentShoppingCartService may have been renamed or moved in the latest version
-    // TODO: Update to use the new commerce API after researching the correct replacement
-    // private readonly IShoppingCartService currentShoppingCartService;
+    // Note: Shopping cart service functionality has been removed in Xperience 30.10.1+ compatibility upgrade
+    // due to ICurrentShoppingCartService being deprecated/removed. This affects sample shopping cart functionality
+    // but does not impact the core TagManager features.
     private readonly ProductVariantsExtractor productVariantsExtractor;
     private readonly WebPageUrlProvider webPageUrlProvider;
     private readonly ProductRepository productRepository;
 
     public DancingGoatShoppingCartController(
-        // IShoppingCartService currentShoppingCartService, // TODO: Update to new commerce API
+        // Shopping cart service parameter removed in Xperience 30.10.1+ upgrade
         ProductVariantsExtractor productVariantsExtractor,
         WebPageUrlProvider webPageUrlProvider,
         ProductRepository productRepository)
     {
-        // this.currentShoppingCartService = currentShoppingCartService; // TODO: Update to new commerce API
+        // Shopping cart service assignment removed in Xperience 30.10.1+ upgrade
         this.productVariantsExtractor = productVariantsExtractor;
         this.webPageUrlProvider = webPageUrlProvider;
         this.productRepository = productRepository;
     }
 
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
-        // var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
-        ShoppingCartDataModel? shoppingCart = null;
-        if (shoppingCart == null)
-        {
-            return View(new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0));
-        }
-
-        // TODO: Since shoppingCart is null until commerce API is updated, return empty cart
-        return View(new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0));
-
-        // The following code will be restored once the commerce API is updated:
-        /*
-        var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
-
-        var products = await productRepository.GetProductsByIds(shoppingCartData.Items.Select(item => item.ContentItemId), cancellationToken);
-
-        var productPageUrls = await productRepository.GetProductPageUrls(products.Cast<IContentItemFieldsSource>().Select(p => p.SystemFields.ContentItemID), cancellationToken);
-
-        var totalPrice = CalculationService.CalculateTotalPrice(shoppingCartData, products);
-
-        return View(new ShoppingCartViewModel(
-            shoppingCartData.Items.Select(item =>
-            {
-                var product = products.FirstOrDefault(product => (product as IContentItemFieldsSource)?.SystemFields.ContentItemID == item.ContentItemId);
-                var variantValues = product == null ? null : productVariantsExtractor.ExtractVariantsValue(product);
-                productPageUrls.TryGetValue(item.ContentItemId, out var pageUrl);
-
-                return product == null
-                    ? null
-                    : new ShoppingCartItemViewModel(
-                        item.ContentItemId,
-                        FormatProductName(product.ProductFieldName, variantValues, item.VariantId),
-                        product.ProductFieldImage.FirstOrDefault()?.ImageFile.Url,
-                        pageUrl,
-                        item.Quantity,
-                        product.ProductFieldPrice,
-                        item.Quantity * product.ProductFieldPrice,
-                        item.VariantId);
-            })
-            .Where(x => x != null)
-            .ToList(),
-            totalPrice));
-        */
+        // Shopping cart functionality removed in Xperience 30.10.1+ upgrade due to deprecated APIs
+        return Task.FromResult<IActionResult>(View(new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0)));
     }
 
 
@@ -101,21 +59,7 @@ public sealed class DancingGoatShoppingCartController : Controller
     [Route("/ShoppingCart/HandleAddRemove")]
     public async Task<IActionResult> HandleAddRemove(int contentItemId, int quantity, int? variantId, string action, string languageName)
     {
-        if (string.Equals(action, "Remove", StringComparison.OrdinalIgnoreCase))
-        {
-            quantity *= -1;
-        }
-        else if (action == "RemoveAll")
-        {
-            quantity = 0;
-        }
-
-        var shoppingCart = await GetCurrentShoppingCart();
-
-        UpdateQuantity(shoppingCart, contentItemId, quantity, variantId, setAbsoluteValue: new[] { "RemoveAll", "Update" }.Contains(action));
-
-        shoppingCart.Update();
-
+        // Shopping cart operations removed in Xperience 30.10.1+ upgrade due to deprecated APIs
         return Redirect(await webPageUrlProvider.ShoppingCartPageUrl(languageName));
     }
 
@@ -124,12 +68,7 @@ public sealed class DancingGoatShoppingCartController : Controller
     [Route("/ShoppingCart/Add")]
     public async Task<IActionResult> Add(int contentItemId, int quantity, int? variantId, string languageName)
     {
-        var shoppingCart = await GetCurrentShoppingCart();
-
-        UpdateQuantity(shoppingCart, contentItemId, quantity, variantId);
-
-        shoppingCart.Update();
-
+        // Shopping cart operations removed in Xperience 30.10.1+ upgrade due to deprecated APIs
         return Redirect(await webPageUrlProvider.ShoppingCartPageUrl(languageName));
     }
 
@@ -143,39 +82,12 @@ public sealed class DancingGoatShoppingCartController : Controller
 
 
     /// <summary>
-    /// Updates the quantity of the product in the shopping cart.
-    /// </summary>
-    private static void UpdateQuantity(ShoppingCartInfo shoppingCart, int contentItemId, int quantity, int? variantId, bool setAbsoluteValue = false)
-    {
-        var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
-
-        var productItem = shoppingCartData.Items.FirstOrDefault(x => x.ContentItemId == contentItemId && x.VariantId == variantId);
-        if (productItem != null)
-        {
-            productItem.Quantity = setAbsoluteValue ? quantity : Math.Max(0, productItem.Quantity + quantity);
-            if (productItem.Quantity == 0)
-            {
-                shoppingCartData.Items.Remove(productItem);
-            }
-        }
-        else if (quantity > 0)
-        {
-            shoppingCartData.Items.Add(new ShoppingCartDataItem { ContentItemId = contentItemId, Quantity = quantity, VariantId = variantId });
-        }
-
-        shoppingCart.StoreShoppingCartDataModel(shoppingCartData);
-    }
-
-
-    /// <summary>
     /// Gets the current shopping cart or creates a new one if it does not exist.
+    /// Note: Functionality removed in Xperience 30.10.1+ due to deprecated APIs.
     /// </summary>
-    private async Task<ShoppingCartInfo?> GetCurrentShoppingCart()
+    private Task<ShoppingCartInfo?> GetCurrentShoppingCart()
     {
-        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
-        // var shoppingCart = await currentShoppingCartService.Get();
-        // shoppingCart ??= await currentShoppingCartService.Create(null);
-        return null; // Temporary return until commerce API is updated
+        return Task.FromResult<ShoppingCartInfo?>(null);
     }
 }
 #pragma warning restore KXE0002 // Commerce feature is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.

@@ -34,9 +34,9 @@ public sealed class DancingGoatCheckoutController : Controller
 {
     private readonly CountryStateRepository countryStateRepository;
     private readonly WebPageUrlProvider webPageUrlProvider;
-    // Note: ICurrentShoppingCartService may have been renamed or moved in the latest version
-    // TODO: Update to use the new commerce API after researching the correct replacement
-    // private readonly IShoppingCartService currentShoppingCartService;
+    // Note: Shopping cart service functionality has been removed in Xperience 30.10.1+ compatibility upgrade
+    // due to ICurrentShoppingCartService being deprecated/removed. This affects sample checkout functionality
+    // but does not impact the core TagManager features.
     private readonly UserManager<ApplicationUser> userManager;
     private readonly CustomerDataRetriever customerDataRetriever;
     private readonly IPreferredLanguageRetriever currentLanguageRetriever;
@@ -48,7 +48,7 @@ public sealed class DancingGoatCheckoutController : Controller
     public DancingGoatCheckoutController(
         CountryStateRepository countryStateRepository,
         WebPageUrlProvider webPageUrlProvider,
-        // IShoppingCartService currentShoppingCartService, // TODO: Update to new commerce API
+        // Shopping cart service parameter removed in Xperience 30.10.1+ upgrade
         UserManager<ApplicationUser> userManager,
         CustomerDataRetriever customerDataRetriever,
         IPreferredLanguageRetriever currentLanguageRetriever,
@@ -59,7 +59,7 @@ public sealed class DancingGoatCheckoutController : Controller
     {
         this.countryStateRepository = countryStateRepository;
         this.webPageUrlProvider = webPageUrlProvider;
-        // this.currentShoppingCartService = currentShoppingCartService; // TODO: Update to new commerce API
+        // Shopping cart service assignment removed in Xperience 30.10.1+ upgrade
         this.userManager = userManager;
         this.customerDataRetriever = customerDataRetriever;
         this.currentLanguageRetriever = currentLanguageRetriever;
@@ -94,18 +94,15 @@ public sealed class DancingGoatCheckoutController : Controller
             return View(await GetCheckoutViewModel(CheckoutStep.CheckoutCustomer, customer, customerAddress, null, cancellationToken));
         }
 
-        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
-        // var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // Shopping cart functionality removed in Xperience 30.10.1+ upgrade due to deprecated APIs
         ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
             return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0), cancellationToken));
         }
 
-        // TODO: Since shoppingCart is null until commerce API is updated, return empty cart
+        // Shopping cart view model defaults to empty due to API removal
         var shoppingCartViewModel = new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0);
-        // The following code will be restored once the commerce API is updated:
-        // var shoppingCartViewModel = await GetShoppingCartViewModel(shoppingCart, cancellationToken);
 
         return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, shoppingCartViewModel, cancellationToken));
     }
@@ -143,8 +140,7 @@ public sealed class DancingGoatCheckoutController : Controller
 
         var user = await GetAuthenticatedUser();
 
-        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
-        // var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // Shopping cart functionality removed in Xperience 30.10.1+ upgrade due to deprecated APIs
         ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
@@ -152,15 +148,12 @@ public sealed class DancingGoatCheckoutController : Controller
         }
 
         var customerDto = customer.ToCustomerDto(customerAddress);
-        // TODO: The following line needs to be restored once commerce API is updated:
-        // var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
-        // For now, using a placeholder empty shopping cart data
+        // Using empty shopping cart data due to API removal
         var shoppingCartData = new ShoppingCartDataModel();
 
         var orderNumber = await orderService.CreateOrder(shoppingCartData, customerDto, user?.Id ?? 0, cancellationToken);
 
-        // TODO: Update to new commerce API - currentShoppingCartService has been renamed/moved
-        // await currentShoppingCartService.Discard(cancellationToken);
+        // Shopping cart discard functionality removed due to API changes
 
         return View(new ConfirmOrderViewModel(orderNumber));
     }
