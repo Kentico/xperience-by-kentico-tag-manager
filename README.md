@@ -139,6 +139,10 @@ To see the guidelines for Contributing to Kentico open source software, please s
 
 Instructions and technical details for contributing to **this** project can be found in [Contributing Setup](./docs/Contributing-Setup.md).
 
+## Jira Integration
+
+This repository includes automated Jira integration that creates tasks in Jira Cloud when new GitHub issues are opened. See [Jira Integration](./docs/Jira-Integration.md) for setup instructions and configuration details.
+
 ## License
 
 Distributed under the MIT License. See [`LICENSE.md`](./LICENSE.md) for more information.
