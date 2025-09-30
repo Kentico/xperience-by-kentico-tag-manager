@@ -53,6 +53,9 @@ jobs:
                   "name": "${{ steps.extract-type.outputs.issue_type }}"
                 },
                 "summary": "[xperience-by-kentico-tag-manager] ${{ github.event.issue.title }}",
+                "assignee": {
+                  "accountId": "${{ secrets.JIRA_ASSIGNEE_ACCOUNT_ID }}"
+                },
                 "description": {
                   "type": "doc",
                   "version": 1,
