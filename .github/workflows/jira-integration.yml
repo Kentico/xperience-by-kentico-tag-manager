@@ -1,0 +1,76 @@
+name: "Jira Integration: Create Task from Issue"
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-jira-task:
+    name: Create Jira Task
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Extract issue type from labels
+        id: extract-type
+        run: |
+          # Extract issue type from GitHub labels
+          ISSUE_TYPE="Task"  # Default type
+          LABELS="${{ join(github.event.issue.labels.*.name, ',') }}"
+          
+          if [[ "$LABELS" == *"bug"* ]] || [[ "$LABELS" == *"Bug"* ]]; then
+            ISSUE_TYPE="Bug"
+          elif [[ "$LABELS" == *"feature"* ]] || [[ "$LABELS" == *"Feature"* ]] || [[ "$LABELS" == *"enhancement"* ]]; then
+            ISSUE_TYPE="Story"
+          elif [[ "$LABELS" == *"task"* ]] || [[ "$LABELS" == *"Task"* ]]; then
+            ISSUE_TYPE="Task"
+          fi
+          
+          echo "issue_type=$ISSUE_TYPE" >> $GITHUB_OUTPUT
+          echo "labels=$LABELS" >> $GITHUB_OUTPUT
+
+      - name: Create Jira Task
+        run: |
+          # Create Jira issue using REST API
+          ISSUE_DESCRIPTION="*GitHub Issue created by:* ${{ github.event.issue.user.login }}
+          *Repository:* ${{ github.repository }}
+          *Issue URL:* ${{ github.event.issue.html_url }}
+          *Labels:* ${{ steps.extract-type.outputs.labels }}
+          
+          ---
+          
+          ${{ github.event.issue.body }}"
+          
+          curl -X POST \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -u "${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }}" \
+            -d '{
+              "fields": {
+                "project": {
+                  "key": "${{ secrets.JIRA_PROJECT_KEY }}"
+                },
+                "issuetype": {
+                  "name": "${{ steps.extract-type.outputs.issue_type }}"
+                },
+                "summary": "[xperience-by-kentico-tag-manager] ${{ github.event.issue.title }}",
+                "assignee": {
+                  "accountId": "${{ secrets.JIRA_ASSIGNEE_ACCOUNT_ID }}"
+                },
+                "description": {
+                  "type": "doc",
+                  "version": 1,
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "'"${ISSUE_DESCRIPTION}"'"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }' \
+            "${{ secrets.JIRA_BASE_URL }}/rest/api/3/issue"
