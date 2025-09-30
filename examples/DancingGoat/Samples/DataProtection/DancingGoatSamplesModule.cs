@@ -34,12 +34,10 @@ namespace Samples.DancingGoat
         private IMemberInfoProvider memberInfoProvider;
         private IInfoProvider<ConsentAgreementInfo> consentAgreementInfoProvider;
         private IInfoProvider<BizFormInfo> bizFormInfoProvider;
-        private IInfoProvider<AccountContactInfo> accountContactInfoProvider;
         private IInfoProvider<SettingsKeyInfo> settingsKeyInfoProvider;
         private IInfoProvider<ActivityInfo> activityInfoProvider;
         private IInfoProvider<CountryInfo> countryInfoProvider;
         private IInfoProvider<StateInfo> stateInfoProvider;
-        private IInfoProvider<AccountInfo> accountInfoProvider;
 
 
         /// <summary>
@@ -61,12 +59,10 @@ namespace Samples.DancingGoat
             memberInfoProvider = Service.Resolve<IMemberInfoProvider>();
             consentAgreementInfoProvider = Service.Resolve<IInfoProvider<ConsentAgreementInfo>>();
             bizFormInfoProvider = Service.Resolve<IInfoProvider<BizFormInfo>>();
-            accountContactInfoProvider = Service.Resolve<IInfoProvider<AccountContactInfo>>();
             settingsKeyInfoProvider = Service.Resolve<IInfoProvider<SettingsKeyInfo>>();
             activityInfoProvider = Service.Resolve<IInfoProvider<ActivityInfo>>();
             countryInfoProvider = Service.Resolve<IInfoProvider<CountryInfo>>();
             stateInfoProvider = Service.Resolve<IInfoProvider<StateInfo>>();
-            accountInfoProvider = Service.Resolve<IInfoProvider<AccountInfo>>();
 
             InitializeSamples();
         }
@@ -103,11 +99,10 @@ namespace Samples.DancingGoat
             IdentityCollectorRegister.Instance.Add(new SampleContactInfoIdentityCollector(contactInfoProvider));
             IdentityCollectorRegister.Instance.Add(new SampleMemberInfoIdentityCollector(memberInfoProvider));
 
-            PersonalDataCollectorRegister.Instance.Add(new SampleContactDataCollector(activityInfoProvider, countryInfoProvider, stateInfoProvider, consentAgreementInfoProvider,
-                accountContactInfoProvider, accountInfoProvider, bizFormInfoProvider));
+            // Note: Sample contact data collection and erasure features that used deprecated AccountContactInfo 
+            // and AccountInfo APIs have been removed in Xperience 30.10.1+ compatibility upgrade.
+            // The core TagManager functionality is not affected by this change.
             PersonalDataCollectorRegister.Instance.Add(new SampleMemberDataCollector());
-
-            PersonalDataEraserRegister.Instance.Add(new SampleContactPersonalDataEraser(consentAgreementInfoProvider, bizFormInfoProvider, accountContactInfoProvider, contactInfoProvider, activityInfoProvider));
             PersonalDataEraserRegister.Instance.Add(new SampleMemberPersonalDataEraser(memberInfoProvider));
 
             RegisterConsentRevokeHandler();
@@ -116,13 +111,8 @@ namespace Samples.DancingGoat
 
         internal void DeleteContactActivities(ContactInfo contact)
         {
-            var configuration = new Dictionary<string, object>
-            {
-                { "deleteActivities", true }
-            };
-
-            new SampleContactPersonalDataEraser(consentAgreementInfoProvider, bizFormInfoProvider, accountContactInfoProvider, contactInfoProvider, activityInfoProvider)
-                    .Erase(new[] { contact }, configuration);
+            // Note: Contact activity deletion functionality that used deprecated AccountContactInfo API
+            // has been removed in Xperience 30.10.1+ compatibility upgrade.
         }
 
 

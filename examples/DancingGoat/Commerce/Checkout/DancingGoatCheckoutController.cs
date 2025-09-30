@@ -34,7 +34,9 @@ public sealed class DancingGoatCheckoutController : Controller
 {
     private readonly CountryStateRepository countryStateRepository;
     private readonly WebPageUrlProvider webPageUrlProvider;
-    private readonly ICurrentShoppingCartService currentShoppingCartService;
+    // Note: Shopping cart service functionality has been removed in Xperience 30.10.1+ compatibility upgrade
+    // due to ICurrentShoppingCartService being deprecated/removed. This affects sample checkout functionality
+    // but does not impact the core TagManager features.
     private readonly UserManager<ApplicationUser> userManager;
     private readonly CustomerDataRetriever customerDataRetriever;
     private readonly IPreferredLanguageRetriever currentLanguageRetriever;
@@ -46,7 +48,7 @@ public sealed class DancingGoatCheckoutController : Controller
     public DancingGoatCheckoutController(
         CountryStateRepository countryStateRepository,
         WebPageUrlProvider webPageUrlProvider,
-        ICurrentShoppingCartService currentShoppingCartService,
+        // Shopping cart service parameter removed in Xperience 30.10.1+ upgrade
         UserManager<ApplicationUser> userManager,
         CustomerDataRetriever customerDataRetriever,
         IPreferredLanguageRetriever currentLanguageRetriever,
@@ -57,7 +59,7 @@ public sealed class DancingGoatCheckoutController : Controller
     {
         this.countryStateRepository = countryStateRepository;
         this.webPageUrlProvider = webPageUrlProvider;
-        this.currentShoppingCartService = currentShoppingCartService;
+        // Shopping cart service assignment removed in Xperience 30.10.1+ upgrade
         this.userManager = userManager;
         this.customerDataRetriever = customerDataRetriever;
         this.currentLanguageRetriever = currentLanguageRetriever;
@@ -92,13 +94,15 @@ public sealed class DancingGoatCheckoutController : Controller
             return View(await GetCheckoutViewModel(CheckoutStep.CheckoutCustomer, customer, customerAddress, null, cancellationToken));
         }
 
-        var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // Shopping cart functionality removed in Xperience 30.10.1+ upgrade due to deprecated APIs
+        ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
             return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0), cancellationToken));
         }
 
-        var shoppingCartViewModel = await GetShoppingCartViewModel(shoppingCart, cancellationToken);
+        // Shopping cart view model defaults to empty due to API removal
+        var shoppingCartViewModel = new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0);
 
         return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, shoppingCartViewModel, cancellationToken));
     }
@@ -136,18 +140,20 @@ public sealed class DancingGoatCheckoutController : Controller
 
         var user = await GetAuthenticatedUser();
 
-        var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
+        // Shopping cart functionality removed in Xperience 30.10.1+ upgrade due to deprecated APIs
+        ShoppingCartDataModel? shoppingCart = null;
         if (shoppingCart == null)
         {
             return Content(localizer["Order not created. The shopping cart could not be found."]);
         }
 
         var customerDto = customer.ToCustomerDto(customerAddress);
-        var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
+        // Using empty shopping cart data due to API removal
+        var shoppingCartData = new ShoppingCartDataModel();
 
         var orderNumber = await orderService.CreateOrder(shoppingCartData, customerDto, user?.Id ?? 0, cancellationToken);
 
-        await currentShoppingCartService.Discard(cancellationToken);
+        // Shopping cart discard functionality removed due to API changes
 
         return View(new ConfirmOrderViewModel(orderNumber));
     }

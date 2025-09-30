@@ -24,7 +24,7 @@ public class PriceTagHelper : TagHelper
 
         if (decimal.TryParse(content, out var amount))
         {
-            output.Content.SetContent(priceFormatter.Format(amount, new PriceFormatConfiguration()));
+            output.Content.SetContent(priceFormatter.Format(amount, new PriceFormatContext()));
         }
         else
         {
