@@ -52,7 +52,7 @@ jobs:
                 "issuetype": {
                   "name": "${{ steps.extract-type.outputs.issue_type }}"
                 },
-                "summary": "${{ github.event.issue.title }}",
+                "summary": "[xperience-by-kentico-tag-manager] ${{ github.event.issue.title }}",
                 "description": {
                   "type": "doc",
                   "version": 1,
