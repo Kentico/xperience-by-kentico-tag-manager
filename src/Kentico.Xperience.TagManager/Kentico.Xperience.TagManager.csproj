@@ -51,6 +51,9 @@
 	<Target Name="NpmBuildHelpScript" BeforeTargets="BeforeBuild" Condition=" '$(Configuration)|$(Platform)' != 'Debug|AnyCPU' ">
 		<Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)\Admin\FrontEnd" />
 	</Target>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\TagManagerResources.resx" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Kentico.Xperience.Admin" />
