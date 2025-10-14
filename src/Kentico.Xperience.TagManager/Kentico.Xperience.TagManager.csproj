@@ -26,6 +26,9 @@
 		<EmbeddedResource Remove="Admin\Client\node_modules\**" />
 		<None Remove="Admin\Client\node_modules\**" />
 
+		<!-- Include resource files explicitly -->
+		<EmbeddedResource Include="Resources\*.resx" />
+
 		<!-- Requires that npm run build or npm run build:dev was executed _before_ the .NET build -->
 		<AdminClientPath Include="Admin\Client\dist\**" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 			<ProjectName>xperience-integrations-tagmanager</ProjectName>
