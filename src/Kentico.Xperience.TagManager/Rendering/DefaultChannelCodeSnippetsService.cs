@@ -146,5 +146,5 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
       };
 
     private static string AddSnippetIds(int codeSnippetId, string codeSnippet) =>
-      Regex.Replace(codeSnippet, "<([^\\/]*?)>", $"""<$1 data-snippet-id="{codeSnippetId}">""");
+      Regex.Replace(codeSnippet, "<(?!!--|\\/|!)([^>]*?)(/?)>", $"""<$1 data-snippet-id="{codeSnippetId}"$2>""");
 }
