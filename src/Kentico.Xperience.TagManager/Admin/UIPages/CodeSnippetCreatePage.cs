@@ -23,6 +23,7 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
     private CodeSnippetConfigurationModel? model;
     protected override CodeSnippetConfigurationModel Model => model ??= new CodeSnippetConfigurationModel();
     private readonly IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider;
+    private readonly IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider;
     private readonly IPageLinkGenerator pageLinkGenerator;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
@@ -30,11 +31,13 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
         IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider,
+        IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider,
         IPageLinkGenerator pageLinkGenerator,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
     {
         this.channelCodeSnippetInfoProvider = channelCodeSnippetInfoProvider;
+        this.contentTypeBindingProvider = contentTypeBindingProvider;
         this.pageLinkGenerator = pageLinkGenerator;
         this.websiteChannelPermissionService = websiteChannelPermissionService;
     }
@@ -94,5 +97,16 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
         model.MapToChannelCodeSnippetInfo(infoObject);
 
         channelCodeSnippetInfoProvider.Set(infoObject);
+
+        // Create content type bindings
+        foreach (var contentTypeId in model.ContentTypeIDs)
+        {
+            var binding = new ChannelCodeSnippetItemContentTypeInfo
+            {
+                ChannelCodeSnippetItemID = infoObject.ChannelCodeSnippetItemID,
+                ContentTypeID = contentTypeId
+            };
+            contentTypeBindingProvider.Set(binding);
+        }
     }
 }
