@@ -29,17 +29,20 @@ internal class CodeSnippetListingPage : ListingPage
     private readonly IAuthenticatedUserAccessor authenticatedUserAccessor;
     private readonly IInfoProvider<ConsentInfo> consentInfoProvider;
     private readonly IInfoProvider<ChannelInfo> channelProvider;
+    private readonly IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider;
 
     public CodeSnippetListingPage(
         IWebsiteChannelPermissionService websiteChannelPermissionService,
         IInfoProvider<ConsentInfo> consentInfoProvider,
         IAuthenticatedUserAccessor authenticatedUserAccessor,
-        IInfoProvider<ChannelInfo> channelProvider)
+        IInfoProvider<ChannelInfo> channelProvider,
+        IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider)
     {
         this.websiteChannelPermissionService = websiteChannelPermissionService;
         this.consentInfoProvider = consentInfoProvider;
         this.authenticatedUserAccessor = authenticatedUserAccessor;
         this.channelProvider = channelProvider;
+        this.contentTypeBindingProvider = contentTypeBindingProvider;
     }
 
     protected override string ObjectType => ChannelCodeSnippetItemInfo.OBJECT_TYPE;
@@ -54,6 +57,10 @@ internal class CodeSnippetListingPage : ListingPage
 
         var allConsents = await consentInfoProvider.Get().GetEnumerableTypedResultAsync();
         var allChannels = await channelProvider.Get().GetEnumerableTypedResultAsync();
+        var allContentTypes = await DataClassInfoProvider.GetClasses()
+            .WhereEquals(nameof(DataClassInfo.ClassContentTypeType), ClassContentTypeType.WEBSITE)
+            .GetEnumerableTypedResultAsync();
+        var allBindings = await contentTypeBindingProvider.Get().GetEnumerableTypedResultAsync();
 
         PageConfiguration.HeaderActions.AddLink<CodeSnippetCreatePage>("Add new");
         PageConfiguration.TableActions.AddDeleteAction(nameof(Delete));
@@ -87,6 +94,21 @@ internal class CodeSnippetListingPage : ListingPage
                     value is null or 0
                         ? LocalizationService.GetString("customchannelsettings.codesnippets.noconsentneeded")
                         : allConsents.FirstOrDefault(c => c.ConsentID == (int)value)?.ConsentDisplayName ?? "")
+            .AddColumn(
+                nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
+                "Content types",
+                sortable: false,
+                formatter: (value, _) =>
+                {
+                    var snippetId = (int)value;
+                    var bindingIds = allBindings.Where(b => b.ChannelCodeSnippetItemID == snippetId).Select(b => b.ContentTypeID).ToList();
+                    if (!bindingIds.Any())
+                    {
+                        return "All";
+                    }
+                    var contentTypeNames = allContentTypes.Where(ct => bindingIds.Contains(ct.ClassID)).Select(ct => ct.ClassDisplayName);
+                    return string.Join(", ", contentTypeNames);
+                })
             .AddColumn(
                 nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemEnable),
                 "Enable",

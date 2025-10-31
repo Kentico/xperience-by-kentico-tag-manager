@@ -43,7 +43,11 @@ internal class TagManagerModuleInstaller(IInfoProvider<ResourceInfo> resourceInf
         return resourceInfo;
     }
 
-    private static void InstallModuleClasses(ResourceInfo resourceInfo) => InstallChannelCodeSnippetClass(resourceInfo);
+    private static void InstallModuleClasses(ResourceInfo resourceInfo)
+    {
+        InstallChannelCodeSnippetClass(resourceInfo);
+        InstallChannelCodeSnippetItemContentTypeBindingClass(resourceInfo);
+    }
 
     private static void InstallChannelCodeSnippetClass(ResourceInfo resourceInfo)
     {
@@ -180,6 +184,51 @@ internal class TagManagerModuleInstaller(IInfoProvider<ResourceInfo> resourceInf
             DataType = FieldDataType.Text,
             Enabled = true,
             AllowEmpty = true
+        };
+        formInfo.AddFormItem(formItem);
+
+        SetFormDefinition(info, formInfo);
+
+        if (info.HasChanged)
+        {
+            DataClassInfoProvider.SetDataClassInfo(info);
+        }
+    }
+
+    private static void InstallChannelCodeSnippetItemContentTypeBindingClass(ResourceInfo resourceInfo)
+    {
+        var info = DataClassInfoProvider.GetDataClassInfo(ChannelCodeSnippetItemContentTypeInfo.OBJECT_TYPE) ??
+                                      DataClassInfo.New(ChannelCodeSnippetItemContentTypeInfo.OBJECT_TYPE);
+
+        info.ClassName = ChannelCodeSnippetItemContentTypeInfo.TYPEINFO.ObjectClassName;
+        info.ClassTableName = ChannelCodeSnippetItemContentTypeInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
+        info.ClassDisplayName = "Channel Code Snippet Item to Content Type Binding";
+        info.ClassResourceID = resourceInfo.ResourceID;
+        info.ClassType = ClassType.OTHER;
+
+        var formInfo = FormHelper.GetBasicFormDefinition(nameof(ChannelCodeSnippetItemContentTypeInfo.ChannelCodeSnippetItemContentTypeID));
+
+        var formItem = new FormFieldInfo
+        {
+            Name = nameof(ChannelCodeSnippetItemContentTypeInfo.ChannelCodeSnippetItemID),
+            Visible = false,
+            DataType = FieldDataType.Integer,
+            Enabled = true,
+            AllowEmpty = false,
+            ReferenceToObjectType = ChannelCodeSnippetItemInfo.OBJECT_TYPE,
+            ReferenceType = ObjectDependencyEnum.Binding
+        };
+        formInfo.AddFormItem(formItem);
+
+        formItem = new FormFieldInfo
+        {
+            Name = nameof(ChannelCodeSnippetItemContentTypeInfo.ContentTypeID),
+            Visible = false,
+            DataType = FieldDataType.Integer,
+            Enabled = true,
+            AllowEmpty = false,
+            ReferenceToObjectType = DataClassInfo.OBJECT_TYPE,
+            ReferenceType = ObjectDependencyEnum.Binding
         };
         formInfo.AddFormItem(formItem);
 
