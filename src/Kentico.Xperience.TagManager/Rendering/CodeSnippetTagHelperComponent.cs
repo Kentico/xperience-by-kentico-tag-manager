@@ -68,6 +68,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     {
         bool isEditMode = httpContext.Kentico().PageBuilder().EditMode;
         bool isPreviewMode = httpContext.Kentico().Preview().Enabled;
+        bool isAdminContext = IsAdminContext(httpContext);
 
         var headTopSnippets = codeSnippets[CodeSnippetLocations.HeadTop];
         var headBottomSnippets = codeSnippets[CodeSnippetLocations.HeadBottom];
@@ -88,6 +89,12 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
             headBottomSnippets = headBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
                 CodeSnippetAdministrationDisplayMode.PreviewOnly);
         }
+        else if (isAdminContext)
+        {
+            headTopSnippets = headTopSnippets.Where(x => x.DisplayMode is not CodeSnippetAdministrationDisplayMode.None);
+
+            headBottomSnippets = headBottomSnippets.Where(x => x.DisplayMode is not CodeSnippetAdministrationDisplayMode.None);
+        }
 
         foreach (var codeSnippet in headTopSnippets)
         {
@@ -107,6 +114,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     {
         bool isEditMode = httpContext.Kentico().PageBuilder().EditMode;
         bool isPreviewMode = httpContext.Kentico().Preview().Enabled;
+        bool isAdminContext = IsAdminContext(httpContext);
 
         var bodyTopSnippets = codeSnippets[CodeSnippetLocations.BodyTop];
         var bodyBottomSnippets = codeSnippets[CodeSnippetLocations.BodyBottom];
@@ -127,6 +135,12 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
             bodyBottomSnippets = bodyBottomSnippets.Where(x => x.DisplayMode is CodeSnippetAdministrationDisplayMode.Both or
                 CodeSnippetAdministrationDisplayMode.PreviewOnly);
         }
+        else if (isAdminContext)
+        {
+            bodyTopSnippets = bodyTopSnippets.Where(x => x.DisplayMode is not CodeSnippetAdministrationDisplayMode.None);
+
+            bodyBottomSnippets = bodyBottomSnippets.Where(x => x.DisplayMode is not CodeSnippetAdministrationDisplayMode.None);
+        }
 
         foreach (var codeSnippet in bodyTopSnippets)
         {
@@ -139,6 +153,17 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
         }
 
         output.PostContent.AppendHtml(GetScriptSrcTag());
+    }
+
+    private static bool IsAdminContext(HttpContext? httpContext)
+    {
+        if (httpContext is null)
+        {
+            return false;
+        }
+
+        var path = httpContext.Request.Path.Value;
+        return !string.IsNullOrEmpty(path) && path.StartsWith("/cmsctx/", StringComparison.OrdinalIgnoreCase);
     }
 
     private IHtmlContent GetScriptSrcTag()
