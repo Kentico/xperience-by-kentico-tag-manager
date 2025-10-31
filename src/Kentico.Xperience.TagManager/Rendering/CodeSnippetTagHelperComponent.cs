@@ -163,7 +163,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
         }
 
         var path = httpContext.Request.Path.Value;
-        return !string.IsNullOrEmpty(path) && path.StartsWith("/cmsctx/", StringComparison.OrdinalIgnoreCase);
+        return path?.StartsWith("/cmsctx/", StringComparison.OrdinalIgnoreCase) == true;
     }
 
     private IHtmlContent GetScriptSrcTag()
