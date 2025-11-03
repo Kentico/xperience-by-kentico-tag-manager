@@ -66,7 +66,7 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
                         nameof(ChannelCodeSnippetItemContentTypeInfo.ChannelCodeSnippetItemID)))
                     .WhereNull(nameof(ChannelCodeSnippetItemContentTypeInfo.ChannelCodeSnippetItemContentTypeID))
-                    .Columns("KenticoTagManager_ChannelCodeSnippetItem.ChannelCodeSnippetItemID")
+                    .Columns($"{ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName.Replace(".", "_")}.{nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID)}")
                     .GetEnumerableTypedResultAsync();
 
                 // Get snippets bound to the current content type
