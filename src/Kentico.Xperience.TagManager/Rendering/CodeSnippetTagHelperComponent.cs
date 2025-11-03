@@ -57,10 +57,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
         if (webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
         {
             var contentTypeName = webPageDataContext.WebPage.ContentTypeName;
-            var dataClass = DataClassInfoProvider.GetClasses()
-                .WhereEquals(nameof(DataClassInfo.ClassName), contentTypeName)
-                .TopN(1)
-                .FirstOrDefault();
+            var dataClass = DataClassInfoProvider.GetDataClassInfo(contentTypeName);
 
             contentTypeId = dataClass?.ClassID;
         }
