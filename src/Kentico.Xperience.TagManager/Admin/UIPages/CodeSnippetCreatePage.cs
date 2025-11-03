@@ -45,7 +45,7 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
     protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
-        CreateCodeSnippetInfo(model);
+        await CreateCodeSnippetInfo(model);
 
         var navigateResponse = await NavigateToEditPage(model, formItems);
 
@@ -90,13 +90,13 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
                     LocalizationService.GetString("customchannelsettings.codesnippets.permissionerror"));
     }
 
-    private void CreateCodeSnippetInfo(CodeSnippetConfigurationModel model)
+    private async Task CreateCodeSnippetInfo(CodeSnippetConfigurationModel model)
     {
         var infoObject = new ChannelCodeSnippetItemInfo();
 
         model.MapToChannelCodeSnippetInfo(infoObject);
 
-        channelCodeSnippetInfoProvider.Set(infoObject);
+        await channelCodeSnippetInfoProvider.SetAsync(infoObject);
 
         // Create content type bindings
         foreach (var contentTypeId in model.ContentTypeIDs)
@@ -106,7 +106,7 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
                 ChannelCodeSnippetItemID = infoObject.ChannelCodeSnippetItemID,
                 ContentTypeID = contentTypeId
             };
-            contentTypeBindingProvider.Set(binding);
+            await contentTypeBindingProvider.SetAsync(binding);
         }
     }
 }
