@@ -20,21 +20,24 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
     private readonly IWebsiteChannelContext channelContext;
 
     private readonly IInfoProvider<ChannelCodeSnippetItemInfo> codeSnippetInfoProvider;
+    private readonly IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider;
     private readonly IProgressiveCache cache;
 
     public DefaultChannelCodeSnippetsService(
         IConsentAgreementService consentAgreementService,
         IWebsiteChannelContext channelContext,
         IInfoProvider<ChannelCodeSnippetItemInfo> codeSnippetInfoProvider,
+        IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider,
         IProgressiveCache cache)
     {
         this.consentAgreementService = consentAgreementService;
         this.channelContext = channelContext;
         this.codeSnippetInfoProvider = codeSnippetInfoProvider;
+        this.contentTypeBindingProvider = contentTypeBindingProvider;
         this.cache = cache;
     }
 
-    public Task<ILookup<CodeSnippetLocations, CodeSnippetDto>> GetConsentedCodeSnippets(ContactInfo? contact)
+    public Task<ILookup<CodeSnippetLocations, CodeSnippetDto>> GetConsentedCodeSnippets(ContactInfo? contact, int? contentTypeId = null)
     {
         return cache.LoadAsync(s =>
         {
@@ -42,16 +45,42 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                 CacheHelper.GetCacheDependency(
                     [
                         $"{ChannelCodeSnippetItemInfo.OBJECT_TYPE}|all",
+                        $"{ChannelCodeSnippetItemContentTypeInfo.OBJECT_TYPE}|all",
                         $"{ChannelInfo.OBJECT_TYPE}|all",
                         $"{WebsiteChannelInfo.OBJECT_TYPE}|byid|{channelContext.WebsiteChannelID}",
                         $"{ContactInfo.OBJECT_TYPE}|byid|{contact?.ContactID}|children|{ConsentAgreementInfo.OBJECT_TYPE}",
                     ]);
             return GetCodeSnippetsInternal();
-        }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(DefaultChannelCodeSnippetsService)}.{nameof(GetConsentedCodeSnippets)}|{contact?.ContactID}|{channelContext.WebsiteChannelID}"));
+        }, new CacheSettings(CacheHelper.CacheMinutes(), $"{nameof(DefaultChannelCodeSnippetsService)}.{nameof(GetConsentedCodeSnippets)}|{contact?.ContactID}|{channelContext.WebsiteChannelID}|{contentTypeId}"));
 
         async Task<ILookup<CodeSnippetLocations, CodeSnippetDto>> GetCodeSnippetsInternal()
         {
-            var snippets = (await codeSnippetInfoProvider.Get()
+            // Get snippet IDs to include based on content type filtering
+            IEnumerable<int>? allowedSnippetIds = null;
+
+            if (contentTypeId.HasValue)
+            {
+                // Get all snippets that have NO content type bindings (show on all pages)
+                var snippetsWithNoBindings = await codeSnippetInfoProvider.Get()
+                    .Source(x => x.LeftJoin<ChannelCodeSnippetItemContentTypeInfo>(
+                        nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID),
+                        nameof(ChannelCodeSnippetItemContentTypeInfo.ChannelCodeSnippetItemID)))
+                    .WhereNull(nameof(ChannelCodeSnippetItemContentTypeInfo.ChannelCodeSnippetItemContentTypeID))
+                    .Columns($"{ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName.Replace(".", "_")}.{nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID)}")
+                    .GetEnumerableTypedResultAsync();
+
+                // Get snippets bound to the current content type
+                var snippetsBoundToContentType = await contentTypeBindingProvider.Get()
+                    .WhereEquals(nameof(ChannelCodeSnippetItemContentTypeInfo.ContentTypeID), contentTypeId.Value)
+                    .GetEnumerableTypedResultAsync();
+
+                allowedSnippetIds = snippetsWithNoBindings
+                    .Select(s => s.ChannelCodeSnippetItemID)
+                    .Union(snippetsBoundToContentType.Select(b => b.ChannelCodeSnippetItemID))
+                    .ToList();
+            }
+
+            var query = codeSnippetInfoProvider.Get()
                     .Source(x =>
                     {
                         x.InnerJoin<ChannelInfo>(
@@ -68,7 +97,20 @@ internal class DefaultChannelCodeSnippetsService : IChannelCodeSnippetsService
                     })
                     .WhereTrue(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemEnable))
                     .WhereEquals(nameof(WebsiteChannelInfo.WebsiteChannelID), channelContext.WebsiteChannelID)
-                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray())
+                    .WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemType), SnippetFactoryStore.GetRegisteredSnippetFactoryTypes().ToArray());
+
+            // Apply content type filtering if we have allowed snippet IDs
+            if (allowedSnippetIds != null && allowedSnippetIds.Any())
+            {
+                query = query.WhereIn(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemID), allowedSnippetIds.ToArray());
+            }
+            else if (contentTypeId.HasValue)
+            {
+                // If we have a content type but no allowed snippets, return empty
+                return Enumerable.Empty<CodeSnippetDto>().ToLookup(r => r.Location);
+            }
+
+            var snippets = (await query
                     .Columns(nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemLocation),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemCode),
                         nameof(ChannelCodeSnippetItemInfo.ChannelCodeSnippetItemConsentId),

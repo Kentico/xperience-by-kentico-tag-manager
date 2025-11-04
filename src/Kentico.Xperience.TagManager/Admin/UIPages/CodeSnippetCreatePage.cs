@@ -23,6 +23,7 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
     private CodeSnippetConfigurationModel? model;
     protected override CodeSnippetConfigurationModel Model => model ??= new CodeSnippetConfigurationModel();
     private readonly IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider;
+    private readonly IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider;
     private readonly IPageLinkGenerator pageLinkGenerator;
     private readonly IWebsiteChannelPermissionService websiteChannelPermissionService;
 
@@ -30,11 +31,13 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
         IFormItemCollectionProvider formItemCollectionProvider,
         IFormDataBinder formDataBinder,
         IInfoProvider<ChannelCodeSnippetItemInfo> channelCodeSnippetInfoProvider,
+        IInfoProvider<ChannelCodeSnippetItemContentTypeInfo> contentTypeBindingProvider,
         IPageLinkGenerator pageLinkGenerator,
         IWebsiteChannelPermissionService websiteChannelPermissionService)
         : base(formItemCollectionProvider, formDataBinder)
     {
         this.channelCodeSnippetInfoProvider = channelCodeSnippetInfoProvider;
+        this.contentTypeBindingProvider = contentTypeBindingProvider;
         this.pageLinkGenerator = pageLinkGenerator;
         this.websiteChannelPermissionService = websiteChannelPermissionService;
     }
@@ -42,7 +45,7 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
     protected override async Task<ICommandResponse> ProcessFormData(CodeSnippetConfigurationModel model,
         ICollection<IFormItem> formItems)
     {
-        CreateCodeSnippetInfo(model);
+        await CreateCodeSnippetInfo(model);
 
         var navigateResponse = await NavigateToEditPage(model, formItems);
 
@@ -87,12 +90,23 @@ internal class CodeSnippetCreatePage : ModelEditPage<CodeSnippetConfigurationMod
                     LocalizationService.GetString("customchannelsettings.codesnippets.permissionerror"));
     }
 
-    private void CreateCodeSnippetInfo(CodeSnippetConfigurationModel model)
+    private async Task CreateCodeSnippetInfo(CodeSnippetConfigurationModel model)
     {
         var infoObject = new ChannelCodeSnippetItemInfo();
 
         model.MapToChannelCodeSnippetInfo(infoObject);
 
-        channelCodeSnippetInfoProvider.Set(infoObject);
+        await channelCodeSnippetInfoProvider.SetAsync(infoObject);
+
+        // Create content type bindings
+        foreach (var contentTypeId in model.ContentTypeIDs)
+        {
+            var binding = new ChannelCodeSnippetItemContentTypeInfo
+            {
+                ChannelCodeSnippetItemID = infoObject.ChannelCodeSnippetItemID,
+                ContentTypeID = contentTypeId
+            };
+            await contentTypeBindingProvider.SetAsync(binding);
+        }
     }
 }

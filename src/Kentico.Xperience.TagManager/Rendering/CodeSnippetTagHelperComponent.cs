@@ -1,4 +1,5 @@
 ﻿using CMS.ContactManagement;
+using CMS.DataEngine;
 
 using Kentico.Content.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
@@ -24,17 +25,20 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     private readonly IUrlHelperFactory urlHelperFactory;
     private readonly IFileVersionProvider fileVersionProvider;
     private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly IWebPageDataContextRetriever webPageDataContextRetriever;
 
     public CodeSnippetTagHelperComponent(
         IChannelCodeSnippetsService codeSnippetsContext,
         IUrlHelperFactory urlHelperFactory,
         IFileVersionProvider fileVersionProvider,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IWebPageDataContextRetriever webPageDataContextRetriever)
     {
         this.codeSnippetsContext = codeSnippetsContext;
         this.urlHelperFactory = urlHelperFactory;
         this.httpContextAccessor = httpContextAccessor;
         this.fileVersionProvider = fileVersionProvider;
+        this.webPageDataContextRetriever = webPageDataContextRetriever;
     }
 
     /// <summary>
@@ -48,7 +52,17 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     {
         var contact = ContactManagementContext.CurrentContact;
 
-        var codeSnippets = await codeSnippetsContext.GetConsentedCodeSnippets(contact);
+        // Get the current page's content type ID
+        int? contentTypeId = null;
+        if (webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
+        {
+            var contentTypeName = webPageDataContext.WebPage.ContentTypeName;
+            var dataClass = DataClassInfoProvider.GetDataClassInfo(contentTypeName);
+
+            contentTypeId = dataClass?.ClassID;
+        }
+
+        var codeSnippets = await codeSnippetsContext.GetConsentedCodeSnippets(contact, contentTypeId);
 
         if (string.Equals(context.TagName, HeadTag, StringComparison.OrdinalIgnoreCase))
         {
