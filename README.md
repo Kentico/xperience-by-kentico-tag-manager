@@ -108,6 +108,7 @@ dotnet add package Kentico.Xperience.TagManager
        - Bottom of the body - inserts a script right before the closing body tag.
    - Select tag location within the rendered page HTML
    - Fill in a consent if required.
+   - (Optional) Select specific content types to restrict tag rendering to only those page types. If no content types are selected, the tag will render on all pages.
    - Check 'Enable tag rendering' to activate the tag or uncheck to deactivate
    - Select whether you want to display tags in the Xperience administration preview or Page Builder, or both. This option defaults to None.
 5. During rendering the livesite page, the Tag manager module automatically adds custom code snippets with accepted consents to defined locations.
@@ -119,6 +120,7 @@ If you use the [Continuous Deployment](https://docs.kentico.com/x/YgaiCQ) featur
 
 * `kenticotagmanager.channelcodesnippet`
 * `kenticotagmanager.channelcodesnippetitem`
+* `kenticotagmanager.channelcodesnippetitemcontenttype`
 
 Running the CD restore (with `<RestoreMode>` set to `Full`) removes any Tag Manager scripts that exist on the target instance, but are not included in the CD data. 
 
@@ -128,6 +130,7 @@ You can prevent this issue by adding excluded object types to your *repository.c
 <ExcludedObjectTypes>
     <ObjectType>kenticotagmanager.channelcodesnippet</ObjectType>
     <ObjectType>kenticotagmanager.channelcodesnippetitem</ObjectType>
+    <ObjectType>kenticotagmanager.channelcodesnippetitemcontenttype</ObjectType>
 </ExcludedObjectTypes>
 ```
 
