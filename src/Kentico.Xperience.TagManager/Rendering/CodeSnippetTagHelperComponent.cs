@@ -52,15 +52,16 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     {
         var contact = ContactManagementContext.CurrentContact;
 
-        // Get the current page's content type ID
-        int? contentTypeId = null;
-        if (webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
+        if (!webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
         {
-            var contentTypeName = webPageDataContext.WebPage.ContentTypeName;
-            var dataClass = DataClassInfoProvider.GetDataClassInfo(contentTypeName);
-
-            contentTypeId = dataClass?.ClassID;
+            return;
         }
+
+        var contentTypeName = webPageDataContext.WebPage.ContentTypeName;
+        var dataClass = DataClassInfoProvider.GetDataClassInfo(contentTypeName);
+
+        // Get the current page's content type ID
+        int? contentTypeId = dataClass?.ClassID;
 
         var codeSnippets = await codeSnippetsContext.GetConsentedCodeSnippets(contact, contentTypeId);
 
@@ -154,6 +155,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
 
         output.PostContent.AppendHtml(GetScriptSrcTag());
     }
+
 
     private IHtmlContent GetScriptSrcTag()
     {
