@@ -51,6 +51,7 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var contact = ContactManagementContext.CurrentContact;
+
         if (!webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
         {
             return;
