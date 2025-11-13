@@ -1,5 +1,6 @@
 ﻿using CMS.ContactManagement;
 using CMS.DataEngine;
+using CMS.Websites.Routing;
 
 using Kentico.Content.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
@@ -26,19 +27,22 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     private readonly IFileVersionProvider fileVersionProvider;
     private readonly IHttpContextAccessor httpContextAccessor;
     private readonly IWebPageDataContextRetriever webPageDataContextRetriever;
+    private readonly IWebsiteChannelContext websiteChannelContext;
 
     public CodeSnippetTagHelperComponent(
         IChannelCodeSnippetsService codeSnippetsContext,
         IUrlHelperFactory urlHelperFactory,
         IFileVersionProvider fileVersionProvider,
         IHttpContextAccessor httpContextAccessor,
-        IWebPageDataContextRetriever webPageDataContextRetriever)
+        IWebPageDataContextRetriever webPageDataContextRetriever,
+        IWebsiteChannelContext websiteChannelContext)
     {
         this.codeSnippetsContext = codeSnippetsContext;
         this.urlHelperFactory = urlHelperFactory;
         this.httpContextAccessor = httpContextAccessor;
         this.fileVersionProvider = fileVersionProvider;
         this.webPageDataContextRetriever = webPageDataContextRetriever;
+        this.websiteChannelContext = websiteChannelContext;
     }
 
     /// <summary>
@@ -52,16 +56,20 @@ internal class CodeSnippetTagHelperComponent : TagHelperComponent
     {
         var contact = ContactManagementContext.CurrentContact;
 
-        if (!webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
+        if (websiteChannelContext.WebsiteChannelID <= 0)
         {
             return;
         }
 
-        var contentTypeName = webPageDataContext.WebPage.ContentTypeName;
-        var dataClass = DataClassInfoProvider.GetDataClassInfo(contentTypeName);
-
         // Get the current page's content type ID
-        int? contentTypeId = dataClass?.ClassID;
+        int? contentTypeId = null;
+        if (webPageDataContextRetriever.TryRetrieve(out var webPageDataContext))
+        {
+            var contentTypeName = webPageDataContext.WebPage.ContentTypeName;
+            var dataClass = DataClassInfoProvider.GetDataClassInfo(contentTypeName);
+
+            contentTypeId = dataClass?.ClassID;
+        }
 
         var codeSnippets = await codeSnippetsContext.GetConsentedCodeSnippets(contact, contentTypeId);
 
