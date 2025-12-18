@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
+﻿namespace DancingGoat.Models;
 
-namespace DancingGoat.Models
+public record ProductSectionListViewModel(string Title, IEnumerable<ProductListItemViewModel> Items)
 {
-    public record ProductSectionListViewModel(string Title, IEnumerable<ProductListItemViewModel> Items)
-    {
-    }
 }

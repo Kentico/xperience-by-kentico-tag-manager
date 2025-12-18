@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using CMS.ContentEngine;
+﻿using CMS.ContentEngine;
 
 using DancingGoat.AdminComponents.UIPages;
 using DancingGoat.Commerce;
@@ -42,8 +39,7 @@ internal class UniqueProductSkuValidationRule : ValidationRule<string>
     /// <returns>Returns the validation result.</returns>
     public override async Task<ValidationResult> Validate(string value, IFormFieldValueProvider formFieldValueProvider)
     {
-        var contentItemFormContext = FormContext as IContentItemFormContextBase;
-        if (contentItemFormContext == null)
+        if (FormContext is not IContentItemFormContextBase contentItemFormContext)
         {
             throw new InvalidOperationException("The validation rule can only be used in a content item form context.");
         }
@@ -61,19 +57,11 @@ internal class UniqueProductSkuValidationRule : ValidationRule<string>
         else
         {
             // The SKU code is already used in another product, the validation fails
-            var user = await authenticatedUserAccessor.Get();
-            if (user == null)
-            {
-                throw new InvalidOperationException("No authenticated user was found.");
-            }
+            var user = await authenticatedUserAccessor.Get() ?? throw new InvalidOperationException("No authenticated user was found.");
 
             var contentItemManager = contentItemManagerFactory.Create(user.UserID);
 
-            var metadata = await contentItemManager.GetContentItemLanguageMetadata(collidingContentItemIdentifier.Value, contentItemFormContext.LanguageName);
-            if (metadata == null)
-            {
-                throw new InvalidOperationException($"Content item metadata with ID {contentItemId} was not found.");
-            }
+            var metadata = await contentItemManager.GetContentItemLanguageMetadata(collidingContentItemIdentifier.Value, contentItemFormContext.LanguageName) ?? throw new InvalidOperationException($"Content item metadata with ID {contentItemId} was not found.");
 
             return new(false, $"Product SKU is already being used in the product '{metadata.DisplayName}'.");
         }

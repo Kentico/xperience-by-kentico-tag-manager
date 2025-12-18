@@ -1,40 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using DancingGoat.Models;
 
-using DancingGoat.Models;
+namespace DancingGoat.Widgets;
 
-namespace DancingGoat.Widgets
+/// <summary>
+/// View model for Product card widget.
+/// </summary>
+public class ProductCardListViewModel
 {
     /// <summary>
-    /// View model for Product card widget.
+    /// Collection of products.
     /// </summary>
-    public class ProductCardListViewModel
+    public IEnumerable<ProductCardViewModel> Products { get; set; }
+
+
+    /// <summary>
+    /// Gets ViewModels for <paramref name="products"/>.
+    /// </summary>
+    /// <param name="products">Collection of products.</param>
+    /// <returns>Hydrated ViewModel.</returns>
+    public static ProductCardListViewModel GetViewModel(IEnumerable<IProductFields> products)
     {
-        /// <summary>
-        /// Collection of products.
-        /// </summary>
-        public IEnumerable<ProductCardViewModel> Products { get; set; }
+        var productModels = new List<ProductCardViewModel>();
 
-
-        /// <summary>
-        /// Gets ViewModels for <paramref name="products"/>.
-        /// </summary>
-        /// <param name="products">Collection of products.</param>
-        /// <returns>Hydrated ViewModel.</returns>
-        public static ProductCardListViewModel GetViewModel(IEnumerable<IProductFields> products)
+        foreach (var product in products.Where(product => product != null))
         {
-            var productModels = new List<ProductCardViewModel>();
-
-            foreach (var product in products.Where(product => product != null))
-            {
-                var productModel = ProductCardViewModel.GetViewModel(product);
-                productModels.Add(productModel);
-            }
-
-            return new ProductCardListViewModel
-            {
-                Products = productModels
-            };
+            var productModel = ProductCardViewModel.GetViewModel(product);
+            productModels.Add(productModel);
         }
+
+        return new ProductCardListViewModel
+        {
+            Products = productModels
+        };
     }
 }

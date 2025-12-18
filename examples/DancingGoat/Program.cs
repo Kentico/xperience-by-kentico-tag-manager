@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using CMS;
+using CMS.Base;
 
 using DancingGoat;
 using DancingGoat.Commerce;
 using DancingGoat.EmailComponents;
 using DancingGoat.Helpers.Generators;
 using DancingGoat.Models;
-
-using CMS;
-using CMS.Base;
+using DancingGoat.TagManager;
 
 using Kentico.Activities.Web.Mvc;
 using Kentico.Commerce.Web.Mvc;
@@ -18,21 +15,13 @@ using Kentico.EmailBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
-using Kentico.Xperience.Mjml;
 using Kentico.Web.Mvc;
+using Kentico.Xperience.Mjml;
 
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
-using DancingGoat.TagManager;
 
 using Samples.DancingGoat;
 
@@ -67,13 +56,18 @@ builder.Services.AddKentico(features =>
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddLocalization()
     .AddControllersWithViews()
     .AddViewLocalization()
-    .AddDataAnnotationsLocalization(options =>
-    {
-        options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResources));
-    });
+    .AddDataAnnotationsLocalization(options => options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResources)));
 
 builder.Services.AddDancingGoatServices();
 builder.Services.AddSingleton<IEmailActivityTrackingEvaluator, EmailActivityTrackingEvaluator>();
@@ -81,10 +75,7 @@ builder.Services.AddSingleton<IEmailActivityTrackingEvaluator, EmailActivityTrac
 ConfigureEmailBuilder(builder.Services);
 ConfigureMembershipServices(builder.Services);
 
-builder.Services.AddKenticoTagManager(builder.Configuration, builder =>
-{
-    builder.AddSnippetFactory<DancingGoatSnippetFactory>();
-});
+builder.Services.AddKenticoTagManager(builder.Configuration, builder => builder.AddSnippetFactory<DancingGoatSnippetFactory>());
 
 if (builder.Environment.IsDevelopment())
 {
@@ -100,6 +91,8 @@ Initialize(app.Services);
 app.UseStaticFiles();
 
 app.UseCookiePolicy();
+
+app.UseSession();
 
 app.UseAuthentication();
 

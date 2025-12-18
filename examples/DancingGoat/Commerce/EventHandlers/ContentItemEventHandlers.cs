@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using CMS.ContentEngine;
+﻿using CMS.ContentEngine;
 
 using DancingGoat.Models;
 
@@ -18,10 +15,7 @@ internal sealed class ContentItemEventHandlers
     /// <summary>
     /// Initializes a new instance of the <see cref="ContentItemEventHandlers"/> class.
     /// </summary>
-    public ContentItemEventHandlers(ProductSkuValidator productSkuValidator)
-    {
-        this.productSkuValidator = productSkuValidator;
-    }
+    public ContentItemEventHandlers(ProductSkuValidator productSkuValidator) => this.productSkuValidator = productSkuValidator;
 
 
     public void Initialize()

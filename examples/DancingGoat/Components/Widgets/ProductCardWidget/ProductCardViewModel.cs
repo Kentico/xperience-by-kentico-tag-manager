@@ -1,50 +1,47 @@
-﻿using System.Linq;
+﻿using DancingGoat.Models;
 
-using DancingGoat.Models;
+namespace DancingGoat.Widgets;
 
-namespace DancingGoat.Widgets
+/// <summary>
+/// View model for Product card widget.
+/// </summary>
+public class ProductCardViewModel
 {
     /// <summary>
-    /// View model for Product card widget.
+    /// Card heading.
     /// </summary>
-    public class ProductCardViewModel
+    public string Heading { get; set; }
+
+
+    /// <summary>
+    /// Card background image path.
+    /// </summary>
+    public string ImagePath { get; set; }
+
+
+    /// <summary>
+    /// Card text.
+    /// </summary>
+    public string Text { get; set; }
+
+
+    /// <summary>
+    /// Gets ViewModel for <paramref name="product"/>.
+    /// </summary>
+    /// <param name="product">Product.</param>
+    /// <returns>Hydrated ViewModel.</returns>
+    public static ProductCardViewModel GetViewModel(IProductFields product)
     {
-        /// <summary>
-        /// Card heading.
-        /// </summary>
-        public string Heading { get; set; }
-
-
-        /// <summary>
-        /// Card background image path.
-        /// </summary>
-        public string ImagePath { get; set; }
-
-
-        /// <summary>
-        /// Card text.
-        /// </summary>
-        public string Text { get; set; }
-
-
-        /// <summary>
-        /// Gets ViewModel for <paramref name="product"/>.
-        /// </summary>
-        /// <param name="product">Product.</param>
-        /// <returns>Hydrated ViewModel.</returns>
-        public static ProductCardViewModel GetViewModel(IProductFields product)
+        if (product == null)
         {
-            if (product == null)
-            {
-                return null;
-            }
-
-            return new ProductCardViewModel
-            {
-                Heading = product.ProductFieldName,
-                ImagePath = product.ProductFieldImage.FirstOrDefault()?.ImageFile.Url,
-                Text = product.ProductFieldDescription
-            };
+            return null;
         }
+
+        return new ProductCardViewModel
+        {
+            Heading = product.ProductFieldName,
+            ImagePath = product.ProductFieldImage.FirstOrDefault()?.ImageFile.Url,
+            Text = product.ProductFieldDescription
+        };
     }
 }

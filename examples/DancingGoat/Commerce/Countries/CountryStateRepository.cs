@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using CMS.DataEngine;
+﻿using CMS.DataEngine;
 using CMS.Globalization;
 using CMS.Helpers;
 using CMS.Websites.Routing;
@@ -72,10 +67,7 @@ public class CountryStateRepository
     }
 
 
-    private async Task<IEnumerable<CountryInfo>> GetCountriesInternal(CancellationToken cancellationToken)
-    {
-        return await countryInfoProvider.Get().GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
-    }
+    private async Task<IEnumerable<CountryInfo>> GetCountriesInternal(CancellationToken cancellationToken) => await countryInfoProvider.Get().GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
 
 
     /// <summary>
@@ -110,10 +102,7 @@ public class CountryStateRepository
     }
 
 
-    private async Task<IEnumerable<StateInfo>> GetStatesInternal(int countryId, CancellationToken cancellationToken)
-    {
-        return await stateInfoProvider.Get()
+    private async Task<IEnumerable<StateInfo>> GetStatesInternal(int countryId, CancellationToken cancellationToken) => await stateInfoProvider.Get()
             .WhereEquals(nameof(StateInfo.CountryID), countryId)
             .GetEnumerableTypedResultAsync(cancellationToken: cancellationToken);
-    }
 }

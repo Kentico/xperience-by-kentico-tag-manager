@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using DancingGoat.Models;
+﻿using DancingGoat.Models;
 
 namespace DancingGoat.Commerce;
 
@@ -9,10 +7,7 @@ public sealed class ProductNameProvider
     private readonly ProductVariantsExtractor productVariantsExtractor;
 
 
-    public ProductNameProvider(ProductVariantsExtractor productVariantsExtractor)
-    {
-        this.productVariantsExtractor = productVariantsExtractor;
-    }
+    public ProductNameProvider(ProductVariantsExtractor productVariantsExtractor) => this.productVariantsExtractor = productVariantsExtractor;
 
 
     public string GetProductName(IProductFields product, int? variantId = null)
@@ -22,10 +17,7 @@ public sealed class ProductNameProvider
     }
 
 
-    private static string FormatProductName(string productName, IDictionary<int, string> variants, int? variantId)
-    {
-        return variants != null && variantId != null && variants.TryGetValue(variantId.Value, out var variantValue)
+    private static string FormatProductName(string productName, IDictionary<int, string> variants, int? variantId) => variants != null && variantId != null && variants.TryGetValue(variantId.Value, out var variantValue)
             ? $"{productName} - {variantValue}"
             : productName;
-    }
 }

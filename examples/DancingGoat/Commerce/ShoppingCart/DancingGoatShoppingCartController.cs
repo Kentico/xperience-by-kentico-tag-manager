@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using CMS.Commerce;
+﻿using CMS.Commerce;
 using CMS.ContentEngine;
 
 using DancingGoat;
@@ -13,7 +7,6 @@ using DancingGoat.Helpers;
 using DancingGoat.Models;
 using DancingGoat.Services;
 
-using Kentico.Commerce.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 
 using Microsoft.AspNetCore.Mvc;
@@ -28,13 +21,13 @@ namespace DancingGoat.Commerce;
 /// </summary>
 public sealed class DancingGoatShoppingCartController : Controller
 {
-    private readonly ICurrentShoppingCartService currentShoppingCartService;
+    private readonly CurrentShoppingCartService currentShoppingCartService;
     private readonly ProductVariantsExtractor productVariantsExtractor;
     private readonly WebPageUrlProvider webPageUrlProvider;
     private readonly ProductRepository productRepository;
 
     public DancingGoatShoppingCartController(
-        ICurrentShoppingCartService currentShoppingCartService,
+        CurrentShoppingCartService currentShoppingCartService,
         ProductVariantsExtractor productVariantsExtractor,
         WebPageUrlProvider webPageUrlProvider,
         ProductRepository productRepository)
@@ -51,7 +44,7 @@ public sealed class DancingGoatShoppingCartController : Controller
         var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
         if (shoppingCart == null)
         {
-            return View(new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0));
+            return View(new ShoppingCartViewModel([], 0));
         }
 
         var shoppingCartData = shoppingCart.GetShoppingCartDataModel();
@@ -124,12 +117,9 @@ public sealed class DancingGoatShoppingCartController : Controller
     }
 
 
-    private static string FormatProductName(string productName, IDictionary<int, string> variants, int? variantId)
-    {
-        return variants != null && variantId != null && variants.TryGetValue(variantId.Value, out string variantValue)
+    private static string FormatProductName(string productName, IDictionary<int, string> variants, int? variantId) => variants != null && variantId != null && variants.TryGetValue(variantId.Value, out string variantValue)
             ? $"{productName} - {variantValue}"
             : productName;
-    }
 
 
     /// <summary>

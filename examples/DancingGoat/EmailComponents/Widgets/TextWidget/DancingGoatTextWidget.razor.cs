@@ -26,9 +26,6 @@ public partial class DancingGoatTextWidget : ComponentBase
     public const string IDENTIFIER = $"DancingGoat.{nameof(DancingGoatTextWidget)}";
 
 
-    private EmailContext emailContext;
-
-
     /// <summary>
     /// The widget properties.
     /// </summary>
@@ -46,5 +43,5 @@ public partial class DancingGoatTextWidget : ComponentBase
     /// <summary>
     /// Gets the current email context.
     /// </summary>
-    private EmailContext EmailContext => emailContext ??= EmailContextAccessor.GetContext();
+    private EmailContext EmailContext => field ??= EmailContextAccessor.GetContext();
 }

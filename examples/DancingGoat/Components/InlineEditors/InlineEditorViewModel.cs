@@ -1,13 +1,12 @@
-﻿namespace DancingGoat.InlineEditors
+﻿namespace DancingGoat.InlineEditors;
+
+/// <summary>
+/// Base class for inline editor view models.
+/// </summary>
+public abstract class InlineEditorViewModel
 {
     /// <summary>
-    /// Base class for inline editor view models.
+    /// Name of the widget property to edit.
     /// </summary>
-    public abstract class InlineEditorViewModel
-    {
-        /// <summary>
-        /// Name of the widget property to edit.
-        /// </summary>
-        public string PropertyName { get; set; }
-    }
+    public string PropertyName { get; set; }
 }

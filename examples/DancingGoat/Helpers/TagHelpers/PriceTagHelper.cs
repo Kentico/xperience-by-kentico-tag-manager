@@ -11,10 +11,7 @@ public class PriceTagHelper : TagHelper
     private readonly IPriceFormatter priceFormatter;
 
 
-    public PriceTagHelper(IPriceFormatter priceFormatter)
-    {
-        this.priceFormatter = priceFormatter;
-    }
+    public PriceTagHelper(IPriceFormatter priceFormatter) => this.priceFormatter = priceFormatter;
 
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -24,7 +21,7 @@ public class PriceTagHelper : TagHelper
 
         if (decimal.TryParse(content, out var amount))
         {
-            output.Content.SetContent(priceFormatter.Format(amount, new PriceFormatConfiguration()));
+            output.Content.SetContent(priceFormatter.Format(amount, new PriceFormatContext()));
         }
         else
         {

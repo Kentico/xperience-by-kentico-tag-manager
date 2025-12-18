@@ -6,10 +6,7 @@ namespace DancingGoat.Models;
 
 public sealed record CustomerViewModel
 {
-    public CustomerViewModel()
-    {
-        FirstName = LastName = Email = PhoneNumber = string.Empty;
-    }
+    public CustomerViewModel() => FirstName = LastName = Email = PhoneNumber = string.Empty;
 
 
     public CustomerViewModel(string firstName, string lastName, string email, string phoneNumber)
@@ -47,10 +44,7 @@ public sealed record CustomerViewModel
     public string PhoneNumber { get; set; }
 
 
-    public bool IsEmpty()
-    {
-        return string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName) && string.IsNullOrEmpty(Company) && string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(PhoneNumber);
-    }
+    public bool IsEmpty() => string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName) && string.IsNullOrEmpty(Company) && string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(PhoneNumber);
 
 
     public CustomerDto ToCustomerDto(CustomerAddressViewModel customerAddressViewModel)

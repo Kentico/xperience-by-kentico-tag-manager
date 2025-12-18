@@ -1,15 +1,14 @@
 ﻿using CMS.Websites;
 
-namespace DancingGoat.Models
+namespace DancingGoat.Models;
+
+/// <summary>
+/// Interface for view model instances based on web page items.
+/// </summary>
+public interface IWebPageBasedViewModel
 {
     /// <summary>
-    /// Interface for view model instances based on web page items.
+    /// Web page which the view model is based on.
     /// </summary>
-    public interface IWebPageBasedViewModel
-    {
-        /// <summary>
-        /// Web page which the view model is based on.
-        /// </summary>
-        IWebPageFieldsSource WebPage { get; }
-    }
+    IWebPageFieldsSource WebPage { get; }
 }

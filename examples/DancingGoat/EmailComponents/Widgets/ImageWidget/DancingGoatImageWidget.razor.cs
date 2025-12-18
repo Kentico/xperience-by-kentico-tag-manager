@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using DancingGoat.EmailComponents;
+﻿using DancingGoat.EmailComponents;
 using DancingGoat.Models;
 
 using Kentico.Content.Web.Mvc;
@@ -66,10 +62,7 @@ public partial class DancingGoatImageWidget : ComponentBase
 
 
     /// <inheritdoc/>
-    protected override async Task OnInitializedAsync()
-    {
-        await BindProperties();
-    }
+    protected override async Task OnInitializedAsync() => await BindProperties();
 
 
     private async Task BindProperties()

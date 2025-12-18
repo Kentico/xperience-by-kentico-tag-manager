@@ -3,30 +3,29 @@ using Kentico.PageBuilder.Web.Mvc;
 using Kentico.Xperience.Admin.Base.FormAnnotations;
 using Kentico.Xperience.Admin.Websites.FormAnnotations;
 
-namespace DancingGoat.Widgets
+namespace DancingGoat.Widgets;
+
+/// <summary>
+/// CTA button widget properties.
+/// </summary>
+public class CTAButtonWidgetProperties : IWidgetProperties
 {
     /// <summary>
-    /// CTA button widget properties.
+    /// Button text.
     /// </summary>
-    public class CTAButtonWidgetProperties : IWidgetProperties
-    {
-        /// <summary>
-        /// Button text.
-        /// </summary>
-        public string Text { get; set; }
+    public string Text { get; set; }
 
 
-        /// <summary>
-        /// Page where the button points to.
-        /// </summary>
-        [UrlSelectorComponent(Label = "Link URL", Order = 1)]
-        public string LinkUrl { get; set; }
+    /// <summary>
+    /// Page where the button points to.
+    /// </summary>
+    [UrlSelectorComponent(Label = "Link URL", Order = 1)]
+    public string LinkUrl { get; set; }
 
 
-        /// <summary>
-        /// Indicates if link should be opened in a new tab.
-        /// </summary>
-        [CheckBoxComponent(Label = "Open in a new tab", Order = 2)]
-        public bool OpenInNewTab { get; set; }
-    }
+    /// <summary>
+    /// Indicates if link should be opened in a new tab.
+    /// </summary>
+    [CheckBoxComponent(Label = "Open in a new tab", Order = 2)]
+    public bool OpenInNewTab { get; set; }
 }

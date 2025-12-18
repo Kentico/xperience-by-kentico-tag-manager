@@ -1,19 +1,18 @@
-﻿namespace DancingGoat.InlineEditors
+﻿namespace DancingGoat.InlineEditors;
+
+/// <summary>
+/// View model for Text editor.
+/// </summary>
+public sealed class TextEditorViewModel : InlineEditorViewModel
 {
     /// <summary>
-    /// View model for Text editor.
+    /// Editor text.
     /// </summary>
-    public sealed class TextEditorViewModel : InlineEditorViewModel
-    {
-        /// <summary>
-        /// Editor text.
-        /// </summary>
-        public string Text { get; set; }
+    public string Text { get; set; }
 
 
-        /// <summary>
-        /// Placeholder text.
-        /// </summary>
-        public string PlaceholderText { get; set; } = "Type your text";
-    }
+    /// <summary>
+    /// Placeholder text.
+    /// </summary>
+    public string PlaceholderText { get; set; } = "Type your text";
 }

@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using DancingGoat.Models;
 
-using DancingGoat.Models;
+namespace DancingGoat.ViewComponents;
 
-namespace DancingGoat.ViewComponents
+public record CafeCardSectionViewModel(IEnumerable<CafeViewModel> Cafes, string ContactsPagePath)
 {
-    public record CafeCardSectionViewModel(IEnumerable<CafeViewModel> Cafes, string ContactsPagePath)
-    {
-    }
 }

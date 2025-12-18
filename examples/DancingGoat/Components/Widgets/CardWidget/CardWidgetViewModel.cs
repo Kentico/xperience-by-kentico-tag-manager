@@ -1,19 +1,18 @@
-﻿namespace DancingGoat.Widgets
+﻿namespace DancingGoat.Widgets;
+
+/// <summary>
+/// View model for Card widget.
+/// </summary>
+public class CardWidgetViewModel
 {
     /// <summary>
-    /// View model for Card widget.
+    /// Card background image path.
     /// </summary>
-    public class CardWidgetViewModel
-    {
-        /// <summary>
-        /// Card background image path.
-        /// </summary>
-        public string ImagePath { get; set; }
+    public string ImagePath { get; set; }
 
 
-        /// <summary>
-        /// Card text.
-        /// </summary>
-        public string Text { get; set; }
-    }
+    /// <summary>
+    /// Card text.
+    /// </summary>
+    public string Text { get; set; }
 }

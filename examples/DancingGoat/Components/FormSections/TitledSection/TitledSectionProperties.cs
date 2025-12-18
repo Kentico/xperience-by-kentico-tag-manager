@@ -2,11 +2,10 @@
 
 using Kentico.Xperience.Admin.Base.FormAnnotations;
 
-namespace DancingGoat.Components.FormSections.TitledSection
+namespace DancingGoat.Components.FormSections.TitledSection;
+
+public class TitledSectionProperties : IFormSectionProperties
 {
-    public class TitledSectionProperties : IFormSectionProperties
-    {
-        [RichTextEditorComponent(Label = "Title")]
-        public string Title { get; set; }
-    }
+    [RichTextEditorComponent(Label = "Title")]
+    public string Title { get; set; }
 }

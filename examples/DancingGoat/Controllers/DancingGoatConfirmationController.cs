@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using DancingGoat;
+﻿using DancingGoat;
 using DancingGoat.Controllers;
 using DancingGoat.Models;
 
@@ -11,25 +9,21 @@ using Microsoft.AspNetCore.Mvc;
 
 [assembly: RegisterWebPageRoute(ConfirmationPage.CONTENT_TYPE_NAME, typeof(DancingGoatConfirmationController), WebsiteChannelNames = new[] { DancingGoatConstants.WEBSITE_CHANNEL_NAME })]
 
-namespace DancingGoat.Controllers
+namespace DancingGoat.Controllers;
+
+public class DancingGoatConfirmationController : Controller
 {
-    public class DancingGoatConfirmationController : Controller
+    private readonly IContentRetriever contentRetriever;
+
+    public DancingGoatConfirmationController(IContentRetriever contentRetriever) => this.contentRetriever = contentRetriever;
+
+    public async Task<IActionResult> Index()
     {
-        private readonly IContentRetriever contentRetriever;
+        var confirmationPage = await contentRetriever.RetrieveCurrentPage<ConfirmationPage>(
+            new RetrieveCurrentPageParameters { IncludeSecuredItems = true },
+            HttpContext.RequestAborted
+        );
 
-        public DancingGoatConfirmationController(IContentRetriever contentRetriever)
-        {
-            this.contentRetriever = contentRetriever;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var confirmationPage = await contentRetriever.RetrieveCurrentPage<ConfirmationPage>(
-                new RetrieveCurrentPageParameters { IncludeSecuredItems = true },
-                HttpContext.RequestAborted
-            );
-
-            return View(ConfirmationPageViewModel.GetViewModel(confirmationPage));
-        }
+        return View(ConfirmationPageViewModel.GetViewModel(confirmationPage));
     }
 }
