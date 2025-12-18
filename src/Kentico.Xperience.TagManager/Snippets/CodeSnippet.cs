@@ -1,7 +1,6 @@
 ﻿using Kentico.Xperience.TagManager.Rendering;
 
 namespace Kentico.Xperience.TagManager.Snippets;
-
 public class CodeSnippet
 {
     public string? Code { get; init; }

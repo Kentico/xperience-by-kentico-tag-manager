@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 using CMS.Commerce;
 using CMS.DataEngine;
@@ -14,7 +17,10 @@ public sealed partial class OrderNumberGenerator
     private readonly IInfoProvider<OrderInfo> orderInfoProvider;
 
 
-    public OrderNumberGenerator(IInfoProvider<OrderInfo> orderInfoProvider) => this.orderInfoProvider = orderInfoProvider;
+    public OrderNumberGenerator(IInfoProvider<OrderInfo> orderInfoProvider)
+    {
+        this.orderInfoProvider = orderInfoProvider;
+    }
 
 
     /// <summary>

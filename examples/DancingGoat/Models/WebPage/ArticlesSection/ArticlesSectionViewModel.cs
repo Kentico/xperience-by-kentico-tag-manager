@@ -1,19 +1,25 @@
-﻿using CMS.Websites;
+﻿using System.Collections.Generic;
 
-namespace DancingGoat.Models;
+using CMS.Websites;
 
-public record ArticlesSectionViewModel(IEnumerable<ArticleViewModel> Articles, string ArticlesPath)
-    : IWebPageBasedViewModel
+namespace DancingGoat.Models
 {
-    /// <inheritdoc/>
-    public IWebPageFieldsSource WebPage { get; init; }
-
-
-    /// <summary>
-    /// Maps <see cref="ArticlesSection"/> to a <see cref="ArticlesSectionViewModel"/>.
-    /// </summary>
-    public static ArticlesSectionViewModel GetViewModel(ArticlesSection articlesSection, IEnumerable<ArticleViewModel> Articles, string ArticlesPath) => new ArticlesSectionViewModel(Articles, ArticlesPath)
+    public record ArticlesSectionViewModel(IEnumerable<ArticleViewModel> Articles, string ArticlesPath)
+        : IWebPageBasedViewModel
     {
-        WebPage = articlesSection
-    };
+        /// <inheritdoc/>
+        public IWebPageFieldsSource WebPage { get; init; }
+
+
+        /// <summary>
+        /// Maps <see cref="ArticlesSection"/> to a <see cref="ArticlesSectionViewModel"/>.
+        /// </summary>
+        public static ArticlesSectionViewModel GetViewModel(ArticlesSection articlesSection, IEnumerable<ArticleViewModel> Articles, string ArticlesPath)
+        {
+            return new ArticlesSectionViewModel(Articles, ArticlesPath)
+            {
+                WebPage = articlesSection
+            };
+        }
+    }
 }

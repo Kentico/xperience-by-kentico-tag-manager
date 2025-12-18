@@ -1,4 +1,9 @@
-﻿using CMS.Commerce;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using CMS.Commerce;
 using CMS.ContentEngine;
 using CMS.Membership;
 
@@ -8,6 +13,7 @@ using DancingGoat.Helpers;
 using DancingGoat.Models;
 using DancingGoat.Services;
 
+using Kentico.Commerce.Web.Mvc;
 using Kentico.Content.Web.Mvc.Routing;
 using Kentico.Membership;
 
@@ -63,7 +69,10 @@ public sealed class DancingGoatCheckoutController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> Index(CancellationToken cancellationToken) => View(await GetCheckoutViewModel(CheckoutStep.CheckoutCustomer, null, null, null, cancellationToken));
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    {
+        return View(await GetCheckoutViewModel(CheckoutStep.CheckoutCustomer, null, null, null, cancellationToken));
+    }
 
 
     [HttpPost]
@@ -86,7 +95,7 @@ public sealed class DancingGoatCheckoutController : Controller
         var shoppingCart = await currentShoppingCartService.Get(cancellationToken);
         if (shoppingCart == null)
         {
-            return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, new ShoppingCartViewModel([], 0), cancellationToken));
+            return View(await GetCheckoutViewModel(CheckoutStep.OrderConfirmation, customer, customerAddress, new ShoppingCartViewModel(new List<ShoppingCartItemViewModel>(), 0), cancellationToken));
         }
 
         var shoppingCartViewModel = await GetShoppingCartViewModel(shoppingCart, cancellationToken);

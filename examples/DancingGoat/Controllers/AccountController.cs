@@ -1,4 +1,8 @@
-﻿using System.Net;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 using CMS.Core;
 using CMS.Websites;
@@ -15,149 +19,156 @@ using Microsoft.Extensions.Localization;
 
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace DancingGoat.Controllers;
-
-public class AccountController : Controller
+namespace DancingGoat.Controllers
 {
-    private readonly IStringLocalizer<SharedResources> localizer;
-    private readonly IEventLogService eventLogService;
-    private readonly IContentRetriever contentRetriever;
-    private readonly UserManager<ApplicationUser> userManager;
-    private readonly SignInManager<ApplicationUser> signInManager;
-
-
-    public AccountController(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
-        IStringLocalizer<SharedResources> localizer,
-        IEventLogService eventLogService,
-        IContentRetriever contentRetriever)
+    public class AccountController : Controller
     {
-        this.userManager = userManager;
-        this.signInManager = signInManager;
-        this.localizer = localizer;
-        this.eventLogService = eventLogService;
-        this.contentRetriever = contentRetriever;
-    }
+        private readonly IStringLocalizer<SharedResources> localizer;
+        private readonly IEventLogService eventLogService;
+        private readonly IContentRetriever contentRetriever;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
 
-    // GET: Account/Login
-    [HttpGet]
-    [AllowAnonymous]
-    public ActionResult Login() => View();
-
-
-    // POST: Account/Login
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Login(LoginViewModel model, string returnUrl, CancellationToken cancellationToken = default)
-    {
-        if (!ModelState.IsValid)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IStringLocalizer<SharedResources> localizer,
+            IEventLogService eventLogService,
+            IContentRetriever contentRetriever)
         {
-            return View(model);
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.localizer = localizer;
+            this.eventLogService = eventLogService;
+            this.contentRetriever = contentRetriever;
         }
 
-        var signInResult = SignInResult.Failed;
 
-        try
+        // GET: Account/Login
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Login()
         {
-            signInResult = await signInManager.PasswordSignInAsync(model.UserName, model.Password, model.StaySignedIn, false);
-        }
-        catch (Exception ex)
-        {
-            eventLogService.LogException("AccountController", "Login", ex);
+            return View();
         }
 
-        if (signInResult.Succeeded)
+
+        // POST: Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl, CancellationToken cancellationToken = default)
         {
-            var decodedReturnUrl = WebUtility.UrlDecode(returnUrl);
-            if (!string.IsNullOrEmpty(decodedReturnUrl) && Url.IsLocalUrl(decodedReturnUrl))
+            if (!ModelState.IsValid)
             {
-                return Redirect(decodedReturnUrl);
+                return View(model);
             }
 
-            return Redirect(await GetHomeWebPageUrl(cancellationToken));
-        }
+            var signInResult = SignInResult.Failed;
 
-        ModelState.AddModelError(string.Empty, localizer["Your sign-in attempt was not successful. Please try again."].ToString());
-
-        return View(model);
-    }
-
-
-    // POST: Account/Logout 
-    [Authorize]
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Logout(CancellationToken cancellationToken = default)
-    {
-        await signInManager.SignOutAsync();
-        return Redirect(await GetHomeWebPageUrl(cancellationToken));
-    }
-
-
-    // GET: Account/Register
-    public ActionResult Register() => View();
-
-
-    // POST: Account/Register
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Register(RegisterViewModel model, CancellationToken cancellationToken = default)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
-
-        var member = new ApplicationUser
-        {
-            UserName = model.UserName,
-            Email = model.Email,
-            Enabled = true
-        };
-
-        var registerResult = new IdentityResult();
-
-        try
-        {
-            registerResult = await userManager.CreateAsync(member, model.Password);
-        }
-        catch (Exception ex)
-        {
-            eventLogService.LogException("AccountController", "Register", ex);
-            ModelState.AddModelError(string.Empty, localizer["Your registration was not successful."]);
-        }
-
-        if (registerResult.Succeeded)
-        {
-            var signInResult = await signInManager.PasswordSignInAsync(member, model.Password, true, false);
+            try
+            {
+                signInResult = await signInManager.PasswordSignInAsync(model.UserName, model.Password, model.StaySignedIn, false);
+            }
+            catch (Exception ex)
+            {
+                eventLogService.LogException("AccountController", "Login", ex);
+            }
 
             if (signInResult.Succeeded)
             {
+                var decodedReturnUrl = WebUtility.UrlDecode(returnUrl);
+                if (!string.IsNullOrEmpty(decodedReturnUrl) && Url.IsLocalUrl(decodedReturnUrl))
+                {
+                    return Redirect(decodedReturnUrl);
+                }
+
                 return Redirect(await GetHomeWebPageUrl(cancellationToken));
             }
+
+            ModelState.AddModelError(string.Empty, localizer["Your sign-in attempt was not successful. Please try again."].ToString());
+
+            return View(model);
         }
 
-        foreach (var error in registerResult.Errors)
+
+        // POST: Account/Logout 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Logout(CancellationToken cancellationToken = default)
         {
-            ModelState.AddModelError(string.Empty, error.Description);
+            await signInManager.SignOutAsync();
+            return Redirect(await GetHomeWebPageUrl(cancellationToken));
         }
 
-        return View(model);
-    }
+
+        // GET: Account/Register
+        public ActionResult Register()
+        {
+            return View();
+        }
 
 
-    private async Task<string> GetHomeWebPageUrl(CancellationToken cancellationToken = default)
-    {
-        var homePage = (await contentRetriever.RetrievePages<HomePage>(
-            RetrievePagesParameters.Default,
-            query => query.UrlPathColumns(),
-            new RetrievalCacheSettings("UrlPathColumns"),
-            cancellationToken
-        )).FirstOrDefault();
+        // POST: Account/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(RegisterViewModel model, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-        return homePage.GetUrl().RelativePath;
+            var member = new ApplicationUser
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                Enabled = true
+            };
+
+            var registerResult = new IdentityResult();
+
+            try
+            {
+                registerResult = await userManager.CreateAsync(member, model.Password);
+            }
+            catch (Exception ex)
+            {
+                eventLogService.LogException("AccountController", "Register", ex);
+                ModelState.AddModelError(string.Empty, localizer["Your registration was not successful."]);
+            }
+
+            if (registerResult.Succeeded)
+            {
+                var signInResult = await signInManager.PasswordSignInAsync(member, model.Password, true, false);
+
+                if (signInResult.Succeeded)
+                {
+                    return Redirect(await GetHomeWebPageUrl(cancellationToken));
+                }
+            }
+
+            foreach (var error in registerResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
+
+        private async Task<string> GetHomeWebPageUrl(CancellationToken cancellationToken = default)
+        {
+            var homePage = (await contentRetriever.RetrievePages<HomePage>(
+                RetrievePagesParameters.Default,
+                query => query.UrlPathColumns(),
+                new RetrievalCacheSettings("UrlPathColumns"),
+                cancellationToken
+            )).FirstOrDefault();
+
+            return homePage.GetUrl().RelativePath;
+        }
     }
 }

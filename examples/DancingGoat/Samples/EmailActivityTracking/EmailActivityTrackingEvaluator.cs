@@ -1,4 +1,6 @@
-﻿using CMS.ContactManagement;
+﻿using System.Threading.Tasks;
+
+using CMS.ContactManagement;
 using CMS.DataEngine;
 using CMS.DataProtection;
 using CMS.EmailLibrary;

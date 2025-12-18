@@ -1,5 +1,8 @@
-﻿namespace DancingGoat.Models;
+﻿using System.Collections.Generic;
 
-public record ProductViewModel(string Name, string Description, string ImagePath, decimal Price, string Tag, int ContentItemId, IDictionary<string, string> Parameters, IDictionary<int, string> Variants)
+namespace DancingGoat.Models
 {
+    public record ProductViewModel(string Name, string Description, string ImagePath, decimal Price, string Tag, int ContentItemId, IDictionary<string, string> Parameters, IDictionary<int, string> Variants)
+    {
+    }
 }

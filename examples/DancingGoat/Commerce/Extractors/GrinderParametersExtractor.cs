@@ -1,23 +1,28 @@
-﻿using DancingGoat.Models;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace DancingGoat.Commerce;
+using DancingGoat.Models;
 
-/// <inheritdoc cref="IProductTypeParametersExtractor"/>
-public class GrinderParametersExtractor : IProductTypeParametersExtractor
+namespace DancingGoat.Commerce
 {
-    /// <inheritdoc/>
-    public Task ExtractParameter<T>(IDictionary<string, string> parameters, T product, string _, CancellationToken cancellationToken)
+    /// <inheritdoc cref="IProductTypeParametersExtractor"/>
+    public class GrinderParametersExtractor : IProductTypeParametersExtractor
     {
-        if (product is ProductGrinder grinder)
+        /// <inheritdoc/>
+        public Task ExtractParameter<T>(IDictionary<string, string> parameters, T product, string _, CancellationToken cancellationToken)
         {
-            parameters.Add("Type", grinder.GrinderType);
-
-            if (grinder.GrinderType != "Manual")
+            if (product is ProductGrinder grinder)
             {
-                parameters.Add("Power", $"{grinder.GrinderPower:0} Watt");
-            }
-        }
+                parameters.Add("Type", grinder.GrinderType);
 
-        return Task.CompletedTask;
+                if (grinder.GrinderType != "Manual")
+                {
+                    parameters.Add("Power", $"{grinder.GrinderPower:0} Watt");
+                }
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

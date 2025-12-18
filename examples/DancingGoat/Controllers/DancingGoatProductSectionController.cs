@@ -1,4 +1,7 @@
-﻿using CMS.Websites.Routing;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+using CMS.Websites.Routing;
 
 using DancingGoat;
 using DancingGoat.Controllers;
@@ -12,36 +15,37 @@ using Microsoft.Extensions.Localization;
 
 [assembly: RegisterWebPageRoute(ProductsSection.CONTENT_TYPE_NAME, typeof(DancingGoatProductSectionController), WebsiteChannelNames = [DancingGoatConstants.WEBSITE_CHANNEL_NAME])]
 
-namespace DancingGoat.Controllers;
-
-public class DancingGoatProductSectionController : Controller
+namespace DancingGoat.Controllers
 {
-    private readonly IWebsiteChannelContext websiteChannelContext;
-    private readonly WebPageUrlProvider webPageUrlProvider;
-    private readonly IStringLocalizer<SharedResources> localizer;
-
-
-    public DancingGoatProductSectionController(
-        WebPageUrlProvider webPageUrlProvider,
-        IWebsiteChannelContext websiteChannelContext,
-        IStringLocalizer<SharedResources> localizer)
+    public class DancingGoatProductSectionController : Controller
     {
-        this.webPageUrlProvider = webPageUrlProvider;
-        this.websiteChannelContext = websiteChannelContext;
-        this.localizer = localizer;
-    }
+        private readonly IWebsiteChannelContext websiteChannelContext;
+        private readonly WebPageUrlProvider webPageUrlProvider;
+        private readonly IStringLocalizer<SharedResources> localizer;
 
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
-    {
-        if (websiteChannelContext.IsPreview)
+        public DancingGoatProductSectionController(
+            WebPageUrlProvider webPageUrlProvider,
+            IWebsiteChannelContext websiteChannelContext,
+            IStringLocalizer<SharedResources> localizer)
         {
-            return Content(localizer["Redirection to the Store page when on the live site."]);
+            this.webPageUrlProvider = webPageUrlProvider;
+            this.websiteChannelContext = websiteChannelContext;
+            this.localizer = localizer;
         }
 
-        var storePageUrl = await webPageUrlProvider.StorePageUrl(cancellationToken: cancellationToken);
 
-        // Redirect to the store page
-        return Redirect(storePageUrl);
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        {
+            if (websiteChannelContext.IsPreview)
+            {
+                return Content(localizer["Redirection to the Store page when on the live site."]);
+            }
+
+            var storePageUrl = await webPageUrlProvider.StorePageUrl(cancellationToken: cancellationToken);
+
+            // Redirect to the store page
+            return Redirect(storePageUrl);
+        }
     }
 }

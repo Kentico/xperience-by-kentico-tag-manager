@@ -1,4 +1,8 @@
-﻿using CMS.ContentEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using CMS.ContentEngine;
 using CMS.DataEngine;
 using CMS.Helpers;
 using CMS.Websites;
@@ -14,49 +18,50 @@ using Microsoft.AspNetCore.Mvc;
 
 [assembly: RegisterWebPageRoute(HomePage.CONTENT_TYPE_NAME, typeof(DancingGoatHomeController), WebsiteChannelNames = new[] { DancingGoatConstants.WEBSITE_CHANNEL_NAME })]
 
-namespace DancingGoat.Controllers;
-
-public class DancingGoatHomeController : Controller
+namespace DancingGoat.Controllers
 {
-    private readonly IContentRetriever contentRetriever;
-    private readonly ICacheDependencyBuilderFactory cacheDependencyBuilderFactory;
-
-    public DancingGoatHomeController(IContentRetriever contentRetriever, ICacheDependencyBuilderFactory cacheDependencyBuilderFactory)
+    public class DancingGoatHomeController : Controller
     {
-        this.contentRetriever = contentRetriever;
-        this.cacheDependencyBuilderFactory = cacheDependencyBuilderFactory;
-    }
+        private readonly IContentRetriever contentRetriever;
+        private readonly ICacheDependencyBuilderFactory cacheDependencyBuilderFactory;
 
-    public async Task<IActionResult> Index()
-    {
-        var homePage = await contentRetriever.RetrieveCurrentPage<HomePage>(
-            new RetrieveCurrentPageParameters { LinkedItemsMaxLevel = 4 },
-            HttpContext.RequestAborted
-        );
+        public DancingGoatHomeController(IContentRetriever contentRetriever, ICacheDependencyBuilderFactory cacheDependencyBuilderFactory)
+        {
+            this.contentRetriever = contentRetriever;
+            this.cacheDependencyBuilderFactory = cacheDependencyBuilderFactory;
+        }
 
-        var cafes = await GetCafes(homePage);
+        public async Task<IActionResult> Index()
+        {
+            var homePage = await contentRetriever.RetrieveCurrentPage<HomePage>(
+                new RetrieveCurrentPageParameters { LinkedItemsMaxLevel = 4 },
+                HttpContext.RequestAborted
+            );
 
-        return View(HomePageViewModel.GetViewModel(homePage, cafes));
-    }
+            var cafes = await GetCafes(homePage);
 
-    private async Task<IEnumerable<Cafe>> GetCafes(HomePage homePage)
-    {
-        var cafeAdditionalDependencies = cacheDependencyBuilderFactory.Create()
-            .ForWebPageItems()
-                .ByIdWithLanguageContext(homePage.SystemFields.WebPageItemID)
-                .Builder()
-            .ForInfoObjects<SmartFolderInfo>()
-                .ByGuid(homePage.HomePageCafesFolder.Identifier)
-                .Builder()
-            .Build();
+            return View(HomePageViewModel.GetViewModel(homePage, cafes));
+        }
 
-        return await contentRetriever.RetrieveContent<Cafe>(
-            new RetrieveContentParameters { LinkedItemsMaxLevel = 1 },
-            query => query
-                .InSmartFolder(homePage.HomePageCafesFolder.Identifier)
-                .TopN(3),
-            new RetrievalCacheSettings($"InSmartFolder_{homePage.HomePageCafesFolder.Identifier}_TopN_3", TimeSpan.FromMinutes(5), additionalCacheDependencies: cafeAdditionalDependencies),
-            HttpContext.RequestAborted
-        );
+        private async Task<IEnumerable<Cafe>> GetCafes(HomePage homePage)
+        {
+            var cafeAdditionalDependencies = cacheDependencyBuilderFactory.Create()
+                .ForWebPageItems()
+                    .ByIdWithLanguageContext(homePage.SystemFields.WebPageItemID)
+                    .Builder()
+                .ForInfoObjects<SmartFolderInfo>()
+                    .ByGuid(homePage.HomePageCafesFolder.Identifier)
+                    .Builder()
+                .Build();
+
+            return await contentRetriever.RetrieveContent<Cafe>(
+                new RetrieveContentParameters { LinkedItemsMaxLevel = 1 },
+                query => query
+                    .InSmartFolder(homePage.HomePageCafesFolder.Identifier)
+                    .TopN(3),
+                new RetrievalCacheSettings($"InSmartFolder_{homePage.HomePageCafesFolder.Identifier}_TopN_3", TimeSpan.FromMinutes(5), additionalCacheDependencies: cafeAdditionalDependencies),
+                HttpContext.RequestAborted
+            );
+        }
     }
 }

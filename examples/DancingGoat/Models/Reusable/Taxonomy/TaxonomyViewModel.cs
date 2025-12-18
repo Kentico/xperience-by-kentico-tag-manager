@@ -1,25 +1,33 @@
-﻿using CMS.ContentEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace DancingGoat.Models;
+using CMS.ContentEngine;
 
-public record TaxonomyViewModel(string Name, string CodeName, List<TagViewModel> Tags)
+namespace DancingGoat.Models
 {
-    /// <summary>
-    /// Maps <see cref="TaxonomyData"/> to a <see cref="TaxonomyViewModel"/>.
-    /// </summary>
-    public static TaxonomyViewModel GetViewModel(TaxonomyData taxonomy) => new TaxonomyViewModel(taxonomy.Taxonomy.Title, taxonomy.Taxonomy.Name, TagViewModel.GetViewModels(taxonomy.Tags));
-
-
-    /// <summary>
-    /// Gets selected tags.
-    /// </summary>
-    public async Task<TagCollection> GetSelectedTags()
+    public record TaxonomyViewModel(string Name, string CodeName, List<TagViewModel> Tags)
     {
-        if (Tags == null)
+        /// <summary>
+        /// Maps <see cref="TaxonomyData"/> to a <see cref="TaxonomyViewModel"/>.
+        /// </summary>
+        public static TaxonomyViewModel GetViewModel(TaxonomyData taxonomy)
         {
-            return null;
+            return new TaxonomyViewModel(taxonomy.Taxonomy.Title, taxonomy.Taxonomy.Name, TagViewModel.GetViewModels(taxonomy.Tags));
         }
 
-        return await TagCollection.Create(Tags.Where(tag => tag.IsChecked).Select(tag => tag.Value));
+
+        /// <summary>
+        /// Gets selected tags.
+        /// </summary>
+        public async Task<TagCollection> GetSelectedTags()
+        {
+            if (Tags == null)
+            {
+                return null;
+            }
+
+            return await TagCollection.Create(Tags.Where(tag => tag.IsChecked).Select(tag => tag.Value));
+        }
     }
 }

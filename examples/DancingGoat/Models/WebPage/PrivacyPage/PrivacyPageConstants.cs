@@ -1,6 +1,7 @@
-﻿namespace DancingGoat.Models;
-
-internal static class PrivacyPageConstants
+﻿namespace DancingGoat.Models
 {
-    public const string PRIVACY_PAGE_TREE_PATH = "/specials/privacy";
+    internal static class PrivacyPageConstants
+    {
+        public const string PRIVACY_PAGE_TREE_PATH = "/specials/privacy";
+    }
 }

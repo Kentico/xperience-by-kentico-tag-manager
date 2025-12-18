@@ -1,20 +1,26 @@
-﻿using DancingGoat.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace DancingGoat.Commerce;
+using DancingGoat.Models;
 
-/// <inheritdoc cref="IProductTypeParametersExtractor"/>
-internal class ProductTemplateAlphaSizeParametersExtractor : IProductTypeParametersExtractor
+namespace DancingGoat.Commerce
 {
-    /// <inheritdoc/>
-    public Task ExtractParameter<T>(IDictionary<string, string> parameters, T product, string _, CancellationToken cancellationToken)
+    /// <inheritdoc cref="IProductTypeParametersExtractor"/>
+    internal class ProductTemplateAlphaSizeParametersExtractor : IProductTypeParametersExtractor
     {
-        if (product is ProductTemplateAlphaSize productTemplateAlphaSize)
+        /// <inheritdoc/>
+        public Task ExtractParameter<T>(IDictionary<string, string> parameters, T product, string _, CancellationToken cancellationToken)
         {
-            var alphaSizes = productTemplateAlphaSize.ProductVariants.Select(x => x.ProductOptionAlphaSize).Distinct();
+            if (product is ProductTemplateAlphaSize productTemplateAlphaSize)
+            {
+                var alphaSizes = productTemplateAlphaSize.ProductVariants.Select(x => x.ProductOptionAlphaSize).Distinct();
 
-            parameters.Add("Sizes", string.Join(", ", alphaSizes));
+                parameters.Add("Sizes", string.Join(", ", alphaSizes));
+            }
+
+            return Task.CompletedTask;
         }
-
-        return Task.CompletedTask;
     }
 }

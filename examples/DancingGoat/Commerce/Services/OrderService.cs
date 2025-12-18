@@ -1,4 +1,9 @@
-﻿using CMS.Commerce;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using CMS.Commerce;
 using CMS.ContentEngine;
 using CMS.DataEngine;
 
@@ -66,68 +71,70 @@ public sealed class OrderService
 
         var totalPrice = CalculationService.CalculateTotalPrice(shoppingCartData, products);
 
-        using var scope = new CMSTransactionScope();
-        int customerId = await UpsertCustomer(customerDto, memberId, cancellationToken);
-
-        var orderNumber = await orderNumberGenerator.GenerateOrderNumber(cancellationToken);
-        var orderStatusId = await GetInitialOrderStatusId(cancellationToken);
-
-        var order = new OrderInfo()
+        using (var scope = new CMSTransactionScope())
         {
-            OrderCreatedWhen = DateTime.Now,
-            OrderNumber = orderNumber,
-            OrderOrderStatusID = orderStatusId,
-            OrderTotalPrice = totalPrice,
-            OrderTotalTax = 0,
-            OrderTotalShipping = 0,
-            OrderGrandTotal = totalPrice,
-            OrderCustomerID = customerId
-        };
-        await orderInfoProvider.SetAsync(order);
+            int customerId = await UpsertCustomer(customerDto, memberId, cancellationToken);
 
-        var orderAddress = new OrderAddressInfo()
-        {
-            OrderAddressFirstName = customerDto.FirstName,
-            OrderAddressLastName = customerDto.LastName,
-            OrderAddressCompany = customerDto.Company,
-            OrderAddressPhone = customerDto.PhoneNumber,
-            OrderAddressEmail = customerDto.Email,
-            OrderAddressCity = customerDto.AddressCity,
-            OrderAddressLine1 = customerDto.AddressLine1,
-            OrderAddressLine2 = customerDto.AddressLine2,
-            OrderAddressZip = customerDto.AddressPostalCode,
-            OrderAddressCountryID = customerDto.AddressCountryId,
-            OrderAddressStateID = customerDto.AddressStateId,
-            OrderAddressOrderID = order.OrderID,
-            OrderAddressType = OrderAddressType.Billing,
-        };
-        await orderAddressInfoProvider.SetAsync(orderAddress);
+            var orderNumber = await orderNumberGenerator.GenerateOrderNumber(cancellationToken);
+            var orderStatusId = await GetInitialOrderStatusId(cancellationToken);
 
-        foreach (var item in shoppingCartData.Items)
-        {
-            var product = products.First(product => (product as IContentItemFieldsSource).SystemFields.ContentItemID == item.ContentItemId);
-            var variantSKUs = product == null ? null : productVariantsExtractor.ExtractVariantsSKUCode(product);
-            var variantSKU = variantSKUs == null || !item.VariantId.HasValue ? null : variantSKUs[item.VariantId.Value];
-            var productName = productNameProvider.GetProductName(product, item.VariantId);
-
-            var unitPrice = product.ProductFieldPrice;
-            var orderItem = new OrderItemInfo()
+            var order = new OrderInfo()
             {
-                OrderItemOrderID = order.OrderID,
-                OrderItemQuantity = item.Quantity,
-                OrderItemUnitPrice = unitPrice,
-                OrderItemTotalPrice = CalculationService.CalculateItemPrice(item.Quantity, unitPrice),
-                OrderItemSKU = variantSKU ?? (product as IProductSKU).ProductSKUCode,
-                OrderItemName = productName
+                OrderCreatedWhen = DateTime.Now,
+                OrderNumber = orderNumber,
+                OrderOrderStatusID = orderStatusId,
+                OrderTotalPrice = totalPrice,
+                OrderTotalTax = 0,
+                OrderTotalShipping = 0,
+                OrderGrandTotal = totalPrice,
+                OrderCustomerID = customerId
             };
-            await orderItemInfoProvider.SetAsync(orderItem);
+            await orderInfoProvider.SetAsync(order);
+
+            var orderAddress = new OrderAddressInfo()
+            {
+                OrderAddressFirstName = customerDto.FirstName,
+                OrderAddressLastName = customerDto.LastName,
+                OrderAddressCompany = customerDto.Company,
+                OrderAddressPhone = customerDto.PhoneNumber,
+                OrderAddressEmail = customerDto.Email,
+                OrderAddressCity = customerDto.AddressCity,
+                OrderAddressLine1 = customerDto.AddressLine1,
+                OrderAddressLine2 = customerDto.AddressLine2,
+                OrderAddressZip = customerDto.AddressPostalCode,
+                OrderAddressCountryID = customerDto.AddressCountryId,
+                OrderAddressStateID = customerDto.AddressStateId,
+                OrderAddressOrderID = order.OrderID,
+                OrderAddressType = OrderAddressType.Billing,
+            };
+            await orderAddressInfoProvider.SetAsync(orderAddress);
+
+            foreach (var item in shoppingCartData.Items)
+            {
+                var product = products.First(product => (product as IContentItemFieldsSource).SystemFields.ContentItemID == item.ContentItemId);
+                var variantSKUs = product == null ? null : productVariantsExtractor.ExtractVariantsSKUCode(product);
+                var variantSKU = variantSKUs == null || !item.VariantId.HasValue ? null : variantSKUs[item.VariantId.Value];
+                var productName = productNameProvider.GetProductName(product, item.VariantId);
+
+                var unitPrice = product.ProductFieldPrice;
+                var orderItem = new OrderItemInfo()
+                {
+                    OrderItemOrderID = order.OrderID,
+                    OrderItemQuantity = item.Quantity,
+                    OrderItemUnitPrice = unitPrice,
+                    OrderItemTotalPrice = CalculationService.CalculateItemPrice(item.Quantity, unitPrice),
+                    OrderItemSKU = variantSKU ?? (product as IProductSKU).ProductSKUCode,
+                    OrderItemName = productName
+                };
+                await orderItemInfoProvider.SetAsync(orderItem);
+            }
+
+            scope.Commit();
+
+            await orderNotificationService.SendNotification(order.OrderID, cancellationToken);
+
+            return orderNumber;
         }
-
-        scope.Commit();
-
-        await orderNotificationService.SendNotification(order.OrderID, cancellationToken);
-
-        return orderNumber;
     }
 
 
@@ -143,12 +150,15 @@ public sealed class OrderService
             customer = await customerDataRetriever.GetCustomerForMember(memberId, cancellation);
         }
 
-        // Create a new customer if it doesn't exist for the member yet or if the member is not authenticated
-        customer ??= new CustomerInfo()
+        if (customer == null)
         {
-            CustomerCreatedWhen = DateTime.Now,
-            CustomerMemberID = memberId
-        };
+            // Create a new customer if it doesn't exist for the member yet or if the member is not authenticated
+            customer = new CustomerInfo()
+            {
+                CustomerCreatedWhen = DateTime.Now,
+                CustomerMemberID = memberId
+            };
+        }
 
         // Update the customer with the data from the checkout form
         customer.CustomerFirstName = customerDto.FirstName;
@@ -159,10 +169,14 @@ public sealed class OrderService
         await customerInfoProvider.SetAsync(customer);
 
         // Do not cancel the request while a write operation is already in process
-        var customerAddress = await customerDataRetriever.GetCustomerAddress(customer.CustomerID, CancellationToken.None) ?? new CustomerAddressInfo()
+        var customerAddress = await customerDataRetriever.GetCustomerAddress(customer.CustomerID, CancellationToken.None);
+        if (customerAddress == null)
+        {
+            customerAddress = new CustomerAddressInfo()
             {
                 CustomerAddressCustomerID = customer.CustomerID
             };
+        }
 
         // Update the customer address with the data from the checkout form
         // (Dancing Goat sample operates only with a single customer address)

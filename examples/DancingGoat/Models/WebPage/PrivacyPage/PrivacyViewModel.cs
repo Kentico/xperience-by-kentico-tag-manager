@@ -1,23 +1,27 @@
-﻿using CMS.Websites;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace DancingGoat.Models;
+using CMS.Websites;
 
-public class PrivacyViewModel : IWebPageBasedViewModel
+namespace DancingGoat.Models
 {
-    public bool DemoDisabled { get; set; }
+    public class PrivacyViewModel : IWebPageBasedViewModel
+    {
+        public bool DemoDisabled { get; set; }
 
 
-    public bool ShowSavedMessage { get; set; }
+        public bool ShowSavedMessage { get; set; }
 
 
-    public bool ShowErrorMessage { get; set; }
+        public bool ShowErrorMessage { get; set; }
 
 
-    public IEnumerable<PrivacyConsentViewModel> Consents { get; set; } = Enumerable.Empty<PrivacyConsentViewModel>();
+        public IEnumerable<PrivacyConsentViewModel> Consents { get; set; } = Enumerable.Empty<PrivacyConsentViewModel>();
 
 
-    public string PrivacyPageUrl { get; set; }
+        public string PrivacyPageUrl { get; set; }
 
 
-    public IWebPageFieldsSource WebPage { get; init; }
+        public IWebPageFieldsSource WebPage { get; init; }
+    }
 }

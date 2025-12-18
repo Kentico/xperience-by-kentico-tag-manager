@@ -1,5 +1,8 @@
-﻿namespace DancingGoat.Models;
+﻿using System.Collections.Generic;
 
-public record ProductSectionListViewModel(string Title, IEnumerable<ProductListItemViewModel> Items)
+namespace DancingGoat.Models
 {
+    public record ProductSectionListViewModel(string Title, IEnumerable<ProductListItemViewModel> Items)
+    {
+    }
 }

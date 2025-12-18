@@ -1,23 +1,26 @@
-﻿namespace DancingGoat.Models;
+﻿using System.Linq;
 
-public record ReferenceViewModel(string Name, string Description, string Text, string ImageUrl, string ImageShortDescription)
+namespace DancingGoat.Models
 {
-    /// <summary>
-    /// Validates and maps <see cref="Reference"/> to a <see cref="ReferenceViewModel"/>.
-    /// </summary>
-    public static ReferenceViewModel GetViewModel(Reference reference)
+    public record ReferenceViewModel(string Name, string Description, string Text, string ImageUrl, string ImageShortDescription)
     {
-        if (reference == null)
+        /// <summary>
+        /// Validates and maps <see cref="Reference"/> to a <see cref="ReferenceViewModel"/>.
+        /// </summary>
+        public static ReferenceViewModel GetViewModel(Reference reference)
         {
-            return null;
-        }
+            if (reference == null)
+            {
+                return null;
+            }
 
-        return new ReferenceViewModel(
-            reference.ReferenceName,
-            reference.ReferenceDescription,
-            reference.ReferenceText,
-            reference.ReferenceImage.FirstOrDefault()?.ImageFile.Url,
-            reference.ReferenceImage.FirstOrDefault()?.ImageShortDescription
-         );
+            return new ReferenceViewModel(
+                reference.ReferenceName,
+                reference.ReferenceDescription,
+                reference.ReferenceText,
+                reference.ReferenceImage.FirstOrDefault()?.ImageFile.Url,
+                reference.ReferenceImage.FirstOrDefault()?.ImageShortDescription
+             );
+        }
     }
 }

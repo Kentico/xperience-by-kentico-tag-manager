@@ -1,19 +1,22 @@
-﻿namespace DancingGoat.Models;
+﻿using System.Linq;
 
-public record BannerViewModel(string BackgroundImageUrl, string HeaderText, string Text)
+namespace DancingGoat.Models
 {
-    /// <summary>
-    /// Validates and maps <see cref="Banner"/> to a <see cref="BannerViewModel"/>.
-    /// </summary>
-    public static BannerViewModel GetViewModel(Banner banner)
+    public record BannerViewModel(string BackgroundImageUrl, string HeaderText, string Text)
     {
-        if (banner == null)
+        /// <summary>
+        /// Validates and maps <see cref="Banner"/> to a <see cref="BannerViewModel"/>.
+        /// </summary>
+        public static BannerViewModel GetViewModel(Banner banner)
         {
-            return null;
+            if (banner == null)
+            {
+                return null;
+            }
+
+            var image = banner.BannerBackgroundImage.FirstOrDefault();
+
+            return new BannerViewModel(image?.ImageFile.Url, banner.BannerHeaderText, banner.BannerText);
         }
-
-        var image = banner.BannerBackgroundImage.FirstOrDefault();
-
-        return new BannerViewModel(image?.ImageFile.Url, banner.BannerHeaderText, banner.BannerText);
     }
 }

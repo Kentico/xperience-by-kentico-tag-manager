@@ -1,28 +1,32 @@
-﻿using DancingGoat.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace DancingGoat.Commerce;
+using DancingGoat.Models;
 
-/// <inheritdoc cref="IProductTypeVariantsExtractor"/>
-internal class ProductTemplateAlphaSizeVariantsExtractor : IProductTypeVariantsExtractor
+namespace DancingGoat.Commerce
 {
-    /// <inheritdoc/>
-    public IDictionary<int, string> ExtractVariantsValue<T>(T product)
+    /// <inheritdoc cref="IProductTypeVariantsExtractor"/>
+    internal class ProductTemplateAlphaSizeVariantsExtractor : IProductTypeVariantsExtractor
     {
-        if (product is ProductTemplateAlphaSize productTemplateAlphaSize)
+        /// <inheritdoc/>
+        public IDictionary<int, string> ExtractVariantsValue<T>(T product)
         {
-            return productTemplateAlphaSize.ProductVariants.ToDictionary(x => x.SystemFields.ContentItemID, x => x.ProductOptionAlphaSize);
+            if (product is ProductTemplateAlphaSize productTemplateAlphaSize)
+            {
+                return productTemplateAlphaSize.ProductVariants.ToDictionary(x => x.SystemFields.ContentItemID, x => x.ProductOptionAlphaSize);
+            }
+            return null;
         }
-        return null;
-    }
 
 
-    /// <inheritdoc/>
-    public IDictionary<int, string> ExtractVariantsSKUCode<T>(T product)
-    {
-        if (product is ProductTemplateAlphaSize productTemplateAlphaSize)
+        /// <inheritdoc/>
+        public IDictionary<int, string> ExtractVariantsSKUCode<T>(T product)
         {
-            return productTemplateAlphaSize.ProductVariants.ToDictionary(x => x.SystemFields.ContentItemID, x => x.ProductSKUCode);
+            if (product is ProductTemplateAlphaSize productTemplateAlphaSize)
+            {
+                return productTemplateAlphaSize.ProductVariants.ToDictionary(x => x.SystemFields.ContentItemID, x => x.ProductSKUCode);
+            }
+            return null;
         }
-        return null;
     }
 }

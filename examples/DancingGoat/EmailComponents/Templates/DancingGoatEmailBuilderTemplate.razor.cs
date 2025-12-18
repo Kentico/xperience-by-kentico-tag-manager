@@ -1,4 +1,6 @@
-﻿using CMS.EmailMarketing;
+﻿using System.Threading.Tasks;
+
+using CMS.EmailMarketing;
 
 using DancingGoat.EmailComponents;
 using DancingGoat.Models;

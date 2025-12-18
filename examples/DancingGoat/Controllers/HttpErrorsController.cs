@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace DancingGoat.Controllers;
-
-public class HttpErrorsController : Controller
+namespace DancingGoat.Controllers
 {
-    public IActionResult Error(int code)
+    public class HttpErrorsController : Controller
     {
-        if (code == 404)
+        public IActionResult Error(int code)
         {
-            return View("NotFound");
-        }
+            if (code == 404)
+            {
+                return View("NotFound");
+            }
 
-        return StatusCode(code);
+            return StatusCode(code);
+        }
     }
 }

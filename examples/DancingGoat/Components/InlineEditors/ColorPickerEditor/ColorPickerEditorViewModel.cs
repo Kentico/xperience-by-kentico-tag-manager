@@ -1,12 +1,13 @@
-﻿namespace DancingGoat.InlineEditors;
-
-/// <summary>
-/// View model for Color picker editor.
-/// </summary>
-public sealed class ColorPickerEditorViewModel : InlineEditorViewModel
+﻿namespace DancingGoat.InlineEditors
 {
     /// <summary>
-    /// Color CSS class.
+    /// View model for Color picker editor.
     /// </summary>
-    public string ColorCssClass { get; set; }
+    public sealed class ColorPickerEditorViewModel : InlineEditorViewModel
+    {
+        /// <summary>
+        /// Color CSS class.
+        /// </summary>
+        public string ColorCssClass { get; set; }
+    }
 }

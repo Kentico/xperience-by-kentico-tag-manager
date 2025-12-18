@@ -1,5 +1,6 @@
-﻿namespace DancingGoat;
-
-public class SharedResources
+﻿namespace DancingGoat
 {
+    public class SharedResources
+    {
+    }
 }

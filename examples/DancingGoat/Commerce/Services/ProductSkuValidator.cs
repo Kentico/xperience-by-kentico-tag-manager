@@ -1,4 +1,7 @@
-﻿using CMS.ContentEngine;
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+using CMS.ContentEngine;
 
 using DancingGoat.Models;
 
@@ -13,7 +16,10 @@ internal sealed class ProductSkuValidator
     private readonly IContentQueryExecutor executor;
 
 
-    public ProductSkuValidator(IContentQueryExecutor executor) => this.executor = executor;
+    public ProductSkuValidator(IContentQueryExecutor executor)
+    {
+        this.executor = executor;
+    }
 
 
     /// <summary>

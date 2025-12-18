@@ -1,12 +1,15 @@
-﻿using CMS;
-using CMS.Base;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using DancingGoat;
 using DancingGoat.Commerce;
 using DancingGoat.EmailComponents;
 using DancingGoat.Helpers.Generators;
 using DancingGoat.Models;
-using DancingGoat.TagManager;
+
+using CMS;
+using CMS.Base;
 
 using Kentico.Activities.Web.Mvc;
 using Kentico.Commerce.Web.Mvc;
@@ -15,13 +18,21 @@ using Kentico.EmailBuilder.Web.Mvc;
 using Kentico.Membership;
 using Kentico.OnlineMarketing.Web.Mvc;
 using Kentico.PageBuilder.Web.Mvc;
-using Kentico.Web.Mvc;
 using Kentico.Xperience.Mjml;
+using Kentico.Web.Mvc;
 
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+using DancingGoat.TagManager;
 
 using Samples.DancingGoat;
 
@@ -67,7 +78,10 @@ builder.Services.AddSession(options =>
 builder.Services.AddLocalization()
     .AddControllersWithViews()
     .AddViewLocalization()
-    .AddDataAnnotationsLocalization(options => options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResources)));
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResources));
+    });
 
 builder.Services.AddDancingGoatServices();
 builder.Services.AddSingleton<IEmailActivityTrackingEvaluator, EmailActivityTrackingEvaluator>();
@@ -75,7 +89,10 @@ builder.Services.AddSingleton<IEmailActivityTrackingEvaluator, EmailActivityTrac
 ConfigureEmailBuilder(builder.Services);
 ConfigureMembershipServices(builder.Services);
 
-builder.Services.AddKenticoTagManager(builder.Configuration, builder => builder.AddSnippetFactory<DancingGoatSnippetFactory>());
+builder.Services.AddKenticoTagManager(builder.Configuration, builder =>
+{
+    builder.AddSnippetFactory<DancingGoatSnippetFactory>();
+});
 
 if (builder.Environment.IsDevelopment())
 {

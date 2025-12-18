@@ -1,27 +1,30 @@
-﻿using CMS.Websites;
+﻿using System.Collections.Generic;
 
-namespace DancingGoat.Models;
+using CMS.Websites;
 
-public class ContactsIndexViewModel : IWebPageBasedViewModel
+namespace DancingGoat.Models
 {
-    /// <summary>
-    /// The company contact data.
-    /// </summary>
-    public ContactViewModel CompanyContact { get; set; }
+    public class ContactsIndexViewModel : IWebPageBasedViewModel
+    {
+        /// <summary>
+        /// The company contact data.
+        /// </summary>
+        public ContactViewModel CompanyContact { get; set; }
 
 
-    /// <summary>
-    /// The company cafes data.
-    /// </summary>
-    public List<CafeViewModel> CompanyCafes { get; set; }
+        /// <summary>
+        /// The company cafes data.
+        /// </summary>
+        public List<CafeViewModel> CompanyCafes { get; set; }
 
 
-    /// <summary>
-    /// The partner cafes data.
-    /// </summary>
-    public List<CafeViewModel> PartnerCafes { get; set; }
+        /// <summary>
+        /// The partner cafes data.
+        /// </summary>
+        public List<CafeViewModel> PartnerCafes { get; set; }
 
 
-    /// <inheritdoc/>
-    public IWebPageFieldsSource WebPage { get; init; }
+        /// <inheritdoc/>
+        public IWebPageFieldsSource WebPage { get; init; }
+    }
 }

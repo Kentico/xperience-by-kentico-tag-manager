@@ -1,27 +1,36 @@
-﻿using CMS.ContentEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using CMS.ContentEngine;
 
 using DancingGoat.Models;
 
-namespace DancingGoat.Commerce;
-
-/// <inheritdoc cref="IProductTypeParametersExtractor"/>
-internal class ProductManufacturerExtractor : IProductTypeParametersExtractor
+namespace DancingGoat.Commerce
 {
-    private readonly ITaxonomyRetriever taxonomyRetriever;
-
-
-    public ProductManufacturerExtractor(ITaxonomyRetriever taxonomyRetriever) => this.taxonomyRetriever = taxonomyRetriever;
-
-
-    /// <inheritdoc/>
-    public async Task ExtractParameter<T>(IDictionary<string, string> parameters, T product, string languageName, CancellationToken cancellationToken)
+    /// <inheritdoc cref="IProductTypeParametersExtractor"/>
+    internal class ProductManufacturerExtractor : IProductTypeParametersExtractor
     {
-        if (product is IProductManufacturer productManufacturer && productManufacturer.ProductManufacturerTag != null)
+        private readonly ITaxonomyRetriever taxonomyRetriever;
+
+
+        public ProductManufacturerExtractor(ITaxonomyRetriever taxonomyRetriever)
         {
-            var manufacturerTags = await taxonomyRetriever.RetrieveTags(productManufacturer.ProductManufacturerTag.Select(x => x.Identifier), languageName, cancellationToken);
-            if (manufacturerTags.Any())
+            this.taxonomyRetriever = taxonomyRetriever;
+        }
+
+
+        /// <inheritdoc/>
+        public async Task ExtractParameter<T>(IDictionary<string, string> parameters, T product, string languageName, CancellationToken cancellationToken)
+        {
+            if (product is IProductManufacturer productManufacturer && productManufacturer.ProductManufacturerTag != null)
             {
-                parameters.Add("Manufacturer", string.Join(", ", manufacturerTags.Select(x => x.Title)));
+                var manufacturerTags = await taxonomyRetriever.RetrieveTags(productManufacturer.ProductManufacturerTag.Select(x => x.Identifier), languageName, cancellationToken);
+                if (manufacturerTags.Any())
+                {
+                    parameters.Add("Manufacturer", string.Join(", ", manufacturerTags.Select(x => x.Title)));
+                }
             }
         }
     }

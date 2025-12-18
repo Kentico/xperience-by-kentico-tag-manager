@@ -1,26 +1,34 @@
-﻿using Kentico.PageBuilder.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DancingGoat.Helpers;
+using Kentico.PageBuilder.Web.Mvc;
 
-/// <summary>
-/// Provides filter methods to restrict the list of allowed widgets for editable areas.
-/// </summary>
-public static class AreaRestrictionHelper
+namespace DancingGoat.Helpers
 {
     /// <summary>
-    /// Gets list of widget identifiers allowed for landing page.
+    /// Provides filter methods to restrict the list of allowed widgets for editable areas.
     /// </summary>
-    public static string[] GetLandingPageRestrictions()
+    public static class AreaRestrictionHelper
     {
-        var allowedScopes = new[] { "Kentico.", "DancingGoat.General.", "DancingGoat.LandingPage." };
+        /// <summary>
+        /// Gets list of widget identifiers allowed for landing page.
+        /// </summary>
+        public static string[] GetLandingPageRestrictions()
+        {
+            var allowedScopes = new[] { "Kentico.", "DancingGoat.General.", "DancingGoat.LandingPage." };
 
-        return GetWidgetsIdentifiers()
-            .Where(id => allowedScopes.Any(scope => id.StartsWith(scope, StringComparison.OrdinalIgnoreCase)))
-            .ToArray();
+            return GetWidgetsIdentifiers()
+                .Where(id => allowedScopes.Any(scope => id.StartsWith(scope, StringComparison.OrdinalIgnoreCase)))
+                .ToArray();
+        }
+
+
+        private static IEnumerable<string> GetWidgetsIdentifiers()
+        {
+            return new Kentico.Builder.Web.Mvc.ComponentDefinitionProvider<WidgetDefinition>()
+                   .GetAll()
+                   .Select(definition => definition.Identifier);
+        }
     }
-
-
-    private static IEnumerable<string> GetWidgetsIdentifiers() => new Kentico.Builder.Web.Mvc.ComponentDefinitionProvider<WidgetDefinition>()
-               .GetAll()
-               .Select(definition => definition.Identifier);
 }

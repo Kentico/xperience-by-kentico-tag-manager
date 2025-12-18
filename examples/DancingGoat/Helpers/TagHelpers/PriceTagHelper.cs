@@ -11,7 +11,10 @@ public class PriceTagHelper : TagHelper
     private readonly IPriceFormatter priceFormatter;
 
 
-    public PriceTagHelper(IPriceFormatter priceFormatter) => this.priceFormatter = priceFormatter;
+    public PriceTagHelper(IPriceFormatter priceFormatter)
+    {
+        this.priceFormatter = priceFormatter;
+    }
 
 
     public override void Process(TagHelperContext context, TagHelperOutput output)

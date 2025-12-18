@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -50,5 +51,8 @@ internal static class HtmlHelperExtensions
     }
 
 
-    private static string GetModelName<TModel>(IHtmlHelper<TModel> html) => html.GetType().GenericTypeArguments[0].Name.Replace("ViewModel", "");
+    private static string GetModelName<TModel>(IHtmlHelper<TModel> html)
+    {
+        return html.GetType().GenericTypeArguments[0].Name.Replace("ViewModel", "");
+    }
 }

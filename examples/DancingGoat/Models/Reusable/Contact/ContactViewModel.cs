@@ -1,25 +1,26 @@
-﻿namespace DancingGoat.Models;
-
-public record ContactViewModel(string Name, string Street, string City, string Country, string ZipCode, string Phone, string Email)
+﻿namespace DancingGoat.Models
 {
-    /// <summary>
-    /// Validates and maps <see cref="Contact"/> to a <see cref="ContactViewModel"/>.
-    /// </summary>
-    public static ContactViewModel GetViewModel(Contact contact)
+    public record ContactViewModel(string Name, string Street, string City, string Country, string ZipCode, string Phone, string Email)
     {
-        if (contact is null)
+        /// <summary>
+        /// Validates and maps <see cref="Contact"/> to a <see cref="ContactViewModel"/>.
+        /// </summary>
+        public static ContactViewModel GetViewModel(Contact contact)
         {
-            return null;
-        }
+            if (contact is null)
+            {
+                return null;
+            }
 
-        return new ContactViewModel(
-            contact.ContactName,
-            contact.ContactStreet,
-            contact.ContactCity,
-            contact.ContactCountry,
-            contact.ContactZipCode,
-            contact.ContactPhone,
-            contact.ContactEmail
-        );
+            return new ContactViewModel(
+                contact.ContactName,
+                contact.ContactStreet,
+                contact.ContactCity,
+                contact.ContactCountry,
+                contact.ContactZipCode,
+                contact.ContactPhone,
+                contact.ContactEmail
+            );
+        }
     }
 }
