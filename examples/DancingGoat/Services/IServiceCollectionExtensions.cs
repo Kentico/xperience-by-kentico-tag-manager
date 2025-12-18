@@ -27,7 +27,6 @@ namespace DancingGoat
         {
             services.AddSingleton<ContentItemEventHandlers>();
 
-            services.AddScoped<CurrentShoppingCartService>();
             services.AddSingleton<OrderService>();
             services.AddSingleton<CustomerDataRetriever>();
             services.AddSingleton<ProductNameProvider>();

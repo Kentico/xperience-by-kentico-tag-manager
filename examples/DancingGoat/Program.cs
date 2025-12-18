@@ -67,14 +67,6 @@ builder.Services.AddKentico(features =>
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
 builder.Services.AddLocalization()
     .AddControllersWithViews()
     .AddViewLocalization()
@@ -108,8 +100,6 @@ Initialize(app.Services);
 app.UseStaticFiles();
 
 app.UseCookiePolicy();
-
-app.UseSession();
 
 app.UseAuthentication();
 
