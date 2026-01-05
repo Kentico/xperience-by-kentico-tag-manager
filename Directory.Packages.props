@@ -6,14 +6,14 @@
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Kentico.Xperience.Admin" Version="30.6.0" />
-    <PackageVersion Include="Kentico.Xperience.WebApp" Version="30.6.0" />
-    <PackageVersion Include="kentico.xperience.azurestorage" Version="30.6.0" />
-    <PackageVersion Include="kentico.xperience.imageprocessing" Version="30.6.0" />
+    <PackageVersion Include="Kentico.Xperience.Admin" Version="31.0.0" />
+    <PackageVersion Include="Kentico.Xperience.WebApp" Version="31.0.0" />
+    <PackageVersion Include="kentico.xperience.azurestorage" Version="31.0.0" />
+    <PackageVersion Include="kentico.xperience.imageprocessing" Version="31.0.0" />
     <PackageVersion Include="Kentico.Xperience.TagManager" Version="" Condition="'$(LOCAL_NUGET)' == 'true'" />
-	<PackageVersion Include="Kentico.Xperience.Mjml" Version="30.6.0"/>
-    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+	<PackageVersion Include="Kentico.Xperience.Mjml" Version="31.0.0"/>
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.25.0.90414" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="NUnit" Version="4.1.0" />
