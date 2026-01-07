@@ -30,7 +30,7 @@ Xperience by Kentico Tag Manager is a .NET 8 class library that integrates with 
 ### Package Testing - TIMING VERIFIED
 To test local package changes:
 1. `dotnet pack ./src/Kentico.Xperience.TagManager -c Release -o nuget-local -p:SIGN_FILE=false` -- takes ~22 seconds, creates local NuGet package
-2. Update `Directory.Packages.props`: Set `Kentico.Xperience.TagManager` version to match the version in `Directory.Build.props` (currently 4.2.2)
+2. Update `Directory.Packages.props`: Set `Kentico.Xperience.TagManager` version to match the version in `Directory.Build.props`
 3. Update `nuget.config`: Uncomment `<package pattern="Kentico.Xperience.TagManager" />` in LocalPackages section
 4. `dotnet build -p:LOCAL_NUGET=true` -- takes ~7 seconds, builds solution using local package
 5. Verify DLL version in `examples/DancingGoat/bin/Debug/net8.0/` matches expected version
@@ -98,7 +98,7 @@ For admin UI development, add to DancingGoat User Secrets:
 
 ### Key Files
 - `global.json` - Specifies exact .NET SDK version requirement (8.0.411)
-- `Directory.Build.props` - Contains version (4.2.2) and package metadata
+- `Directory.Build.props` - Contains version and package metadata
 - `Directory.Packages.props` - Central package version management
 - `nuget.config` - Local package testing configuration
 - `.github/workflows/ci.yml` - Build and test automation
@@ -146,7 +146,7 @@ dotnet build --configuration Release --no-restore
 # Test local package
 dotnet pack ./src/Kentico.Xperience.TagManager -c Release -o nuget-local -p:SIGN_FILE=false
 
-# Update Directory.Packages.props version to 4.2.2
+# Update Directory.Packages.props version to latest version
 # Uncomment package pattern in nuget.config
 dotnet build -p:LOCAL_NUGET=true
 
