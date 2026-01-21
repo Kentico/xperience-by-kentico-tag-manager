@@ -1,5 +1,5 @@
 <Project>
-    <Target Name="SignAssemblyWithAuthenticodeSignature" AfterTargets="AfterBuild" Condition="'$(MSBuildProjectFullPath.Contains(&quot;node_modules&quot;))' == 'false' And $(Configuration) == 'Release' And $(SIGN_FILE) != 'false'">
+    <Target Name="SignAssemblyWithAuthenticodeSignature" AfterTargets="AfterBuild" Condition="'$(MSBuildProjectFullPath.Contains(&quot;node_modules&quot;))' == 'false' And $(Configuration) == 'Release' And $(SIGN_FILE) == 'true'">
         <PropertyGroup>
             <XmlSerializersTargetPath>$(TargetDir)$(TargetName).XmlSerializers.dll</XmlSerializersTargetPath>
         </PropertyGroup>
@@ -8,12 +8,14 @@
             <AssemblyToSign Include="$(TargetPath)" />
             <AssemblyToSign Include="$(XmlSerializersTargetPath)" Condition="Exists('$(XmlSerializersTargetPath)')" />
         </ItemGroup>
+
+        <Exec Command="dotnet AzureSignTool sign --azure-key-vault-url $(AuthenticodeKeyVaultUrl) --azure-key-vault-accesstoken $(AuthenticodeAccessToken) --azure-key-vault-certificate $(AuthenticodeCertificateName) --timestamp-rfc3161 $(TimestampServerUrl) --skip-signed %(AssemblyToSign.Identity)" />
     </Target>
 
     <ItemGroup>
         <Content Remove="Admin/Client/*.json" />
         <Content Remove="Admin/FrontEnd/*.json" />
         <Content Remove="Admin/*.json" />
-		<Content Remove="../Kentico.Xperience.TagManager/*.json"/>
+        <Content Remove="../Kentico.Xperience.TagManager/*.json"/>
     </ItemGroup>
 </Project>
