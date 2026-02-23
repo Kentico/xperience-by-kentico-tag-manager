@@ -55,7 +55,7 @@ internal class TagManagerModuleInstaller(IInfoProvider<ResourceInfo> resourceInf
                                       DataClassInfo.New(ChannelCodeSnippetItemInfo.OBJECT_TYPE);
 
         info.ClassName = ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName;
-        info.ClassTableName = ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
+        info.ClassTableName = $"dbo.{ChannelCodeSnippetItemInfo.TYPEINFO.ObjectClassName.Replace(".", "_")}";
         info.ClassDisplayName = "Channel Code Snippet Item";
         info.ClassResourceID = resourceInfo.ResourceID;
         info.ClassType = ClassType.OTHER;
@@ -201,7 +201,7 @@ internal class TagManagerModuleInstaller(IInfoProvider<ResourceInfo> resourceInf
                                       DataClassInfo.New(ChannelCodeSnippetItemContentTypeInfo.OBJECT_TYPE);
 
         info.ClassName = ChannelCodeSnippetItemContentTypeInfo.TYPEINFO.ObjectClassName;
-        info.ClassTableName = ChannelCodeSnippetItemContentTypeInfo.TYPEINFO.ObjectClassName.Replace(".", "_");
+        info.ClassTableName = $"dbo.{ChannelCodeSnippetItemContentTypeInfo.TYPEINFO.ObjectClassName.Replace(".", "_")}";
         info.ClassDisplayName = "Channel Code Snippet Item to Content Type Binding";
         info.ClassResourceID = resourceInfo.ResourceID;
         info.ClassType = ClassType.OTHER;
