@@ -14,7 +14,10 @@ internal class WebsiteChannelPermissionService : IWebsiteChannelPermissionServic
     private readonly IAuthenticatedUserAccessor authenticatedUserAccessor;
     private readonly IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider;
 
-    public WebsiteChannelPermissionService(IUserRoleInfoProvider roleInfoProvider, IAuthenticatedUserAccessor authenticatedUserAccessor, IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider)
+    public WebsiteChannelPermissionService(
+        IUserRoleInfoProvider roleInfoProvider,
+        IAuthenticatedUserAccessor authenticatedUserAccessor,
+        IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider)
     {
         this.roleInfoProvider = roleInfoProvider;
         this.authenticatedUserAccessor = authenticatedUserAccessor;
