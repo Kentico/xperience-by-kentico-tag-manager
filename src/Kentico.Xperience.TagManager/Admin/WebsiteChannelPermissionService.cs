@@ -1,4 +1,5 @@
-﻿using CMS.Membership;
+﻿using CMS.DataEngine;
+using CMS.Membership;
 using CMS.Websites;
 
 using Kentico.Membership;
@@ -11,18 +12,23 @@ internal class WebsiteChannelPermissionService : IWebsiteChannelPermissionServic
 {
     private readonly IUserRoleInfoProvider roleInfoProvider;
     private readonly IAuthenticatedUserAccessor authenticatedUserAccessor;
+    private readonly IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider;
 
-    public WebsiteChannelPermissionService(IUserRoleInfoProvider roleInfoProvider, IAuthenticatedUserAccessor authenticatedUserAccessor)
+    public WebsiteChannelPermissionService(
+        IUserRoleInfoProvider roleInfoProvider,
+        IAuthenticatedUserAccessor authenticatedUserAccessor,
+        IInfoProvider<WebsiteChannelInfo> websiteChannelInfoProvider)
     {
         this.roleInfoProvider = roleInfoProvider;
         this.authenticatedUserAccessor = authenticatedUserAccessor;
+        this.websiteChannelInfoProvider = websiteChannelInfoProvider;
     }
 
     public IEnumerable<int> GetChannelIDsWithGrantedPermission(AdminApplicationUser user, string permission)
     {
         if (user.IsAdministrator())
         {
-            return WebsiteChannelInfoProvider.ProviderObject.Get()
+            return websiteChannelInfoProvider.Get()
                 .Columns(nameof(WebsiteChannelInfo.WebsiteChannelChannelID))
                 .GetListResult<int>();
         }
@@ -37,7 +43,7 @@ internal class WebsiteChannelPermissionService : IWebsiteChannelPermissionServic
             .Where(g => g != Guid.Empty)
             .ToList();
 
-        var websiteChannelIDs = WebsiteChannelInfoProvider.ProviderObject.Get()
+        var websiteChannelIDs = websiteChannelInfoProvider.Get()
             .Columns(nameof(WebsiteChannelInfo.WebsiteChannelChannelID))
             .WhereIn(nameof(WebsiteChannelInfo.WebsiteChannelGUID), websiteChannelGuids)
             .GetListResult<int>();
