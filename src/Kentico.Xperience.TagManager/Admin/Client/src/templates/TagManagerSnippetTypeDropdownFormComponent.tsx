@@ -76,10 +76,8 @@ export const TagManagerSnippetTypeDropdownFormComponent = (
                 typeName: newValue?.value ?? ''
             };
 
-            props.value = tagManagerSnippet.typeName;
-
             if (props.onChange !== undefined) {
-                props.onChange(props.value);
+                props.onChange(tagManagerSnippet.typeName);
             }
         }
     }
